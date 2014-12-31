@@ -1,0 +1,94 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+@using (Html.BeginForm("PageThree", "Survey"))
+{
+    <div class="container">
+
+        <h2 class="text-center">Client Scores</h2>
+        <div class="row form-group h3">
+            <div class="col-md-4 col-xs-5 col-sm-5">@Html.LabelFor(m => m.PreContemplationPoints, new { @class = "control-label" })</div>
+            <div class="col-md-2 col-xs-1 col-sm-1">@Html.DisplayFor(m => m.PreContemplationPoints, new { @class = "form-control" })</div>
+            <div class="col-md-4 col-xs-5 col-sm-5">@Html.LabelFor(m => m.MatrixPreContemplationPoints, new { @class = "control-label" })</div>
+            <div class="col-md-2 col-xs-1 col-sm-1">@Html.DisplayFor(m => m.MatrixPreContemplationPoints, new { id = "P", @class = "form-control" })</div>
+        </div>
+        <div class="row form-group h3">
+            <div class="col-md-4 col-xs-5 col-sm-5">@Html.LabelFor(m => m.ContemplationPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2 col-xs-1 col-sm-1">@Html.DisplayFor(m => m.ContemplationPoints, new { @class = "form-control" })</div>
+            <div class="col-md-4 col-xs-5 col-sm-5">@Html.LabelFor(m => m.MatrixContemplationPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2 col-xs-1 col-sm-1">@Html.DisplayFor(m => m.MatrixContemplationPoints, new { id = "C", @class = "form-control" })</div>
+        </div>
+        <div class="row form-group h3">
+            <div class="col-md-4 col-xs-5 col-sm-5">@Html.LabelFor(m => m.ActionPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2 col-xs-1 col-sm-1">@Html.DisplayFor(m => m.ActionPoints, new { @class = "form-control" })</div>
+            <div class="col-md-4 col-xs-5 col-sm-5">@Html.LabelFor(m => m.MatrixActionPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2 col-xs-1 col-sm-1">@Html.DisplayFor(m => m.MatrixActionPoints, new { id = "A", @class = "form-control" })</div>
+        </div>
+    </div>    
+ 
+    <div class="container">
+                    <div>
+                <h2 class="text-center">@Model.ActionTypeName</h2>
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <h2>@Model.ActionTypeDescription</h2>
+                    </div>
+                </div>
+            </div> 
+
+        <div id="chartdiv" class="container row center-block form-group" style="height: 400px; width: 500px;"></div>
+     
+        <div class="row text-center">
+            <strong>@Model.ActionTypeSummary</strong>
+        </div>
+
+    </div>
+    
+}
+<div class="no-print">
+<br />
+<br />
+</div>
+
+<div class="container no-print text-center">
+    <div class="col-md-6">
+        @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "btn btn-primary" })   
+    </div>
+    <div class="col-md-6">
+        <a href="#" onclick=" window.print(); return false; " class="btn btn-secondary">Print Page</a>
+    </div>
+    <br />
+    <br />
+    <br />
+</div>
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-migrate-1.2.1.js"></script>
+<script src="~/Scripts/jquery.jqplot.min.js"></script>
+<script src="~/Scripts/jqplot.canvasTextRenderer.min.js"></script>
+<script src="~/Scripts/jqplot.canvasAxisLabelRenderer.min.js"></script>
+<link href="~/Content/themes/base/jquery.jqplot.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    $.jqplot('chartdiv', [[@Model.MatrixPreContemplationPoints, @Model.MatrixContemplationPoints, @Model.MatrixActionPoints]], {
+        axesDefaults: {
+            labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+        },
+        axes: {
+            xaxis: {
+                label: "Precontemplation      Contemplation            Action",
+                labelOptions: {
+                    fontFamily: 'Segoe UI, Verdana, Helvetica, Sans-Serif',
+                    fontSize: '13pt',
+                    textColor: 'black',
+                    fontWeight: 'normal'
+                },
+                pad: 1.5
+            },
+            yaxis: {
+                label: ""
+            }
+        }
+    });
+
+</script>

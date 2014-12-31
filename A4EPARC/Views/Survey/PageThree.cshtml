@@ -1,0 +1,141 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+    <div class="container">
+        <input type="hidden" id="SchemeId" value=@Model.SchemeId />
+                    <div>
+                        <h2 id="@Model.ActionTypeName.Replace(" ", "")Name" class="text-center">@Model.ActionTypeName</h2>
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <h2 id="@Model.ActionTypeName.Replace(" ", "")Description">@Model.ActionTypeDescription</h2>
+                    </div>
+                </div>
+            </div> 
+
+            <div id="chartdiv" class="container row center-block form-group" style="min-width: 200px;"></div>
+     
+        <div class="row text-center">
+            <strong id="@Model.ActionTypeName.Replace(" ", "")Summary">@Model.ActionTypeSummary</strong>
+        </div>
+        
+        <div class="container col-sm-12 hidden-md hidden-lg">
+
+     <h2 class="text-center">Client Scores</h2>
+         <div class="form-group">
+            @Html.LabelFor(m => m.PreContemplationPoints, new { @class = "col-sm-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.PreContemplationPoints, new { @class = "form-control" })
+            </div>
+        </div>       
+        <div class="form-group">
+            @Html.LabelFor(m => m.MatrixPreContemplationPoints, new { @class = "col-sm-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.MatrixPreContemplationPoints, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ContemplationPoints, new { @class = "col-sm-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.ContemplationPoints, new { @class = "form-control" })
+            </div>
+        </div>       
+        <div class="form-group">
+            @Html.LabelFor(m => m.MatrixContemplationPoints, new { @class = "col-sm-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.MatrixContemplationPoints, new { @class = "form-control" })
+            </div>
+        </div>
+                <div class="form-group">
+            @Html.LabelFor(m => m.ActionPoints, new { @class = "col-sm-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.ActionPoints, new { @class = "form-control" })
+            </div>
+        </div>       
+        <div class="form-group">
+            @Html.LabelFor(m => m.MatrixActionPoints, new { @class = "col-sm-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.MatrixActionPoints, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>    
+ 
+     <div class="container col-sm-12 hidden-xs hidden-sm">
+
+        <h2 class="text-center">Client Scores</h2>
+        <div class="row form-group col-md-offset-2">
+            <div class="col-md-3">@Html.LabelFor(m => m.PreContemplationPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2">@Html.DisplayFor(m => m.PreContemplationPoints, new { @class = "form-control" })</div>
+            <div class="col-md-3">@Html.LabelFor(m => m.MatrixPreContemplationPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2">@Html.DisplayFor(m => m.MatrixPreContemplationPoints, new { id = "C", @class = "form-control" })</div>
+        </div>
+       <div class="row form-group col-md-offset-2">
+            <div class="col-md-3">@Html.LabelFor(m => m.ContemplationPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2">@Html.DisplayFor(m => m.ContemplationPoints, new { @class = "form-control" })</div>
+            <div class="col-md-3">@Html.LabelFor(m => m.MatrixContemplationPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2">@Html.DisplayFor(m => m.MatrixContemplationPoints, new { id = "C", @class = "form-control" })</div>
+        </div>
+          <div class="row form-group col-md-offset-2">
+            <div class="col-md-3">@Html.LabelFor(m => m.ActionPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2">@Html.DisplayFor(m => m.ActionPoints, new { @class = "form-control" })</div>
+            <div class="col-md-3">@Html.LabelFor(m => m.MatrixActionPoints, new { @class = "col-md-6 control-label" })</div>
+            <div class="col-md-2">@Html.DisplayFor(m => m.MatrixActionPoints, new { id = "A", @class = "form-control" })</div>
+        </div>
+    </div>
+
+    </div>
+    
+<br />
+
+<div class="form-group">
+    <div class="col-md-offset-5 col-md-1">
+        @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "btn btn-primary" })
+    </div>
+    <div class="col-md-6">
+        @Html.ActionLink("Print PDF", "Print", "Results", new { @id = @Model.Id }, new { @class = "btn btn-primary" })
+    </div>
+<br />
+<br />
+</div>
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/highcharts.js"></script>
+<script src="~/Scripts/hightcharts.exporting.js"></script>
+<script type="text/javascript">
+
+    $('#chartdiv').highcharts({
+        title: {
+            text: '',
+            x: -10 //center
+        },
+        subtitle: {
+            text: 'Source: psychass.com',
+            x: -10
+        },
+        xAxis: {
+            categories: ['Precontemplation', 'Contemplation', 'Action']
+        },
+        yAxis: {
+            title: {
+                text: 'Matrix Score'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ''
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: ' ',
+            data: [@Model.MatrixPreContemplationPoints, @Model.MatrixContemplationPoints, @Model.MatrixActionPoints]
+            }]
+    });
+
+</script>

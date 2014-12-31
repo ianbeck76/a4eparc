@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>jqPlot</id>
+    <version>1.0.8</version>
+    <title>jqPlot</title>
+    <authors>Chris Leonello</authors>
+    <owners>Chris Leonello</owners>
+    <licenseUrl>http://www.jqplot.com/docs/files/MIT-LICENSE-txt.html</licenseUrl>
+    <projectUrl>http://www.jqplot.com/index.php</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>This package contains the jqPlot jQuery plotting plugin version 1.0.8r1250. The docs and examples are not included in this package. For the full download, please go here: https://bitbucket.org/cleonello/jqplot/downloads/</description>
+    <releaseNotes />
+    <copyright>© 2009-2011 Chris Leonello</copyright>
+    <language />
+    <tags>jqPlot jQuery plotting plugin</tags>
+  </metadata>
+</package>

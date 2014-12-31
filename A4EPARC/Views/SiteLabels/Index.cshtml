@@ -1,0 +1,11 @@
+﻿@if (Context.User.IsInRole("IsSuperAdmin"))
+{
+ <form id="sitelabelsform">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Site Label Admin</h3>
+        </div>
+        <div id="sitelabelsdata"></div>
+    </div>
+ </form>
+}             

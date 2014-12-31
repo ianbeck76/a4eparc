@@ -1,0 +1,22 @@
+﻿@if (Context.User.IsInRole("IsSuperAdmin"))
+{
+ <form id="questionformall">
+     <div class="panel panel-default">
+         <div class="panel-heading">
+             <h3 class="panel-title">Questions Admin</h3>
+         </div>
+         <div id="questionlistall"></div>
+    </div>
+ </form>
+}
+else if (Context.User.IsInRole("IsAdmin"))
+{
+ <form id="questionform">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Questions Admin</h3>
+        </div>
+        <div id="questionlist"></div>
+    </div>
+ </form>
+}

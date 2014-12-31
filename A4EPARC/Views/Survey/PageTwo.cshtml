@@ -1,0 +1,103 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+@using (Html.BeginForm("PageTwo", "Survey", FormMethod.Post, new { @class = "form-horizontal surveyPageTwo", id = "surveyPage", role = "form" }))
+{
+
+    <div class="container" id="pagetwoform">
+            
+        <hr class="divider"/>
+        <div class="container" style="border: 5px solid; padding-left: 20px; padding-bottom: 40px; background-color: white; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;">
+            <input type="hidden" id="SchemeId" value=@Model.SchemeId />
+            
+            @{var items = Model.SiteLabels.Where(s => s.Name.Contains("AimStatement"));
+              var i = 0;
+              
+              foreach (var item in items)
+              {
+                  if (i == 0)
+                  {
+                    <div class="row">
+                        <h2 id="@item.Name">@item.Description</h2> 
+                    </div>
+                  }
+                  else
+                  {
+                      if (!string.IsNullOrEmpty(@item.Description))
+                      {
+                          if (i < items.Count() - 1)
+                          {
+                            <div class="row">
+                                <h4 id="@item.Name">@item.Description</h4>
+                            </div>
+                          }
+                      }
+                  }
+                  i++;
+              }
+}
+            <div class="row">
+                <div class="col-md-1 col-sm-2 col-xs-2">
+                    @Html.CheckBoxFor(m => m.AcceptCheckBox,  new { @class = "form-control" })
+                    @Html.ValidationMessage("CheckBox", new{ @style ="color:red;" })
+            </div>
+        <div class="col-md-11 col-sm-10 col-xs-10">
+            <h4 id="AimStatement7">@Model.SiteLabels.LastOrDefault(a => a.Name.Contains("AimStatement")).Description</h4>
+            </div>
+        </div>
+        <br/>
+            <div class="row float-left">
+                <p style="color: #283E94">&copy;&nbsp;Prochange Behavior System Inc</p>
+            </div>
+            </div> 
+      <br/>       
+      <br/> 
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <input type="hidden" name="SchemeId" value="@Model.SchemeId" id="SchemeId" />
+            <input type="hidden" name="ResultId" value="@Model.ResultId" id="ResultId" />
+            @Html.ValidationMessage("WebserviceUnavailable", new{ @style ="color:red;" })
+            @Html.ValidationMessage("RecordAlreadyAdded", new{ @style ="color:red;" })
+            <h3 id="QuestionHeaderLabel">@Model.SiteLabels.FirstOrDefault(q => q.Name == "QuestionHeaderLabel").Description</h3>
+            <hr class="divider" />
+        </div>
+        <div class="form-group">
+                    <div class="col-md-6">
+                        
+                    </div>
+                    <div class="hidden-xs hidden-sm col-md-6">
+                        <label class="col-md-2-4 text-center" id="StronglyDisagree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "StronglyDisagree").Description</label>
+                        <label class="col-md-2-4 text-center" id="Disagree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "Disagree").Description</label>
+                        <label class="col-md-2-4 text-center" id="Neutral">@Model.SiteLabels.FirstOrDefault(q => q.Name == "Neutral").Description</label>
+                        <label class="col-md-2-4 text-center" id="Agree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "Agree").Description</label>
+                        <label class="col-md-2-4 text-center" id="StronglyAgree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "StronglyAgree").Description</label>
+                    </div>
+        </div>    
+            @foreach (var question in Model.Questions)
+            {
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label questionlabels">@question.Description</label>
+                    </div>
+                    <input class="form-control" type="hidden" id="@question.Code" name="@question.Code" value="@question.Answer" data-val="true" data-val-required="Required" />
+                    <div class="col-md-6 col-xs-12 btn-group" data-toggle="buttons">          
+                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 1 ? "active" : "")" data-radio-name="@question.Code" data-text="1">1</button>
+                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 2 ? "active" : "")" data-radio-name="@question.Code" data-text="2">2</button>
+                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 3 ? "active" : "")" data-radio-name="@question.Code" data-text="3">3</button>
+                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 4 ? "active" : "")" data-radio-name="@question.Code" data-text="4">4</button>
+                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 5 ? "active" : "")" data-radio-name="@question.Code" data-text="5">5</button>
+                        <div class="field-validation-error" style="color:red;">@Html.ValidationMessage(question.Code)</div>
+                    </div>
+                </div> 
+            }
+        
+        </div>
+         </div> 
+    <br/>
+    <br/>
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-6">
+            <input type="submit" value="@Model.SiteLabels.FirstOrDefault(q => q.Name == "Next").Description" class="btn btn-primary" id="Next" />
+        </div>
+    </div>          
+}

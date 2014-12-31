@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta charset="utf-8" />
+        <title>Psychass Assessment</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/themes/base/css")
+        @Styles.Render("~/Content/css")
+    </head>
+<body id="top">
+    <div id="wrap" class="wrap">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="navigation-bar">
+            <div class="container-fluid">
+                
+               <form class="navbar-form navbar-left">
+                    <a class="navbar-brand" title="Exemplar Assessment Home" href="@Url.Action("Index", "Home", new { Area = ""})"><img class="navbar-image-20" src="/Images/exemplarX.png" /></a>
+                                        
+                    @*  @{
+                        var host = HttpContext.Current.Request.Url.Host.ToLower();
+                    }
+                    @if (!host.Contains("psychass"))
+                    {
+                    }
+                    else
+                    {
+                        <a class="navbar-brand" title="home" href="@Url.Action("Index", "Home")"><img src="../../Images/a4e-group-logo.png" /></a>
+                    }*@
+                </form>
+                <div class="navbar-right">
+                    @if (HttpContext.Current.Request.IsAuthenticated)
+                    {
+                        @Html.Partial("_NavigationLinks")
+                    }      
+                </div>
+            </div>
+        </div>
+        <div id="mask"></div>
+        <br/>
+        <div id="page" class="container-fluid page" style="padding-top: 100px;">
+            @RenderBody()
+        </div>
+    </div>
+
+    <footer>
+        <div id="footer" class="container-fluid footer">
+            <div class="row">
+                <div class="col-xs-11">
+                    <p>&copy; @DateTime.UtcNow.Year Powered by Esher House Pty Ltd</p>
+                </div>
+                <div class="col-xs-1 pull-right text-right">
+                    <a href="#top" title="Top"><i class="fa fa-chevron-up fa-lg"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jtable")
+    @Scripts.Render("~/bundles/ui")
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

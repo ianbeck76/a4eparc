@@ -1,0 +1,54 @@
+﻿@using System.Web.Mvc.Html
+@using A4EPARC.Extensions
+@model A4EPARC.Models.User
+@{
+    ViewBag.Title = "Log in";
+}
+<div class="row">
+    <div class="col-xs-10 col-sm-6 col-md-6 col-lg-4 col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4">
+        <section id="loginForm">
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { ReturnUrl = ViewBag.ReturnUrl, @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Please sign in</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Email, new { @class = "col-xs-12 col-sm-3 control-label" })
+                                <div class="col-xs-12 col-sm-9">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                    @Html.SocValidationMessageFor(m => m.Email)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password, new { @class = "col-xs-12 col-sm-3 control-label" })
+                                <div class="col-xs-12 col-sm-9">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "" })
+                                    @Html.SocValidationMessageFor(m => m.Password)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-6 col-xs-offset-3">
+                                    <input type="submit" class="btn btn-primary btn-block" value="Log In">
+                                </div>
+                            </div>
+             
+                        </div>
+                    </div>
+            }
+        </section>
+                    @using (Html.BeginForm("ForgottenPassword", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-6 col-xs-offset-3">
+                        <input type="submit" class="btn btn-secondary btn-block" value ="Forgotten Password?" />
+                    </div>
+                </div>
+            }
+    </div>
+</div>
+

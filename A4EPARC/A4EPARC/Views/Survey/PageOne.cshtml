@@ -1,0 +1,175 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+@using (Html.BeginForm("PageOne", "Survey", FormMethod.Post, new { @class = "form-horizontal", id = "surveyPage", role = "form" }))
+{   
+      
+    <div class="container" id="pageoneform">
+        
+        <h2 class="text-center no-print">Client Details</h2>
+        <br/>
+        
+        @if (Model.SchemeDropdownList != null && Model.SchemeDropdownList.Any())
+        {
+            <div class="form-group">
+                @Html.LabelFor(m => m.SchemeId, new { @class = "col-sm-4 control-label" })
+                <div class="col-md-6">
+                    @Html.DropDownListFor(m => m.SchemeId, new SelectList(Model.SchemeDropdownList, "key", "value"), "Please Select", new { id = "schemeId", @class = "form-control" })
+                    <div style="color: red">@Html.ValidationMessageFor(m => m.SchemeId)</div>
+                </div>
+            </div>
+        }
+        
+        <div class="form-group">
+            @Html.LabelFor(m => m.CaseWorkerName, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.CaseWorkerName, new { @class = "form-control", @maxlength = "50" })
+                <div style="color: red">@Html.ValidationMessageFor(m => m.CaseWorkerName)</div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(m => m.CaseWorkerId, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.CaseWorkerId, new { @class = "form-control", @maxlength = "50" })
+                <div style="color: red">@Html.ValidationMessageFor(m => m.CaseWorkerId)</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Agency, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.Agency, new { @class = "form-control", @maxlength = "50" })
+                <div style="color: red">@Html.ValidationMessageFor(m => m.Agency)</div>
+            </div>
+        </div>
+
+@*        <div class="form-group">
+            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "col-md-6 form-control" })
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Surname, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.Surname, new { @class = "form-control", @maxlength = "50" })
+                <div style="color: red">@Html.ValidationMessageFor(m => m.Surname)</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.CaseId, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.CaseId, new { @class = "form-control", @maxlength = "50" })
+                <div style="color: red">@Html.ValidationMessageFor(m => m.CaseId)</div>
+            </div>
+        </div>
+        
+       @* <div class="form-group">
+            @Html.LabelFor(m => m.ClientIdString, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.ClientIdString, new { @class = "form-control", @maxlength = "50" })
+                <div style="color: red">@Html.ValidationMessageFor(m => m.ClientIdString)</div>
+            </div>
+        </div>*@
+        
+@*        <div class="form-group">
+            @Html.LabelFor(m => m.Office, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.Office, new { @class = "form-control", @maxlength = "50" })
+                <div style="color: red">@Html.ValidationMessageFor(m => m.Office)</div>
+            </div>
+        </div>*@
+
+  @*      <div class="form-group">
+            @Html.LabelFor(m => m.Gender, new { @class = "col-md-4 control-label" })
+            <label class="col-md-1 control-label">Male</label>
+            <div class="col-md-1">
+                @Html.CheckBoxFor(m => m.Male, new { @id = "male", @class = "form-control" })
+            </div>
+            <label class="col-md-1 control-label">Female</label>
+            <div class="col-md-1">
+                @Html.CheckBoxFor(m => m.Female, new { @id = "female", @class = "form-control" })
+                @Html.HiddenFor(m => m.Gender, new { @id = "gender"})
+                @Html.ValidationMessageFor(m => m.Gender)
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Gender, new { @class = "col-md-4 control-label" })
+            <input class="form-control" type="hidden" id="Gender" name="Gender" value="@Model.Gender" data-val="true" data-val-required="The Gender field is required" />
+                <div class="col-md-6 btn-group" data-toggle="buttons">
+                    <button type="button" class="btn btn-default radiolist col-md-3 @(Model.Gender == "Male" ? "active" : "")" data-radio-name="Gender" data-text="Male">Male</button>
+                    <button type="button" class="btn btn-default radiolist col-md-3 @(Model.Gender == "Female" ? "active" : "")" data-radio-name="Gender" data-text="Female">Female</button>
+                    <div style="color: red">@Html.ValidationMessageFor(m => m.Gender)</div>
+                </div>
+        </div>
+        <div class="form-group ">
+            @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-4 control-label" })
+            <div class="col-md-2">
+                @Html.DropDownListFor(m => m.DateOfBirthMonth, new SelectList(Model.MonthDropdownList, "key", "value"), "Month", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                @Html.DropDownListFor(m => m.DateOfBirthDay, new SelectList(Model.DayDropdownList), "Day", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                @Html.DropDownListFor(m => m.DateOfBirthYear, new SelectList(Model.YearDropdownList), "Year", new { @class = "form-control" })
+            </div>
+            <div>@Html.ValidationMessage("InvalidDate", new { @style = "color:red;" })</div>
+        </div>
+
+     @*   <div class="form-group">
+            @Html.LabelFor(m => m.Stream, new { @class = "col-sm-6 control-label" })
+            <div class="col-sm-6">
+                @Html.DropDownListFor(m => m.Stream, new SelectList(Model.StreamDropdownList), "Please Select", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Stream)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.CompletedAll5Pathways, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.CheckBoxFor(m => m.CompletedAll5Pathways, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.CompletedAll5Pathways)
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Comments, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6" style="margin-bottom: 10px">
+                @Html.TextAreaFor(m => m.Comments, new { @class = "form-control",  @maxlength = "250" })
+                @Html.ValidationMessageFor(m => m.Comments)
+            </div>
+        </div>
+        
+        <div class="form-group" id="LengthOfUnemploymentRow">
+            @Html.LabelFor(m => m.LengthOfUnemployment, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6" style="margin-bottom: 10px">
+                @Html.DropDownListFor(m => m.LengthOfUnemployment, new SelectList(Model.LengthOfUnemploymentDropdownList), "Please Select", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.LengthOfUnemployment)
+            </div>
+        </div>
+
+@*        <div class="form-group">
+            @Html.LabelFor(m => m.NumberOfTimesSurveyCompleted, new { @class = "col-md-4 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.NumberOfTimesSurveyCompleted, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.NumberOfTimesSurveyCompleted)
+            </div>
+        </div>*@
+
+    </div>
+    
+    <br/>
+    
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-6">
+            <input type="submit" value="Next" class="btn btn-primary" id="next" />
+        </div>
+    </div>
+    <br/>
+    <br/>   
+    
+}
