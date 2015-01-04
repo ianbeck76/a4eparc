@@ -97,9 +97,26 @@ namespace A4EPARC.Controllers
                     viewmodel.SiteLabels = _siteLabelsRepository.Get(viewmodel.SchemeId, LanguageCode);
                     if (viewmodel.SiteLabels.Any())
                     {
-                        viewmodel.ActionTypeName = viewmodel.SiteLabels.FirstOrDefault(l => l.Name == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay) + "Name").Description;
-                        viewmodel.ActionTypeDescription = viewmodel.SiteLabels.FirstOrDefault(l => l.Name == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay) + "Description").Description;
-                        viewmodel.ActionTypeSummary = viewmodel.SiteLabels.FirstOrDefault(l => l.Name == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay) + "Summary").Description;
+                        viewmodel = AppendActionDetailsToViewModel(viewmodel);
+                    }
+                }
+            }
+
+            return View(viewmodel);
+        }
+
+        public ActionResult GlsPdf(int id)
+        {
+            var viewmodel = _clientRepository.GetClient(id);
+
+            if (viewmodel != null)
+            {
+                if (viewmodel.ActionIdToDisplay != (int)ActionType.Undefined)
+                {
+                    viewmodel.SiteLabels = _siteLabelsRepository.Get(viewmodel.SchemeId, "en-GB");
+                    if (viewmodel.SiteLabels.Any())
+                    {
+                        viewmodel = AppendActionDetailsToViewModel(viewmodel);
                     }
                 }
             }
@@ -113,6 +130,15 @@ namespace A4EPARC.Controllers
 
             return new ActionAsPdf(
                            "Pdf",
+                           new { id = id }) { FileName = viewmodel.Company + " SurveyDetails/" + id + ".pdf" };
+        }
+
+        public ActionResult PrintGls(int id)
+        {
+            var viewmodel = _clientRepository.GetClient(id);
+
+            return new ActionAsPdf(
+                           "GlsPdf",
                            new { id = id }) { FileName = viewmodel.Company + " SurveyDetails/" + id + ".pdf" };
         }
 
@@ -137,7 +163,7 @@ namespace A4EPARC.Controllers
             var data = _clientRepository.GetCsvData(ConvertMinDate(datefrom), ConvertMaxDate(dateto), caseId).ToList();
 
             var sb = new StringBuilder();
-            sb.Append("CreatedDate,Username,Office,CaseWorker Name,Case Worker ID,Case ID,Client ID,Date Of Birth,Gender,Length Of Unemployment,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points,Comments");
+            sb.Append("CreatedDate,Username,CaseWorker Name,Case Worker ID,Case ID,Date Of Birth,Gender,Length Of Unemployment,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points,Comments");
             sb.AppendLine(Environment.NewLine);
 
             foreach (var d in data)

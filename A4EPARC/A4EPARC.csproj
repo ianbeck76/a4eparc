@@ -311,7 +311,9 @@
     <Content Include="Content\bootstrap\js\tab.js" />
     <Content Include="Content\bootstrap\js\tooltip.js" />
     <Content Include="Content\bootstrap\js\transition.js" />
-    <Content Include="Content\css\theme%28old%29.css" />
+    <Content Include="Content\css\theme - Copy.css" />
+    <Content Include="Content\css_gls\theme%28old%29.css" />
+    <Content Include="Content\css_gls\theme.css" />
     <Content Include="Content\css\theme.css" />
     <Content Include="Content\fonts\fontawesome\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\icons\icons.dev.svg" />
@@ -628,6 +630,20 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="App_Browsers\qt.browser" />
+    <Content Include="Content\css_gls\bootstrap-metro\alerts.less" />
+    <Content Include="Content\css_gls\bootstrap-metro\checkbox.less" />
+    <Content Include="Content\css_gls\bootstrap-metro\labels.less" />
+    <Content Include="Content\css_gls\bootstrap-metro\modals.less" />
+    <Content Include="Content\css_gls\bootstrap-metro\navbar-side.less" />
+    <Content Include="Content\css_gls\bootstrap-metro\radio.less" />
+    <Content Include="Content\css_gls\bootstrap-metro\tiles.less" />
+    <Content Include="Content\css_gls\bootstrap-metro\variables.less" />
+    <Content Include="Content\css_gls\bootstrap.less" />
+    <Content Include="Content\css_gls\custom.less" />
+    <Content Include="Content\css_gls\datepicker.less" />
+    <Content Include="Content\css_gls\fonts.less" />
+    <Content Include="Content\css_gls\theme.less" />
+    <Content Include="Content\css_gls\variables.less" />
     <None Include="Properties\PublishProfiles\SOC.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -791,13 +807,16 @@
     <Content Include="Views\Shared\ForgottenPasswordFailure.cshtml" />
     <Content Include="Views\Shared\ForgottenPasswordSuccess.cshtml" />
     <Content Include="Views\Results\Details.cshtml" />
-    <Content Include="Views\Shared\_LayoutOld.cshtml" />
     <Content Include="Views\SiteLabels\Index.cshtml" />
     <Content Include="Views\QuestionAdmin\Index.cshtml" />
     <Content Include="Views\Survey\PageThreeJplot.cshtml" />
     <Content Include="Views\Shared\_NewUserEmail.cshtml" />
     <Content Include="Views\Shared\_LanguageSelect.cshtml" />
     <Content Include="Views\Results\Pdf.cshtml" />
+    <Content Include="Views\Shared\_Layout_GLS.cshtml" />
+    <Content Include="Views\Survey\GlsOne.cshtml" />
+    <Content Include="Views\Survey\GlsTwo.cshtml" />
+    <Content Include="Views\Results\GlsPdf.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

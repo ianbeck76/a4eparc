@@ -57,6 +57,8 @@ namespace A4EPARC.ViewModels
 
         public string ActionTypeSummary { get; set; }
 
+        public List<string> ActionBulletPoints { get; set; }
+
         public string AnswerString { get; set; }
 
        //[Required]
@@ -124,13 +126,18 @@ namespace A4EPARC.ViewModels
 
         public IEnumerable<int> YearDropdownList { get; set; }
 
-        [Display(Name = "Length of Unemployment")]
-        public string LengthOfUnemployment { get; set; }
-
         [Display(Name = "Comments")]
         public string Comments { get; set; }
 
+        [Display(Name = "Length of Unemployment")]
+        public string LengthOfUnemployment { get; set; }
+
         public IEnumerable<string> LengthOfUnemploymentDropdownList { get; set; }
+
+        [Display(Name = "State")]
+        public string State { get; set; }
+
+        public IEnumerable<string> StateDropdownList { get; set; }
 
         [Display(Name = "Job Seeker ID")]
         public string JobSeekerID { get; set; }

@@ -44,6 +44,109 @@ namespace A4EPARC.Controllers
             _companyRepository = companyRepository;
         }
 
+        #region GLS Methods
+
+        [HttpGet]
+        public ActionResult GlsOne(int? id)
+        {
+            var viewmodel = id.HasValue ? _clientRepository.GetClient(id.Value) : new ClientViewModel();
+
+            viewmodel.SchemeId = 4;
+
+            viewmodel.SiteLabels = _siteLabelsRepository.Get(4, "en-GB");
+
+            viewmodel.Questions = _questionRepository.Get(4, "en-GB");
+
+            if (viewmodel.DateOfBirth.HasValue)
+            {
+                viewmodel.DateOfBirthDay = viewmodel.DateOfBirth.Value.Day;
+                viewmodel.DateOfBirthMonth = viewmodel.DateOfBirth.Value.Month;
+                viewmodel.DateOfBirthYear = viewmodel.DateOfBirth.Value.Year;
+            }
+
+            viewmodel = InitializeDropdowns(viewmodel);
+
+            return View(viewmodel);
+        }
+
+        [HttpPost]
+        public ActionResult GlsOne(ClientViewModel viewmodel, FormCollection formCollection)
+        {
+            viewmodel.SchemeId = 4;
+
+            viewmodel.SiteLabels = _siteLabelsRepository.Get(4, "en-GB");
+
+            viewmodel.Questions = _questionRepository.Get(4, "en-GB");
+
+            var isDateOfBirthValid = CheckDateOfBirth(viewmodel);
+
+            viewmodel.DateOfBirth = new DateTime(
+               viewmodel.DateOfBirthYear,
+               viewmodel.DateOfBirthMonth,
+               viewmodel.DateOfBirthDay);
+
+            viewmodel.UserId = GetCurrentUser().Id;
+
+            viewmodel.CreatedDate = DateTime.Now;
+            viewmodel.FirstName = string.IsNullOrEmpty(viewmodel.FirstName) ? "N/A" : viewmodel.FirstName;
+            viewmodel.Surname = string.IsNullOrEmpty(viewmodel.Surname) ? "N/A" : viewmodel.Surname;
+            viewmodel.Deleted = false;
+
+            var sb = new StringBuilder();
+
+            foreach (var question in viewmodel.Questions)
+            {
+                var answer = formCollection[question.Code];
+
+                if (string.IsNullOrEmpty(answer))
+                {
+                    ModelState.AddModelError(question.Code, "Required");
+                }
+                else
+                {
+                    question.Answer = Convert.ToInt32(answer);
+                    sb.Append(question.Answer + ",");
+                }
+            }
+
+            if (!ModelState.IsValid || !isDateOfBirthValid)
+            {
+                viewmodel = InitializeDropdowns(viewmodel);
+                return View(viewmodel);
+            }
+
+            viewmodel.Result = CalculateDecision(viewmodel, sb.ToString().TrimEnd(','));
+
+            if (viewmodel.Result.ActionIdToDisplay > ActionType.Undefined)
+            {
+                viewmodel.Id = _clientRepository.InsertPerson(viewmodel);
+                viewmodel.Result.ClientId = viewmodel.Id;
+                _clientRepository.InsertResult(viewmodel.Result);
+
+                return RedirectToAction("GlsTwo", new { viewmodel.Id });
+            }
+
+            ModelState.AddModelError("WebserviceUnavailable", "Web service is currently unavailable - please try again");
+            return View(viewmodel);
+        }
+
+        [HttpGet]
+        public ActionResult GlsTwo(int id)
+        {
+            var viewmodel = _clientRepository.GetClient(id);
+
+            viewmodel.SiteLabels = _siteLabelsRepository.Get(viewmodel.SchemeId, "en-GB");
+
+            if (viewmodel != null)
+            {
+                viewmodel = AppendActionDetailsToViewModel(viewmodel);
+            }
+
+            return View(viewmodel);
+        }
+
+        #endregion
+
         [HttpGet]
         public ActionResult PageOne(int? id)
         {
@@ -211,12 +314,7 @@ namespace A4EPARC.Controllers
 
             if (viewmodel != null)
             {
-                if (viewmodel.ActionIdToDisplay != (int)ActionType.Undefined)
-                {
-                    viewmodel.ActionTypeName = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "name").Description;
-                    viewmodel.ActionTypeDescription = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "description").Description;
-                    viewmodel.ActionTypeSummary = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "summary").Description;
-                }
+                viewmodel = AppendActionDetailsToViewModel(viewmodel);
             }
 
             return View(viewmodel);
@@ -439,6 +537,19 @@ namespace A4EPARC.Controllers
             return ddl;
         }
 
+        private List<string> GetStateDropdownList()
+        {
+            var ddl = new List<string>();
+            ddl.Add("NSW");
+            ddl.Add("NT");
+            ddl.Add("WA");
+            ddl.Add("VIC");
+            ddl.Add("ACT");
+            ddl.Add("TAS");
+            ddl.Add("QLD");
+            return ddl;
+        }
+
         private IEnumerable<KeyValuePair<int, string>> GetSchemeDropdownList(IEnumerable<CompanySchemeViewModel> schemes )
         {
             return schemes.Select(scheme => new KeyValuePair<int, string>(scheme.SchemeId, scheme.SchemeName)).ToList();
@@ -488,6 +599,7 @@ namespace A4EPARC.Controllers
             model.MonthDropdownList = GetMonthDropdownList();
             model.YearDropdownList = GetYearDropdownList();
             model.LengthOfUnemploymentDropdownList = GetLengthOfUnemploymentDropdownList();
+            model.StateDropdownList = GetStateDropdownList();
             return model;
         }
 

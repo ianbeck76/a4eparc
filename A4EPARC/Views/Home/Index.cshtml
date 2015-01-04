@@ -10,7 +10,14 @@
             <div class="panel-body">
 
                     <p class="text-center">
-                        @Html.ActionLink("Begin Survey", "PageOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
+                        @if (Request.Url.AbsoluteUri.ToLower().Contains("exemplar"))
+                        {
+                            @Html.ActionLink("Begin Survey", "PageOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Begin Survey", "GlsOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
+                        }
                     </p>
             
                     @if (Context.User.IsInRole("IsViewer"))

@@ -41,6 +41,8 @@ namespace A4EPARC
                 "~/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/css/theme.css"));
+
+            bundles.Add(new StyleBundle("~/Content/css_gls").Include("~/Content/css_gls/theme.css"));
    
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                 "~/Content/themes/base/jquery.ui.core.css",

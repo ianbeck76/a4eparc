@@ -4,6 +4,9 @@ using A4EPARC.Models;
 using A4EPARC.Repositories;
 using A4EPARC.Services;
 using Ninject;
+using A4EPARC.ViewModels;
+using A4EPARC.Enums;
+using System.Linq;
 
 namespace A4EPARC.Controllers
 {
@@ -40,6 +43,21 @@ namespace A4EPARC.Controllers
                 }
             }
             return null;
+        }
+
+        protected ClientViewModel AppendActionDetailsToViewModel(ClientViewModel viewmodel)
+        {
+            if (viewmodel.ActionIdToDisplay != (int)ActionType.Undefined)
+            {
+                viewmodel.ActionTypeName = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "name").Description;
+                viewmodel.ActionTypeDescription = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "description").Description;
+                viewmodel.ActionTypeSummary = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "summary").Description;
+                if (viewmodel.SchemeId == 4)
+                {
+                    viewmodel.ActionBulletPoints = viewmodel.SiteLabels.Where(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "bulletpoint").Select(s => s.Description).ToList();
+                }
+            }
+            return viewmodel;
         }
 
         [Inject]

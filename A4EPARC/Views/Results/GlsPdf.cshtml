@@ -1,0 +1,42 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+<div class="container form-horizontal">
+
+    <input type="hidden" value="@Model.SchemeId" id="SchemeId" />
+
+    <div width="100%" style="font-size: large;">
+
+        <div>
+            <h1 style="color:darkblue" id="@Model.ActionTypeName.Replace(" ", "")Name">@Model.ActionTypeName</h1>
+            <h1 id="@Model.ActionTypeName.Replace(" ", "")Summary">@Model.ActionTypeSummary</h1>
+            <h4>WHAT THIS STUDENT IS THINKING:</h4>
+            <ul>
+                @foreach (var item in Model.ActionBulletPoints)
+                {
+                    <li class="h4">@item</li>
+                }
+            </ul>
+            <br />
+            <div>
+                <label class="col-md-6 h4">First Name</label> :
+                <label class="col-md-offset-2 control-label"></label>
+                @Html.DisplayFor(m => m.FirstName, new { @class = "form-control" })
+            </div>
+            <div>
+                <label class="col-md-6 control-label">Surname</label> :
+                <label class="col-md-offset-2 control-label"></label>
+                @Html.DisplayFor(m => m.Surname, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-6 control-label" }) :
+                <label class="col-md-offset-2 control-label"></label>
+          @Html.DisplayFor(m => m.DateOfBirth, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.LabelFor(m => m.State, new { @class = "col-md-6 control-label" }) :
+                <label class="col-md-offset-2 control-label"></label>
+                @Html.DisplayFor(m => m.State, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+</div>

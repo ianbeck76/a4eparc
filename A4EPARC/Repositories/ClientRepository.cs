@@ -12,10 +12,10 @@ namespace A4EPARC.Repositories
         {
             const string query = @"INSERT INTO Client (FirstName,Surname,
             DateOfBirth,CaseWorkerName,CaseWorkerId,Agency,Gender,CaseId,
-            LengthOfUnemployment,Comments,CreatedDate,UserId,Deleted,SchemeId)
+            LengthOfUnemployment,Comments,CreatedDate,UserId,Deleted,SchemeId,State)
             VALUES(@FirstName,@Surname,@DateOfBirth,
             @CaseWorkerName,@CaseWorkerId,@Agency,@Gender,@CaseId,@LengthOfUnemployment,
-            @Comments,@CreatedDate,@UserId,@Deleted,@SchemeId);
+            @Comments,@CreatedDate,@UserId,@Deleted,@SchemeId,@State);
             SELECT CAST(SCOPE_IDENTITY() as int);";
 
             return Query<int>(query, model).SingleOrDefault();
@@ -37,7 +37,8 @@ namespace A4EPARC.Repositories
 
         public ClientViewModel GetClient(int id)
         {
-            const string query = @"select c.Id,                                
+            const string query = @"select c.Id,
+                                c.FirstName,                                
                                 c.Surname,
                                 c.DateOfBirth, 
                                 c.SchemeId,
@@ -49,6 +50,7 @@ namespace A4EPARC.Repositories
                                 c.Comments, 
                                 c.Gender,
                                 c.LengthOfUnemployment,
+                                c.State,
                                 c.Accepted, 
                                 cr.ActionIdToDisplay, 
                                 cr.ActionPoints, 
@@ -70,7 +72,7 @@ namespace A4EPARC.Repositories
         {
             var query = string.Format(@"select c.Id, c.CaseId AS CaseID, 
                                             u.Email AS Username, 
-                                            c.CreatedDate,  
+                                            c.CreatedDate,
                                             a.ActionType AS ActionName, 
                                             cr.AnswerString,
                                             cr.PreContemplationPoints,
