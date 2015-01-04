@@ -124,7 +124,7 @@ namespace A4EPARC.ViewModels
 
         public IEnumerable<int> YearDropdownList { get; set; }
 
-        [Display(Name = "Length of Unemployment (Months)")]
+        [Display(Name = "Length of Unemployment")]
         public string LengthOfUnemployment { get; set; }
 
         [Display(Name = "Comments")]

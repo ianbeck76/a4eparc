@@ -58,7 +58,7 @@
             <input type="hidden" name="ResultId" value="@Model.ResultId" id="ResultId" />
             @Html.ValidationMessage("WebserviceUnavailable", new{ @style ="color:red;" })
             @Html.ValidationMessage("RecordAlreadyAdded", new{ @style ="color:red;" })
-            <h3 id="QuestionHeaderLabel">@Model.SiteLabels.FirstOrDefault(q => q.Name == "QuestionHeaderLabel").Description</h3>
+            <h4 id="QuestionHeaderLabel">@Model.SiteLabels.FirstOrDefault(q => q.Name == "QuestionHeaderLabel").Description</h4>
             <hr class="divider" />
         </div>
         <div class="form-group">
