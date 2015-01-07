@@ -1,24 +1,24 @@
 ﻿@model A4EPARC.ViewModels.ClientViewModel
 <div class="container form-horizontal">
 
-    <input type="hidden" value="@Model.SchemeId" id="SchemeId" />
-
-    <div width="100%" style="font-size: large;">
-
-        <div>
-            <h1 style="color:darkblue" id="@Model.ActionTypeName.Replace(" ", "")Name">@Model.ActionTypeName</h1>
-            <h1 id="@Model.ActionTypeName.Replace(" ", "")Summary">@Model.ActionTypeSummary</h1>
-            <h4>WHAT THIS STUDENT IS THINKING:</h4>
-            <ul>
-                @foreach (var item in Model.ActionBulletPoints)
-                {
-                    <li class="h4">@item</li>
-                }
-            </ul>
-            <br />
-            <div style="border-style:solid; border-width:2px; padding-top:1em;padding-bottom:1em;background-color:white;">
-                @if (Model.ActionIdToDisplay == 1)
-                {
+    <h2 class="text-center">Result Details</h2>
+    <br/>
+        <input type="hidden" value="@Model.SchemeId" id="SchemeId" />
+    <div>
+        <h1 class="text-center" style="color:darkblue" id="@Model.ActionTypeName.Replace(" ", "")Name">@Model.ActionTypeName</h1>
+        <h1 class="text-center" id="@Model.ActionTypeName.Replace(" ", "")Summary">@Model.ActionTypeSummary</h1>
+        <br />
+        <h4 class="text-center">WHAT THIS STUDENT IS THINKING:</h4>
+        <ul class="col-md-offset-2">
+            @foreach (var item in Model.ActionBulletPoints)
+            {
+                <li class="h4">@item</li>
+            }
+        </ul>
+        <br />
+        <div style="border-style:solid; border-width:2px; padding-top:1em;padding-bottom:1em;background-color:white;">
+            @if (Model.ActionIdToDisplay == 1)
+            {
                     <h4 class="text-center">STUDENT SUPPORT PRINCIPLES</h4>
                     <label class="col-md-offset-2">Insisting that they actively continue study and forcing them to undertake some tasks might be counter-productive.</label>
                     <ul class="col-md-offset-2">
@@ -26,8 +26,8 @@
                         <li>Lectures and confrontation don’t work, the goal is engagement in the change process and improving commitment to the course.</li>
                         <li>Don’t try to move them straight to Action – progress to the next (Contemplation) stage.</li>
                     </ul>
-                    <h4 class="text-center">STUDENT SUPPORT STRATEGIES – IF THEY WISH TO CONTINUE STUDYING</h4>
-                    <h4 class="text-center">1. FOCUS ON THE PROS</h4>
+                    <h4 class="text-center" >STUDENT SUPPORT STRATEGIES – IF THEY WISH TO CONTINUE STUDYING</h4>
+                    <h4 class="text-center" >1. FOCUS ON THE PROS</h4>
                     <label class="col-md-offset-2">committing to the course requires weighting the PROS (eg ‘sense of independence’, ‘future opportunities’) vs the CONS (eg ‘it will take time and energy and I might embarrass myself’, ‘fear of failure’).</label>
                     <ul class="col-md-offset-2">
                         <li>Ask Precontemplators to name as many benefits of the course as they can.</li>
@@ -37,7 +37,7 @@
                         <li>Align yourself with them – say “I felt like that when I first started a course…but I persevered and achieved it in the end. My family were very proud” etc.</li>
                         <li>Make a note of their stated “Pros” and remind them of them in future.</li>
                     </ul>
-                    <h4 class="text-center">2. DECREASE DEFENCES</h4>
+                    <h4 class="text-center" >2. DECREASE DEFENCES</h4>
                     <label class="col-md-offset-2">Raise the student’s awareness of their own doubts, “why do you think you might not finish this course?”</label>
                     <ul class="col-md-offset-2">
                         <li>Normalise these doubts by saying, “yes, many people think that at first, then overcome it…How would YOU deal with that concern?”</li>
@@ -45,49 +45,49 @@
                         <li>Reassure them of their proactivity on getting started: that’s the hardest bit…and they’ve achieved it!</li>
                         <li>Reassure them that you’re there for them.</li>
                     </ul>
-                }
-                else if (@Model.ActionIdToDisplay == 2)
-                {
-                    <h4 class="text-center">STUDENT SUPPORT PRINCIPLES</h4>
+            }
+            else if (@Model.ActionIdToDisplay == 2)
+            {
+                    <h4 class="text-center" >STUDENT SUPPORT PRINCIPLES</h4>
                     <ul class="col-md-offset-2">
                         <li>Acknowledge ambivalence.</li>
                         <li>Ask them to think about the person they want to be - the benefits of completing he course.</li>
                         <li>Encouraging students to make a verbal commitments to learning milestones.</li>
                     </ul>
-                    <h4 class="text-center">STUDENT SUPPORT STRATEGIES – IF THEY WISH TO CONTINUE STUDYING</h4>
-                    <h4 class="text-center">1. STAY INFORMED</h4>
+                    <h4 class="text-center" >STUDENT SUPPORT STRATEGIES – IF THEY WISH TO CONTINUE STUDYING</h4>
+                    <h4 class="text-center" >1. STAY INFORMED</h4>
                     <label class="col-md-offset-2">1. STAY INFORMED – The goal is to raise consciousness. Advisors can help participants increase Consciousness just by being more aware, ie:</label>
                     <ul class="col-md-offset-2">
                         <li>Ask clients to commit to learn more about the steps required to complete a course.</li>
                         <li>Keep a diary of thoughts and behaviours relating to completing the course and report that back to student support (eg, minutes per day spent studying uninterrupted).</li>
                     </ul>
-                    <h4 class="text-center">2. PROS Vs CONS</h4>
+                    <h4 class="text-center" >2. PROS Vs CONS</h4>
                     <label class="col-md-offset-2">Students should list the Cons of the course and then weigh them against their list of Pros.</label>
                     <ul class="col-md-offset-2">
                         <li>Consider whether the Cons are so important after all?</li>
                         <li>Student Support can acknowledge that there are some costs to completing the course…but the overall Pros are worth it.</li>
                     </ul>
-                    <h4 class="text-center">3. CREATE A NEW SELF-IMAGE</h4>
+                    <h4 class="text-center" >3. CREATE A NEW SELF-IMAGE</h4>
                     <label class="col-md-offset-2">Question Students on how things would be different when they’ve completed the course. How others would act towards them, or how would they feel?</label>
                     <ul class="col-md-offset-2">
                         <li>Consider what SMALL ACTIONS they might take to progress – realistic, measurable and achievable.</li>
                     </ul>
-                    <h4 class="text-center">4. BUILD SELF-EFFICACY & RESILIENCE</h4>
+                    <h4 class="text-center" >4. BUILD SELF-EFFICACY & RESILIENCE</h4>
                     <label class="col-md-offset-2">SCALING: Ask them to score out of 10 (1 being ‘very poor’ and 1 being ‘great’) on how well they’re doing on the course. If they say “2” ask “why a 2, why not a 1?” and build on those positives. Ask “how can we get you to a 3?”</label>
                     <ul class="col-md-offset-2">
                         <li>Ask them to describe when they’ve been committed or able to complete parts of the course before. What was different then? How can they make that happen again?</li>
                     </ul>
-                }
-                else if (@Model.ActionIdToDisplay == 3)
-                {
-                    <h4 class="text-center">STUDENT SUPPORT PRINCIPLES</h4>
+            }
+            else if (@Model.ActionIdToDisplay == 3)
+            {
+                    <h4 class="text-center" >STUDENT SUPPORT PRINCIPLES</h4>
                     <ul class="col-md-offset-2">
                         <li>Praise participants for steps that are being taken.</li>
                         <li>Establish the ‘point’ of the course.</li>
                         <li>Ask them for examples of where they’ve successfully achieved a goal before: driving tests, exams, moving house, asking someone out on a date etc.</li>
                     </ul>
-                    <h4 class="text-center">STUDENT SUPPORT STRATEGIES</h4>
-                    <h4 class="text-center">FOCUS ON THE PROS</h4>
+                    <h4 class="text-center" >STUDENT SUPPORT STRATEGIES</h4>
+                    <h4 class="text-center" >FOCUS ON THE PROS</h4>
                     <label class="col-md-offset-2">Committing to the course requires weighting the PROS (eg ‘sense of independence’, ‘future opportunities’) vs the CONS (eg ‘it will take time and energy and I might embarrass myself’, ‘fear of failure’).</label>
                     <ul class="col-md-offset-2">
                         <li>Ask Precontemplators to name as many benefits of the course as they can.</li>
@@ -97,7 +97,7 @@
                         <li>Align yourself with them – say “I felt like that when I first started a course…but I persevered and achieved it in the end. My family were very proud” etc.</li>
                         <li>Make a note of their stated “Pros” and remind them of them in future.</li>
                     </ul>
-                    <h4 class="text-center">DECREASE DEFENCES, RAISE RESILIENCE</h4>
+                    <h4 class="text-center" >DECREASE DEFENCES, RAISE RESILIENCE</h4>
                     <label class="col-md-offset-2">Raise the student’s awareness of their own doubts, “why do you think you might not finish this course?”</label>
                     <ul class="col-md-offset-2">
                         <li>Normalise these doubts by saying, “yes, many people think that at first, then overcome it…How would YOU deal with that concern?”</li>
@@ -110,9 +110,9 @@
                         <li>Offer tips on finding private time and space to study.</li>
                         <li>Offer tips on dealing with family to allow them to progress with their studies.</li>
                     </ul>
-                }
-                else if (@Model.ActionIdToDisplay == 4)
-                {
+            }
+            else if (@Model.ActionIdToDisplay == 4)
+            {
                     <h4 class="text-center">STUDENT SUPPORT PRINCIPLES</h4>
                     <ul class="col-md-offset-2">
                         <li>Encourage, excite & empower.</li>
@@ -127,71 +127,129 @@
                     <ul class="col-md-offset-2">
                         <li>Together, set more specific and measurable Action Plans.</li>
                     </ul>
-                    <h4 class="text-center">2. POSITIVITY</h4>
+                    <h4 class="text-center" >2. POSITIVITY</h4>
                     <ul class="col-md-offset-2">
                         <li>Ask what benefits the course is already.</li>
                         <li>Remind students that they’re likely to be unable or forget to complete study sometimes, but this happens to everybody, they just have to “keep on putting one foot in front of the other”.</li>
                         <li>Inform student of the benefits of completing the course and how much closer they are.</li>
                         <li>Perhaps refer the student to groups/other students, which will enhance their peer group and support.</li>
                     </ul>
-                    <h4 class="text-center">3. REINFORCE SELF-IMAGE</h4>
+                    <h4 class="text-center" >3. REINFORCE SELF-IMAGE</h4>
                     <ul class="col-md-offset-2">
                         <li>Compliment the student on how well they are progressing.</li>
                         <li>Checking their scores out of 10 in terms of how well they are progressing, or how well they’re finding time and space to study.</li>
                     </ul>
-                }
-                else if (@Model.ActionIdToDisplay == 5)
-                {
-                    <h4 class="text-center">STUDENT SUPPORT PRINCIPLES</h4>
+            }
+            else if (@Model.ActionIdToDisplay == 5)
+            {
+                    <h4 class="text-center" >STUDENT SUPPORT PRINCIPLES</h4>
                     <ul class="col-md-offset-2">
                         <li>Encourage active efforts to study and cope with urges to slip.</li>
                         <li>Assist students with planning ahead to prevent lapses.</li>
                         <li>Simply be there to provide support during stressful or demanding times.</li>
                     </ul>
-                    <h4 class="text-center">STUDENT SUPPORT STRATEGIES</h4>
-                    <h4 class="text-center">1. RESILIENCE AND REALISTIC OPTIMISM</h4>
+                    <h4 class="text-center" >STUDENT SUPPORT STRATEGIES</h4>
+                    <h4 class="text-center" >1. RESILIENCE AND REALISTIC OPTIMISM</h4>
                     <ul class="col-md-offset-2">
                         <li>Role play/imagine failing at course-end tests…how should they react, what should they expect?</li>
                         <li>Remind them of the Pros – the positives – of completing the course and how far they’ve come.</li>
                     </ul>
-                    <h4 class="text-center">2. SUPPORT & SOURCE JOBS</h4>
+                    <h4 class="text-center" >2. SUPPORT & SOURCE JOBS</h4>
                     <ul class="col-md-offset-2">
                         <li>Let students know of what they should expect during the rest of their course.</li>
                         <li>Perhaps refer clients to groups, which will enhance their peer group.</li>
                     </ul>
-                    <h4 class="text-center">3. REINFORCE SELF-IMAGE</h4>
+                    <h4 class="text-center" >3. REINFORCE SELF-IMAGE</h4>
                     <ul class="col-md-offset-2">
                         <li>Compliment the student on their progress and performance.</li>
                         <li>Remind them of the end-goal and benefits.</li>
                         <li>Discuss the student’s STRENGTHS that they are displaying.</li>
                     </ul>
-                    <h4 class="text-center">4. THINK OF THE FUTURE</h4>
+                    <h4 class="text-center" >4. THINK OF THE FUTURE</h4>
                     <label class="col-md-offset-2">Consider what they’re going to do after the course, how are they going to fill the study time, would they want to do another course etc?</label>
-                }
-            </div>
+            }
         </div>
-        <br />  
-            <div>
-                <label class="col-md-6 h4">First Name</label> :
-                <label class="col-md-offset-2 control-label"></label>
+    </div>
+    <br />  
+    <div class="col-md-offset-2">
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
                 @Html.DisplayFor(m => m.FirstName, new { @class = "form-control" })
             </div>
-            <div>
-                <label class="col-md-6 control-label">Surname</label> :
-                <label class="col-md-offset-2 control-label"></label>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Surname, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
                 @Html.DisplayFor(m => m.Surname, new { @class = "form-control" })
             </div>
-            <div>
-                @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-6 control-label" }) :
-                <label class="col-md-offset-2 control-label"></label>
-          @Html.DisplayFor(m => m.DateOfBirth, new { @class = "form-control" })
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.DateOfBirth, new { @class = "form-control" })
             </div>
-            <div>
-                @Html.LabelFor(m => m.State, new { @class = "col-md-6 control-label" }) :
-                <label class="col-md-offset-2 control-label"></label>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.State, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
                 @Html.DisplayFor(m => m.State, new { @class = "form-control" })
             </div>
         </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.PreContemplationPoints, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.PreContemplationPoints, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.ContemplationPoints, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.ContemplationPoints, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.ActionPoints, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.ActionPoints, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.MatrixPreContemplationPoints, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.MatrixPreContemplationPoints, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.MatrixContemplationPoints, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.MatrixContemplationPoints, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.MatrixActionPoints, new { @class = "col-md-6 control-label" })
+            <div class="col-md-6">
+                @Html.DisplayFor(m => m.MatrixActionPoints, new { @class = "form-control" })
+            </div>
+        </div>
+      </div>
+    <br />
+
     </div>
 
-</div>
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-6">
+            @Html.ActionLink("Print PDF", "PrintGls", "Results", new { @id = @Model.Id }, new { @class = "btn btn-primary" })
+        </div>
+    </div>

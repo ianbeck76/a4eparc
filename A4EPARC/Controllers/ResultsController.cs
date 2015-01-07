@@ -11,6 +11,7 @@ using MvcContrib.Pagination;
 using MvcContrib.Sorting;
 using MvcContrib.UI.Grid;
 using Rotativa;
+using A4EPARC.Services;
 namespace A4EPARC.Controllers
 {
     [Authorize(Roles = "IsViewer")]
@@ -76,9 +77,26 @@ namespace A4EPARC.Controllers
                     viewmodel.SiteLabels = _siteLabelsRepository.Get(viewmodel.SchemeId, LanguageCode);
                     if (viewmodel.SiteLabels.Any())
                     {
-                        viewmodel.ActionTypeName = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "name").Description;
-                        viewmodel.ActionTypeDescription = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "description").Description;
-                        viewmodel.ActionTypeSummary = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "summary").Description;
+                        viewmodel = AppendActionDetailsToViewModel(viewmodel);
+                    }
+                }
+            }
+
+            return View(viewmodel);
+        }
+
+        public ActionResult DetailsGls(int id)
+        {
+            var viewmodel = _clientRepository.GetClient(id);
+
+            if (viewmodel != null)
+            {
+                if (viewmodel.ActionIdToDisplay != (int)ActionType.Undefined)
+                {
+                    viewmodel.SiteLabels = _siteLabelsRepository.Get(4, "en-GB");
+                    if (viewmodel.SiteLabels.Any())
+                    {
+                        viewmodel = AppendActionDetailsToViewModel(viewmodel);
                     }
                 }
             }
@@ -163,6 +181,48 @@ namespace A4EPARC.Controllers
             var data = _clientRepository.GetCsvData(ConvertMinDate(datefrom), ConvertMaxDate(dateto), caseId).ToList();
 
             var sb = new StringBuilder();
+
+            if (AuthenticationService.GetCompanyId() == 11)
+            {
+                sb = GetGlsExcel(data);
+            }
+            else {
+                sb = GetStandardExcel(data);
+            }
+
+            return File(new UTF8Encoding().GetBytes(sb.ToString()), "text/csv", string.Format("Client_Data_{0}.csv", DateTime.Now.ToString("yyyyMMdd-HHmmss")));
+        }
+
+        private StringBuilder GetGlsExcel(IList<ClientCsvModel> data)
+        {
+            var sb = new StringBuilder();
+            sb.Append("CreatedDate,Username,FirstName,Surname,Date Of Birth,State,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points");
+            sb.AppendLine(Environment.NewLine);
+
+            foreach (var d in data)
+            {
+                sb.Append(d.CreatedDate + ",");
+                sb.Append(d.Username + ",");
+                sb.Append(d.FirstName + ",");
+                sb.Append(d.Surname+ ",");
+                sb.Append(d.DateOfBirth.ToString("dd/MM/yyyy ") + ",");
+                sb.Append(d.State + ",");
+                sb.Append(d.ActionName + ","); 
+                sb.Append(d.AnswerString.Replace(',', '-') + ",");
+                sb.Append(d.ActionPoints + ",");
+                sb.Append(d.ContemplationPoints + ",");
+                sb.Append(d.PreContemplationPoints + ",");
+                sb.Append(d.MatrixActionPoints + ",");
+                sb.Append(d.MatrixContemplationPoints + ",");
+                sb.Append(d.MatrixPreContemplationPoints + ",");
+                sb.AppendLine(Environment.NewLine);
+            }
+            return sb;
+        }
+
+        private StringBuilder GetStandardExcel(IList<ClientCsvModel> data) 
+        {
+            var sb = new StringBuilder();
             sb.Append("CreatedDate,Username,CaseWorker Name,Case Worker ID,Case ID,Date Of Birth,Gender,Length Of Unemployment,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points,Comments");
             sb.AppendLine(Environment.NewLine);
 
@@ -177,7 +237,7 @@ namespace A4EPARC.Controllers
                 sb.Append(d.Gender + ",");
                 sb.Append(d.LengthOfUnemployment + ",");
                 sb.Append(d.ActionName + ",");
-                sb.Append(d.AnswerString.Replace(',','-') + ",");
+                sb.Append(d.AnswerString.Replace(',', '-') + ",");
                 sb.Append(d.ActionPoints + ",");
                 sb.Append(d.ContemplationPoints + ",");
                 sb.Append(d.PreContemplationPoints + ",");
@@ -187,8 +247,7 @@ namespace A4EPARC.Controllers
                 sb.Append(d.Comments);
                 sb.AppendLine(Environment.NewLine);
             }
-
-            return File(new UTF8Encoding().GetBytes(sb.ToString()), "text/csv", string.Format("Client_Data_{0}.csv", DateTime.Now.ToString("yyyyMMdd-HHmmss")));
+            return sb;
         }
 
         private static string ObjectToCsvData<T>(List<T> objects)

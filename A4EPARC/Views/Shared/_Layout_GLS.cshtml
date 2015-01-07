@@ -22,7 +22,7 @@
        
                 @if (Request.IsAuthenticated)
                 {
-                    <input id="CompanyId" value="9" type="hidden"/>
+                    <input id="CompanyId" value="11" type="hidden"/>
                     <div class="navbar-header">
                         <button id="toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="icon-bar"></span>
@@ -31,11 +31,19 @@
                         </button>
                     </div>
                       <form class="collapse navbar-collapse navbar-form navbar-left">
-                        <a title="Home" href="/" class="btn btn-primary btn-sm navbar-btn"><i class="icon icon-home"></i></a>
+                          <a title="Home" href="/"><img style="max-height: 80px; cursor: pointer;" src="~/Content/images/GLSLogo.png" alt=""></a>
+                          <a title="Home" href="/"><img title="Home" style="max-height: 80px; cursor: pointer;" src="~/Content/images/AC3Logo.png" alt=""></a>
                     </form>
                     <div class="collapse navbar-collapse navbar-right">
                         @Html.Partial("_NavigationLinks")
                     </div>
+                }
+                else
+                {
+                    <form class="collapse navbar-collapse navbar-form navbar-left">
+                        <a title="Home" href="/"><img style="max-height: 80px; cursor: pointer;" src="~/Content/images/GLSLogo.png" alt=""></a>
+                        <a title="Home" href="/"><img title="Home" style="max-height: 80px; cursor: pointer;" src="~/Content/images/AC3Logo.png" alt=""></a>
+                    </form>
                 }
             </div>
         </div>  

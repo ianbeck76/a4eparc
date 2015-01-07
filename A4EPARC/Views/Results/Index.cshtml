@@ -56,12 +56,21 @@
             <br/>
 @if (Model.Results.Any())
 {
-	@Html.Grid(Model.Results).AutoGenerateColumns().Columns(column =>
+    var companyId = A4EPARC.Services.AuthenticationService.GetCompanyId();
+    
+	@Html.Grid(Model.Results).Columns(column =>
 {
-    column.For(a => "<a href='" + @Url.Action("Details", "Results", new { Area="", id = a.Id }) + "' class='icon icon-edit' title='Display'></a>").Encode(false).Sortable(false);
-    if (Context.User.IsInRole("IsSuperAdmin"))
+    column.For(a => a.CreatedDate).Named("Created Date").Sortable(false);
+    column.For(a => a.ActionName).Named("Action Name").Sortable(false);
+    column.For(a => a.AnswerString).Named("Answer String").Sortable(false);
+    column.For(a => a.Username).Named("Username").Sortable(false);
+    if (@companyId == 11)
     {
-     //   column.For(a => "<a href='" + @Url.Action("Delete", "Results", new { a.Id }) + "' class='icon icon-delete' title='Delete'></a>").Encode(false).Sortable(false);
+        column.For(a => "<a href='" + @Url.Action("DetailsGls", "Results", new { Area = "", id = a.Id }) + "' class='icon icon-edit' title='Display'></a>").Encode(false).Sortable(false);
+    }
+    else {
+        column.For(a => a.CaseID).Named("Case ID").Sortable(false);
+        column.For(a => "<a href='" + @Url.Action("Details", "Results", new { Area = "", id = a.Id }) + "' class='icon icon-edit' title='Display'></a>").Encode(false).Sortable(false);
     }
 }).Sort(Model.GridSortOptions).Attributes(@width => "100%", @class => "table table-striped table-bordered table-hover")
 

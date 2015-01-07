@@ -19,12 +19,14 @@ namespace A4EPARC.ViewModels
         public string Company { get; set; }
         public string CaseWorkerName { get; set; }
         public string CaseWorkerId { get; set; }
+        public string FirstName { get; set; }
         public string Surname { get; set; }
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string LengthOfUnemployment { get; set; }
         public string Comments { get; set; }
         public string CaseId { get; set; }
+        public string State { get; set; }
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
     }

@@ -354,8 +354,10 @@
     <Content Include="Content\fonts\roboto\Roboto-Regular-webfont.svg" />
     <Content Include="Content\fonts\roboto\Roboto-Thin-webfont.svg" />
     <Content Include="Content\fonts\roboto\Roboto-ThinItalic-webfont.svg" />
+    <Content Include="Content\images\AC3Logo.png" />
     <Content Include="Content\images\bg_fade_right.png" />
     <Content Include="Content\images\bg_fade_top.png" />
+    <Content Include="Content\images\GLSLogo.png" />
     <Content Include="Content\jquery.timepicker.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -817,6 +819,7 @@
     <Content Include="Views\Survey\GlsOne.cshtml" />
     <Content Include="Views\Survey\GlsTwo.cshtml" />
     <Content Include="Views\Results\GlsPdf.cshtml" />
+    <Content Include="Views\Results\DetailsGls.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

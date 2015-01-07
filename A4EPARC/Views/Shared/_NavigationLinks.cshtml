@@ -14,8 +14,8 @@
             @if (Context.User.IsInRole("IsAdmin"))
             {
                 <li><a href="@Url.Action("Index", "User", new { Area = "" })"><i class="fa fa-edit"></i> User Admin </a></li>
-                <li><a href="@Url.Action("Index", "SiteLabels", new { Area = "" })"><i class="fa fa-edit"></i> Site Admin </a></li>
-                <li><a href="@Url.Action("Index", "QuestionAdmin", new { Area = "" })"><i class="fa fa-edit"></i> Questions Admin </a></li>
+                @*<li><a href="@Url.Action("Index", "SiteLabels", new { Area = "" })"><i class="fa fa-edit"></i> Site Admin </a></li>
+                <li><a href="@Url.Action("Index", "QuestionAdmin", new { Area = "" })"><i class="fa fa-edit"></i> Questions Admin </a></li>*@
             }
         </ul>
     </li>
