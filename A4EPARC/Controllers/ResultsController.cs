@@ -12,6 +12,9 @@ using MvcContrib.Sorting;
 using MvcContrib.UI.Grid;
 using Rotativa;
 using A4EPARC.Services;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 namespace A4EPARC.Controllers
 {
     [Authorize(Roles = "IsViewer")]
@@ -20,14 +23,22 @@ namespace A4EPARC.Controllers
 
         private readonly IClientRepository _clientRepository;
         private readonly ISiteLabelsRepository _siteLabelsRepository;
+        private readonly ICompanyRepository _companyRepository;
+        private readonly IQuestionRepository _questionRepository;
 
-        public ResultsController(IClientRepository clientRepository, ISiteLabelsRepository siteLabelsRepository)
+        public ResultsController(IClientRepository clientRepository,
+             ISiteLabelsRepository siteLabelsRepository, 
+             ICompanyRepository companyRepository, 
+             IQuestionRepository questionRepository)
         {
             _clientRepository = clientRepository;
             _siteLabelsRepository = siteLabelsRepository;
+            _companyRepository = companyRepository;
+            _questionRepository = questionRepository;
         }
 
-        public ActionResult Index(string datefrom, string dateto, string caseId, string clientId,
+        public ActionResult Index(string datefrom, string dateto, string jobseekerId, 
+                                string surname, string username, string company,
                                   GridSortOptions gridSortOptions, int? page)
         {
 
@@ -45,13 +56,24 @@ namespace A4EPARC.Controllers
             if (dateto == "null")
                 dateto = "";
  
-            if (caseId == "null")
-                caseId = "";
+            if (jobseekerId == "null")
+                jobseekerId = "";
  
-            if (clientId == "null")
-                clientId = "";
- 
-            var query = _clientRepository.All(ConvertMinDate(datefrom), ConvertMaxDate(dateto), caseId, clientId);
+            if (surname == "null")
+                surname = "";
+
+            if (username == "null")
+                username = "";
+
+            if (company == "null")
+                company = "";
+
+            if (!GetCurrentUser().IsSuperAdmin)
+            {
+                company = GetCompanyDetails().Name;
+            }
+
+            var query = _clientRepository.All(ConvertMinDate(datefrom), ConvertMaxDate(dateto), jobseekerId, surname, username, company);
             
             var model = new ClientResultListViewModel
             {
@@ -59,8 +81,11 @@ namespace A4EPARC.Controllers
                 Results = query.AsPagination(page.GetValueOrDefault() == 0 ? 1 : page.GetValueOrDefault(), 10),
                 DateFrom = datefrom,
                 DateTo = dateto,
-                CaseID = caseId,
-                ClientID = clientId
+                JobSeekerID = jobseekerId,
+                Surname = surname,
+                Username = username,
+                Company = company,
+                Companies = _companyRepository.All().Select(c => c.Name).ToList()
             };
 
             return View(model);
@@ -123,26 +148,22 @@ namespace A4EPARC.Controllers
             return View(viewmodel);
         }
 
-        public ActionResult GlsPdf(int id)
+        public ActionResult GlsBronzePdf(int id)
         {
-            var viewmodel = _clientRepository.GetClient(id);
-
-            if (viewmodel != null)
-            {
-                if (viewmodel.ActionIdToDisplay != (int)ActionType.Undefined)
-                {
-                    viewmodel.SiteLabels = _siteLabelsRepository.Get(viewmodel.SchemeId, "en-GB");
-                    if (viewmodel.SiteLabels.Any())
-                    {
-                        viewmodel = AppendActionDetailsToViewModel(viewmodel);
-                    }
-                }
-            }
-
-            return View(viewmodel);
+            return View(GetViewModel(id));
         }
 
-        public ActionResult Print(int id)
+        public ActionResult GlsSilverPdf(int id)
+        {
+           return View(GetViewModel(id));
+        }
+
+        public ActionResult GlsGoldPdf(int id)
+        {
+            return View(GetViewModel(id));
+        }
+
+        public ActionResult GeneratePdf(int id)
         {
             var viewmodel = _clientRepository.GetClient(id);
 
@@ -151,13 +172,45 @@ namespace A4EPARC.Controllers
                            new { id = id }) { FileName = viewmodel.Company + " SurveyDetails/" + id + ".pdf" };
         }
 
-        public ActionResult PrintGls(int id)
+        public ActionResult GenerateGlsPdf(int id)
         {
             var viewmodel = _clientRepository.GetClient(id);
 
-            return new ActionAsPdf(
-                           "GlsPdf",
-                           new { id = id }) { FileName = viewmodel.Company + " SurveyDetails/" + id + ".pdf" };
+            switch (viewmodel.ActionIdToDisplay)
+            {
+                case 2:
+                    return new ActionAsPdf(
+                    "GlsSilverPdf",
+                        new { id = id }) { FileName = viewmodel.Company + " Silver/" + id + ".pdf" };
+                case 4:
+                case 5:
+                    return new ActionAsPdf(
+                    "GlsGoldPdf",
+                        new { id = id }) { FileName = viewmodel.Company + " Gold/" + id + ".pdf" };
+                case 1:
+                case 3:
+                    return new ActionAsPdf(
+                    "GlsBronzePdf",
+                        new { id = id }) { FileName = viewmodel.Company + " Bronze/" + id + ".pdf" };
+                default:
+                    return new ActionAsPdf(
+                    "GlsBronzePdf",
+                        new { id = id }) { FileName = viewmodel.Company + " Bronze/" + id + ".pdf" };
+            }
+        }
+
+        public static string RenderPartialToString(Controller controller, string viewName, object model)
+        {
+            controller.ViewData.Model = model;
+
+            using (StringWriter sw = new StringWriter())
+            {
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, viewName);
+                ViewContext viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+
+                return sw.GetStringBuilder().ToString();
+            }
         }
 
         public ActionResult Delete(int id)
@@ -167,7 +220,7 @@ namespace A4EPARC.Controllers
             return RedirectToAction("Index", new { id });
         }
 
-        public FileResult PrintList(string datefrom, string dateto, string caseId)
+        public FileResult ExportList(string datefrom, string dateto, string jobseekerid, string surname, string username, string company)
         {
             if (datefrom == "null")
                 datefrom = "";
@@ -175,10 +228,19 @@ namespace A4EPARC.Controllers
             if (dateto == "null")
                 dateto = "";
 
-            if (caseId == "null")
-                caseId = "";
+            if (jobseekerid == "null")
+                jobseekerid = "";
 
-            var data = _clientRepository.GetCsvData(ConvertMinDate(datefrom), ConvertMaxDate(dateto), caseId).ToList();
+            if (surname == "null")
+                surname = "";
+
+            if (username == "null")
+                username = "";
+
+            if (company == "null")
+                company = "";
+
+            var data = _clientRepository.GetCsvData(ConvertMinDate(datefrom), ConvertMaxDate(dateto), jobseekerid, surname, username, company).ToList();
 
             var sb = new StringBuilder();
 
@@ -193,10 +255,49 @@ namespace A4EPARC.Controllers
             return File(new UTF8Encoding().GetBytes(sb.ToString()), "text/csv", string.Format("Client_Data_{0}.csv", DateTime.Now.ToString("yyyyMMdd-HHmmss")));
         }
 
+        private string GetActionBand(string actionname) 
+        {
+            switch (actionname.ToLower())
+            {
+                case "precontemplation":
+                case "contemplation":
+                    return "BRONZE";
+                case "unreflectiveaction":
+                    return "SILVER";
+                case "action":
+                case "preparation":
+                    return "GOLD";
+                default:
+                    return actionname;
+            }
+        }
+
+
+        private ClientViewModel GetViewModel(int id)
+        {
+            var viewmodel = _clientRepository.GetClient(id);
+
+            if (viewmodel != null)
+            {
+                if (viewmodel.ActionIdToDisplay != (int)ActionType.Undefined)
+                {
+                    viewmodel.SiteLabels = _siteLabelsRepository.Get(viewmodel.SchemeId, "en-GB");
+                    if (viewmodel.SiteLabels.Any())
+                    {
+                        viewmodel = AppendActionDetailsToViewModel(viewmodel);
+                    }
+                }
+
+                viewmodel.Questions = _questionRepository.Get(viewmodel.SchemeId, LanguageCode);
+            }
+
+            return viewmodel;
+        }
+
         private StringBuilder GetGlsExcel(IList<ClientCsvModel> data)
         {
             var sb = new StringBuilder();
-            sb.Append("CreatedDate,Username,FirstName,Surname,Date Of Birth,State,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points");
+            sb.Append("CreatedDate,Username,FirstName,Surname,Previous Surveys,Date Of Birth,State,Action Name,Action Band,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points");
             sb.AppendLine(Environment.NewLine);
 
             foreach (var d in data)
@@ -205,17 +306,19 @@ namespace A4EPARC.Controllers
                 sb.Append(d.Username + ",");
                 sb.Append(d.FirstName + ",");
                 sb.Append(d.Surname+ ",");
+                sb.Append(d.HowManyTimesHasSurveyBeenCompleted + ",");
                 sb.Append(d.DateOfBirth.ToString("dd/MM/yyyy ") + ",");
                 sb.Append(d.State + ",");
-                sb.Append(d.ActionName + ","); 
+                sb.Append(d.ActionName + ",");
+                sb.Append(GetActionBand(d.ActionName) + ","); 
                 sb.Append(d.AnswerString.Replace(',', '-') + ",");
                 sb.Append(d.ActionPoints + ",");
                 sb.Append(d.ContemplationPoints + ",");
                 sb.Append(d.PreContemplationPoints + ",");
                 sb.Append(d.MatrixActionPoints + ",");
                 sb.Append(d.MatrixContemplationPoints + ",");
-                sb.Append(d.MatrixPreContemplationPoints + ",");
-                sb.AppendLine(Environment.NewLine);
+                sb.Append(d.MatrixPreContemplationPoints);
+                sb.Append(Environment.NewLine);
             }
             return sb;
         }
@@ -223,19 +326,24 @@ namespace A4EPARC.Controllers
         private StringBuilder GetStandardExcel(IList<ClientCsvModel> data) 
         {
             var sb = new StringBuilder();
-            sb.Append("CreatedDate,Username,CaseWorker Name,Case Worker ID,Case ID,Date Of Birth,Gender,Length Of Unemployment,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points,Comments");
+            sb.Append("CreatedDate,Username,FirstName,Surname,CaseWorker Name,Case Worker ID,JobSeekerID,Previous Surveys,Date Of Birth,Gender,Length Of Unemployment,State,Stream,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points,Comments");
             sb.AppendLine(Environment.NewLine);
 
             foreach (var d in data)
             {
                 sb.Append(d.CreatedDate + ",");
                 sb.Append(d.Username + ",");
+                sb.Append(d.FirstName + ",");
+                sb.Append(d.Surname + ",");
                 sb.Append(d.CaseWorkerName + ",");
                 sb.Append(d.CaseWorkerId + ",");
-                sb.Append(d.CaseId + ",");
+                sb.Append(d.JobSeekerID + ",");
+                sb.Append(d.HowManyTimesHasSurveyBeenCompleted + ",");
                 sb.Append(d.DateOfBirth.ToString("MM/dd/yyyy ") + ",");
                 sb.Append(d.Gender + ",");
                 sb.Append(d.LengthOfUnemployment + ",");
+                sb.Append(d.State + ",");
+                sb.Append(d.Stream + ",");
                 sb.Append(d.ActionName + ",");
                 sb.Append(d.AnswerString.Replace(',', '-') + ",");
                 sb.Append(d.ActionPoints + ",");
@@ -245,7 +353,7 @@ namespace A4EPARC.Controllers
                 sb.Append(d.MatrixContemplationPoints + ",");
                 sb.Append(d.MatrixPreContemplationPoints + ",");
                 sb.Append(d.Comments);
-                sb.AppendLine(Environment.NewLine);
+                sb.Append(Environment.NewLine);
             }
             return sb;
         }

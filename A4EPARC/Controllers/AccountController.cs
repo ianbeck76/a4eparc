@@ -48,6 +48,11 @@ namespace A4EPARC.Controllers
                 var userId = _authenticationService.Login(model.Email, model.Password);
                 if (userId != 0)
                 {
+                    var user = _userRepository.SingleOrDefault(userId);
+                    if (user.IsSuperAdmin)
+                    {
+                        return RedirectToAction("Company", "Select");
+                    }
                     return RedirectToLocal(returnUrl);
                 }
             }
@@ -78,7 +83,7 @@ namespace A4EPARC.Controllers
             {
                 if (_authenticationService.LoginExists(forgottenPasswordModel.Email))
                 {
-                    var password = _authenticationService.CreateSalt(6);
+                    var company = GetCompanyDetails();
                     try
                     {
                         var html = _serializeService.RenderRazorViewToString(this.ControllerContext,
@@ -87,11 +92,12 @@ namespace A4EPARC.Controllers
                                                                             {
                                                                                 Username =
                                                                                     forgottenPasswordModel.Email,
-                                                                                Password = password
+                                                                                Password = company.DefaultPassword
                                                                             });
-                        _emailService.Send(ConfigurationManager.AppSettings["EmailFromAddress"],
-                                          forgottenPasswordModel.Email, "Forgotten Password", html);
-                        _authenticationService.ChangePassword(forgottenPasswordModel.Email, password);
+                        _authenticationService.ChangePassword(forgottenPasswordModel.Email, company.DefaultPassword);
+                        _emailService.Send(company.EmailFromAddress,
+                    forgottenPasswordModel.Email, "Forgotten Password", html);
+  
                     }
                     catch (Exception ex)
                     {

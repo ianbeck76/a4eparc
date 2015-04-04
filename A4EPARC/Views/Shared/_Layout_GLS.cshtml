@@ -22,7 +22,6 @@
        
                 @if (Request.IsAuthenticated)
                 {
-                    <input id="CompanyId" value="11" type="hidden"/>
                     <div class="navbar-header">
                         <button id="toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="icon-bar"></span>
@@ -50,7 +49,7 @@
 
         <div id="mask"></div>
         <br/>
-        <div id="page" class="container-fluid page" style="padding-top: 10px;">
+        <div id="page" class="container-fluid page" style="padding-top: 50px;">
             @RenderBody()
         </div>
     </div>
@@ -59,7 +58,7 @@
         <div id="footer" class="container-fluid footer">
             <div class="row">
                 <div class="col-xs-11">
-                    <p>&copy; @DateTime.UtcNow.Year Powered by Esher House Pty Ltd Pro-Change Behavior Inc</p>
+                    <p>&copy; @DateTime.UtcNow.Year Powered by Esher House Pty Ltd</p>
                 </div>
                 <div class="col-xs-1 pull-right text-right">
                     <a href="#top" title="Top"><i class="fa fa-chevron-up fa-lg"></i></a>

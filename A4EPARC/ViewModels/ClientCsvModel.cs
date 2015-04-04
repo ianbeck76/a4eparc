@@ -24,10 +24,13 @@ namespace A4EPARC.ViewModels
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string LengthOfUnemployment { get; set; }
+        public int HowManyTimesHasSurveyBeenCompleted { get; set; }
         public string Comments { get; set; }
-        public string CaseId { get; set; }
+        public string JobSeekerID { get; set; }
         public string State { get; set; }
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
+
+        public string Stream { get; set; }
     }
 }

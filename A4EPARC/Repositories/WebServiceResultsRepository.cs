@@ -12,7 +12,7 @@ namespace A4EPARC.Repositories
     {
         #region Public Methods
 
-        public IQueryable<WebServiceResultsViewModel> GetResultsView(bool showAllRecords)
+        public IQueryable<WebServiceResultsViewModel> GetResultsView()
         {
             using (var connection = DbConnectionFactory.CreateConnection())
             {
@@ -23,16 +23,10 @@ namespace A4EPARC.Repositories
                 var commandText = "select w.Id, c.Name, k.Type, w.CreatedDate, w.JobSeekerID, w.ActionTypeId, w.AnswerString ";
                 commandText += "FROM WebServiceLog w INNER JOIN WebServiceKeys k ON k.UniqueKey = w.UniqueKey ";
                 commandText += "INNER JOIN Company c ON c.Id = k.CompanyId";
-                if (!showAllRecords)
-                {
-                    commandText += " AND w.CreatedDate > @ExpiryDate";
-                }
 
                 cmd.CommandText = commandText;
 
                 cmd.Prepare();
-
-                cmd.Parameters.Add(new { @ExpiryDate = DateTime.UtcNow.AddMonths(-1).AddDays(-1) });
 
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -52,7 +46,7 @@ namespace A4EPARC.Repositories
             }
         }
 
-        public List<WebServiceCsvExportViewModel> GetCsvData(DateTime? toDate, DateTime? fromDate, string environmentType, string jobSeekerID, bool showAllRecords)
+        public List<WebServiceCsvExportViewModel> GetCsvData(DateTime? toDate, DateTime? fromDate, string environmentType, string jobSeekerID, string company)
         {
             using (var connection = DbConnectionFactory.CreateConnection())
             {
@@ -64,25 +58,22 @@ namespace A4EPARC.Repositories
                 var commandText = "select w.Id, c.Name, k.Type, w.CreatedDate, w.JobSeekerID, w.ActionTypeId, w.AnswerString ";
                 commandText += "FROM WebServiceLog w INNER JOIN WebServiceKeys k ON k.UniqueKey = w.UniqueKey ";
                 commandText += "INNER JOIN Company c ON c.Id = k.CompanyId";
-                if (!showAllRecords)
-                {
-                    commandText += " WHERE w.CreatedDate > @ExpiryDate";
-                }
+
                 if (toDate.HasValue)
                 {
-                    commandText += !showAllRecords ? " AND w.CreatedDate < @ToDate" : " WHERE w.CreatedDate < @ToDate";
+                    commandText += " WHERE w.CreatedDate < @ToDate";
                 }
                 if (fromDate.HasValue)
                 {
-                    commandText += !showAllRecords || toDate.HasValue ? " AND w.CreatedDate > @FromDate" : " WHERE w.CreatedDate > @FromDate";
+                    commandText += toDate.HasValue ? " AND w.CreatedDate > @FromDate" : " WHERE w.CreatedDate > @FromDate";
                 }
                 if (!string.IsNullOrWhiteSpace(environmentType) && environmentType != "BOTH")
                 {
-                    commandText += !showAllRecords || toDate.HasValue || fromDate.HasValue ? " AND k.Type = @EnvironmentType" : " WHERE k.Type = @EnvironmentType";
+                    commandText += toDate.HasValue || fromDate.HasValue ? " AND k.Type = @EnvironmentType" : " WHERE k.Type = @EnvironmentType";
                 }
                 if (!string.IsNullOrWhiteSpace(jobSeekerID))
                 {
-                    commandText += !showAllRecords || toDate.HasValue || fromDate.HasValue || !string.IsNullOrWhiteSpace(environmentType) ? " AND w.JobSeekerID = @JobSeekerID" : " WHERE w.JobSeekerID = @JobSeekerID";
+                    commandText += toDate.HasValue || fromDate.HasValue || !string.IsNullOrWhiteSpace(environmentType) ? " AND w.JobSeekerID = @JobSeekerID" : " WHERE w.JobSeekerID = @JobSeekerID";
                 }
                 cmd.CommandText = commandText;
 
@@ -146,9 +137,9 @@ namespace A4EPARC.Repositories
 
     public interface IWebServiceResultsRepository : IRepository<WebServiceResultsViewModel>
     {
-        IQueryable<WebServiceResultsViewModel> GetResultsView(bool showAllRecords);
+        IQueryable<WebServiceResultsViewModel> GetResultsView();
 
         List<WebServiceCsvExportViewModel> GetCsvData(DateTime? toDate, DateTime? fromDate, string environmentType,
-                                                      string jobSeekerID, bool showAllRecords);
+                                                      string jobSeekerID, string company);
     }
 }

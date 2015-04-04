@@ -9,7 +9,7 @@ namespace A4EPARC
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                "~/Scripts/jquery-1.9.1.js",
+                "~/Scripts/jquery-1.10.2.js",
                 "~/Scripts/jquery-migrate-1.2.1.js",
                 "~/Scripts/jquery.cookie.js",
                 "~/Scripts/ui-validation.js",
@@ -25,8 +25,8 @@ namespace A4EPARC
             ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                  "~/Scripts/jquery.validate.js",
-                  "~/Scripts/jquery.validate.unobtrusive.js"));
+                      "~/Scripts/jquery.validate.js",
+                      "~/Scripts/jquery.validate.unobtrusive.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Content/bootstrap/js/bootstrap.js"));
@@ -43,6 +43,8 @@ namespace A4EPARC
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/css/theme.css"));
 
             bundles.Add(new StyleBundle("~/Content/css_gls").Include("~/Content/css_gls/theme.css"));
+
+            bundles.Add(new StyleBundle("~/Content/css_a4e").Include("~/Content/css_a4e/theme.css"));
    
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                 "~/Content/themes/base/jquery.ui.core.css",

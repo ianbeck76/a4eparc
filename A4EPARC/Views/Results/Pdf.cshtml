@@ -1,173 +1,30 @@
 ﻿@model A4EPARC.ViewModels.ClientViewModel
-<div class="container form-horizontal">
+@{
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
 
-    <input type="hidden" value="@Model.SchemeId" id="SchemeId" />
-
-    <table class="container" width="100%" style="font-size: large; background-color:#f5f5f5;">
-        <tr>
-            <td>
-                &nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                @Html.LabelFor(m => m.CaseWorkerName, new { @class = "control-label" }) :
-                @Html.DisplayFor(m => m.CaseWorkerName, new { @class = "form-control" })
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                @Html.LabelFor(m => m.CaseWorkerId, new { @class = "control-label" }) :
-                @Html.DisplayFor(m => m.CaseWorkerId, new { @class = "form-control" })
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                @Html.LabelFor(m => m.Surname, new { @class = "col-md-6 control-label" }) :
-                @Html.DisplayFor(m => m.Surname, new { @class = "form-control" })
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                @Html.LabelFor(m => m.CaseId, new { @class = "col-md-6 control-label" }) :
-                @Html.DisplayFor(m => m.CaseId, new { @class = "form-control" })
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                @Html.LabelFor(m => m.Gender, new { @class = "col-md-6 control-label" }) :
-                @Html.DisplayFor(m => m.Gender, new { @class = "form-control" })
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-6 control-label" }) :
-                @Html.DisplayFor(m => m.DateOfBirth, new { @class = "form-control" })
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                @Html.LabelFor(m => m.Comments, new { @class = "col-md-6 control-label" }) :
-                @Html.DisplayFor(m => m.Comments, new { @class = "form-control" })
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                @Html.LabelFor(m => m.LengthOfUnemployment, new { @class = "col-md-6 control-label" }) :
-                @Html.DisplayFor(m => m.LengthOfUnemployment, new { @class = "form-control" })
-            </td>
-        </tr>
-        <tr>
-            <td>
-                &nbsp;
-            </td>
-        </tr>
-    </table>
-        
-    <div width="100%" style="font-size: large;">
-
-        <h2 class="text-center">@Model.ActionTypeName</h2>
-        <div class="row form-group">
-            <div class="col-md-12">
-                <h2>@Model.ActionTypeDescription</h2>
-            </div>
-        </div>
-        <div id="chartdiv" class="container row center-block form-group" style="min-width: 1080px;"></div>
-
-    </div>
-        <br />
-        <div class="row text-center">
-            <strong>@Model.ActionTypeSummary</strong>
+}
+<div style="padding-bottom:11em;">
+    <h1 class="col-xs-4" style="color:darkblue" id="@Model.ActionTypeName + Name">@Model.SiteLabels.FirstOrDefault(l => l.Name == Model.ActionTypeName + "Name").Description</h1>
+    <h3 class="col-xs-8" style="color:red" id="@Model.ActionTypeName + Summary">@Model.SiteLabels.FirstOrDefault(l => l.Name == Model.ActionTypeName + "Summary").Description</h3>
+</div>
+<div>
+    <div>
+        <div style="border-style:solid; border-width:2px;padding:1em;background-color:white;">
+            <h4 id="MotivatatingStatementTitle">@Model.SiteLabels.FirstOrDefault(l => l.Name == "MotivatingStatementTitle").Description</h4>
+            <h4 id="@Model.ActionTypeName + Statement">@Model.SiteLabels.FirstOrDefault(l => l.Name == Model.ActionTypeName + "Description").Description</h4>
         </div>
     </div>
-    <br />
-    <br />
-    <table class="container" width="100%" style="font-size: large; background-color:#f5f5f5;">
-    <tr>
-        <td>
-            &nbsp;
-        </td>
-    </tr>
-    <tr align="center">
-        <td>
-            @Html.LabelFor(m => m.PreContemplationPoints, new { @class = "col-md-6 control-label" }) :
-            @Html.DisplayFor(m => m.PreContemplationPoints, new { @class = "form-control" })
-        </td>
-        <td>
-            @Html.LabelFor(m => m.MatrixPreContemplationPoints, new { @class = "col-md-6 control-label" }) :
-            @Html.DisplayFor(m => m.MatrixPreContemplationPoints, new { @class = "form-control" })
-        </td>
-    </tr>
-    <tr align="center">
-        <td>
-            @Html.LabelFor(m => m.ContemplationPoints, new { @class = "col-md-6 control-label" })
-            @Html.DisplayFor(m => m.ContemplationPoints, new { @class = "form-control" })
-        </td>
-        <td>
-            @Html.LabelFor(m => m.MatrixContemplationPoints, new { @class = "col-md-6 control-label" })
-            @Html.DisplayFor(m => m.MatrixContemplationPoints, new { @class = "form-control" })
-        </td>
-    </tr>
-    <tr align="center">
-        <td>
-            @Html.LabelFor(m => m.ActionPoints, new { @class = "col-md-6 control-label" })
-            @Html.DisplayFor(m => m.ActionPoints, new { @class = "form-control" })
-        </td>
-        <td>
-            @Html.LabelFor(m => m.MatrixActionPoints, new { @class = "col-md-6 control-label" })
-            @Html.DisplayFor(m => m.MatrixActionPoints, new { @class = "form-control" })
-        </td>
-    </tr>
-    <tr>
-        <td>
-            &nbsp;
-        </td>
-    </tr>
-</table>
- 
 
-<script src="~/Scripts/jquery-1.9.1.js"></script>
-<script src="~/Scripts/highcharts.js"></script>
-<script src="~/Scripts/hightcharts.exporting.js"></script>
-<script type="text/javascript">
+    <div style="padding:1em;">
+        <h4>@Model.SiteLabels.FirstOrDefault(l => l.Name == "BodyTitle").Description</h4>
+        <ul>
+            @foreach (var item in Model.SiteLabels.Where(l => l.Name == Model.ActionTypeName + "BulletPoint"))
+            {
+                <li class="h4">@item.Description</li>
+            }
+        </ul>
+    </div>
 
-    $('#chartdiv').highcharts({
-        title: {
-            text: '',
-            x: -10 //center
-        },
-        subtitle: {
-            text: 'Source: psychass.com',
-            x: -10
-        },
-        xAxis: {
-            categories: ['Precontemplation', 'Contemplation', 'Action']
-        },
-        yAxis: {
-            title: {
-                text: 'Matrix Score'
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-        tooltip: {
-            valueSuffix: ''
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
-            borderWidth: 0
-        },
-        series: [{
-            name: ' ',
-            data: [@Model.MatrixPreContemplationPoints, @Model.MatrixContemplationPoints, @Model.MatrixActionPoints]
-        }]
-    });
+    @Html.Partial("_InterventionGuide", Model)
 
-</script>
-
-
+</div>

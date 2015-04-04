@@ -49,13 +49,7 @@ namespace A4EPARC.Controllers
         {
             if (viewmodel.ActionIdToDisplay != (int)ActionType.Undefined)
             {
-                viewmodel.ActionTypeName = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "name").Description;
-                viewmodel.ActionTypeDescription = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "description").Description;
-                viewmodel.ActionTypeSummary = viewmodel.SiteLabels.FirstOrDefault(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "summary").Description;
-                if (viewmodel.SchemeId == 4)
-                {
-                    viewmodel.ActionBulletPoints = viewmodel.SiteLabels.Where(l => l.Name.ToLower() == Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay).ToLower() + "bulletpoint").Select(s => s.Description).ToList();
-                }
+                viewmodel.ActionTypeName = Enum.GetName(typeof(ActionType), viewmodel.ActionIdToDisplay);
             }
             return viewmodel;
         }
@@ -78,6 +72,34 @@ namespace A4EPARC.Controllers
             return AuthenticationService.GetCompanyId();
         }
 
+        [Inject]
+        public ICompanyRepository CompanyRepository { get; set; }
+
+        public Company GetCompanyDetails() 
+        {
+            var companyId = GetCompanyId();
+            if (companyId == 0)
+            {
+                if (Request.Url.AbsoluteUri.Contains("gls") || Request.Url.AbsoluteUri.Contains("ac3"))
+                {
+                    companyId = 11;
+                }
+                else if (Request.Url.AbsoluteUri.Contains("a4e"))
+                {
+                    companyId = 5;
+                }
+                else if (Request.Url.AbsoluteUri.Contains("exemplar"))
+                {
+                    companyId = 10;
+                }
+                else 
+                {
+                    companyId = 1;
+                }
+            }
+            return CompanyRepository.SingleOrDefault("Id = @Id", new { Id = companyId });
+        }
+
         public int GetLoggedInId()
         {
             return AuthenticationService.GetLoggedInId();
@@ -97,18 +119,18 @@ namespace A4EPARC.Controllers
         {
             var reportDateFrom = "";//GetCookieValue(CookieName, GetCookieFilterKey(product, CookieFilters.ReportDateFrom));
             var reportDateTo = "";//GetCookieValue(CookieName, GetCookieFilterKey(product, CookieFilters.ReportDateTo));
-            var caseId = "";//GetCookieValue(CookieName, GetCookieFilterKey(product, CookieFilters.Reference));
-            var clientId = "";//GetCookieValue(CookieName, GetCookieFilterKey(product, CookieFilters.RegistrationNumber));
+            var jobseekerid = "";//GetCookieValue(CookieName, GetCookieFilterKey(product, CookieFilters.Reference));
+            var surname = "";//GetCookieValue(CookieName, GetCookieFilterKey(product, CookieFilters.RegistrationNumber));
 
             if (string.IsNullOrEmpty(reportDateFrom))
                 reportDateFrom = "null";
             if (string.IsNullOrEmpty(reportDateTo))
                 reportDateTo = "null";
-            if (string.IsNullOrEmpty(caseId))
-                caseId = "null";
-            if (string.IsNullOrEmpty(clientId))
-                clientId = "null";
-            var l = ("/results/" + reportDateFrom + "/" + reportDateTo + "/" + caseId + "/" + clientId);
+            if (string.IsNullOrEmpty(jobseekerid))
+                jobseekerid = "null";
+            if (string.IsNullOrEmpty(surname))
+                surname = "null";
+            var l = ("/results/" + reportDateFrom + "/" + reportDateTo + "/" + jobseekerid + "/" + surname);
             return l;
         }
 

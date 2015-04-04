@@ -1,0 +1,42 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+@using A4EPARC.Services
+
+<div class="form-horizontal">
+    <div class="form-group">
+        <input type="hidden" name="ResultId" value="@Model.ResultId" id="ResultId" />
+        @Html.ValidationMessage("WebserviceUnavailable", new { @style = "color:red;" })
+        @Html.ValidationMessage("RecordAlreadyAdded", new { @style = "color:red;" })
+        <h4 id="QuestionHeaderLabel">@LabelService.Get("QuestionHeaderLabel", "Please answer the following using the 5 point scale: 1=Strongly Disagree; 2=Disagree; 3=Neutral; 4=Agree; 5=Strongly Agree", Model.SiteLabels, Model.SchemeId)</h4>
+        <hr class="divider" />
+    </div>
+    <div class="form-group">
+        <div class="col-md-6">
+
+        </div>
+        <div class="hidden-xs hidden-sm col-md-6">
+            <label class="col-md-2-4 text-center" id="StronglyDisagree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "StronglyDisagree").Description</label>
+            <label class="col-md-2-4 text-center" id="Disagree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "Disagree").Description</label>
+            <label class="col-md-2-4 text-center" id="Neutral">@Model.SiteLabels.FirstOrDefault(q => q.Name == "Neutral").Description</label>
+            <label class="col-md-2-4 text-center" id="Agree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "Agree").Description</label>
+            <label class="col-md-2-4 text-center" id="StronglyAgree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "StronglyAgree").Description</label>
+        </div>
+    </div>
+    @foreach (var question in Model.Questions)
+    {
+        <div class="form-group">
+            <div class="col-md-6">
+                <label class="control-label questionlabels">@question.Description</label>
+            </div>
+            <input class="form-control" type="hidden" id="@question.Code" name="@question.Code" value="@question.Answer" data-val="true" data-val-required="Required" />
+            <div class="col-md-6 col-xs-12 btn-group" data-toggle="buttons">
+                <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 1 ? "active" : "")" data-radio-name="@question.Code" data-text="1">1</button>
+                <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 2 ? "active" : "")" data-radio-name="@question.Code" data-text="2">2</button>
+                <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 3 ? "active" : "")" data-radio-name="@question.Code" data-text="3">3</button>
+                <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 4 ? "active" : "")" data-radio-name="@question.Code" data-text="4">4</button>
+                <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 5 ? "active" : "")" data-radio-name="@question.Code" data-text="5">5</button>
+                <div class="field-validation-error" style="color:red;">@Html.ValidationMessage(question.Code)</div>
+            </div>
+        </div>
+    }
+
+</div>

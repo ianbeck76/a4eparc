@@ -308,11 +308,13 @@ $.extend($.validator, {
 			});
 
 			function delegate(event) {
-				var validator = $.data(this[0].form, "validator"),
-					eventType = "on" + event.type.replace(/^validate/, "");
-				if (validator.settings[eventType]) {
-					validator.settings[eventType].call(validator, this[0], event);
-				}
+			    var validator = $.data(this[0].form, "validator"),
+                    eventType = "on" + event.type.replace(/^validate/, "");
+			    // this fixes handling the deleted/never created validator:
+			    if (!validator) return;
+			    if (validator.settings[eventType]) {
+			        validator.settings[eventType].call(validator, this[0], event);
+			    }
 			}
 			$(this.currentForm)
 				.validateDelegate(":text, [type='password'], [type='file'], select, textarea, " +

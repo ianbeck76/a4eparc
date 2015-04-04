@@ -22,8 +22,7 @@ namespace A4EPARC.Repositories
                 }
             }
 
-            var query = @"SELECT COALESCE(e.Id,s.Id) AS Id, 
-                                    e.Name, 
+            var query = @"SELECT DISTINCT e.Name, 
                                     COALESCE(s.Description,e.Description) AS Description, 
                                     COALESCE(s.SchemeId, e.SchemeId) AS SchemeId, 
                                     COALESCE(s.LanguageCode, e.LanguageCode) AS LanguageCode
@@ -34,13 +33,36 @@ namespace A4EPARC.Repositories
                                     AND s.SchemeId = @SchemeId
                                     WHERE e.SchemeId = 1 
                                     AND e.LanguageCode = 'en-GB' 
-                                    ORDER BY e.Id";
-            siteLabels = (List<SiteLabelsViewModel>)Query<SiteLabelsViewModel>(query, new { LanguageCode = languageCode, SchemeId = schemeId.GetValueOrDefault() });
+                                    ORDER BY e.Name";
+            siteLabels = (List<SiteLabelsViewModel>)Query<SiteLabelsViewModel>(query, new { LanguageCode = languageCode, SchemeId = schemeId.GetValueOrDefault() }).ToList();
 
             HttpContext.Current.Cache.Insert("GetSiteLabels" + schemeId.GetValueOrDefault() + languageCode, siteLabels, null, DateTime.Now.AddHours(2), TimeSpan.Zero);
 
             return siteLabels;
         }
+
+        public List<SiteLabelsViewModel> All()
+        {
+            var siteLabels = HttpContext.Current.Cache["GetSiteLabels"] as List<SiteLabelsViewModel>;
+
+            if (siteLabels != null)
+            {
+                if (siteLabels.Any())
+                {
+                    return siteLabels;
+                }
+            }
+
+            var query = @"SELECT s.Name, s.Description,s.SchemeId,s.LanguageCode
+                                    FROM [dbo].[SiteLabels] s
+                                    ORDER BY s.Name";
+            siteLabels = (List<SiteLabelsViewModel>)Query<SiteLabelsViewModel>(query).ToList();
+
+            HttpContext.Current.Cache.Insert("GetSiteLabels", siteLabels, null, DateTime.Now.AddHours(24), TimeSpan.Zero);
+
+            return siteLabels;
+        }
+
 
         public List<SiteLabelsViewModel> GetJtableView()
         {
@@ -71,5 +93,6 @@ namespace A4EPARC.Repositories
         List<SiteLabelsViewModel> GetJtableView();
         int Add(SiteLabelsViewModel model);
         int Save(SiteLabelsViewModel model);
+        List<SiteLabelsViewModel> All();
     }
 }

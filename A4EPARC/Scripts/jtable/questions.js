@@ -13,22 +13,10 @@
                 updateAction: '/QuestionAdmin/EditRow'
             },
             fields: {
-                SchemeId: {
-                    title: 'Scheme',
-                    width: '5%',
-                    options: { 1: 'Adult', 2: 'Youth', 3: 'Exemplar' },
-                    edit: false
-                },
                 Description: {
                     title: 'Description',
                     width: '90%',
                     type: 'textarea'
-                },
-                LanguageCode: {
-                    title: 'Language',
-                    width: '5%',
-                    options: ['en-GB'],
-                    edit: false
                 },
                 Id: {
                     key: true,
@@ -36,47 +24,29 @@
                 }
             }
         });
-        $('#questionlist').jtable('load');
-    }
-    
 
-    if ($('#questionformall').length > 0) {
+        function loadQuestionTable() {
+            $('#questionlist').jtable('load',
+            {
+                scheme: $("#AdminSchemeSelect").val(),
+                language: $("#AdminLanguageSelect").val()
+            });
+        }
 
-        $('#questionlistall').jtable({
-            title: ' ',
-            paging: true,
-            pageSize: 50,
-            sorting: true,
-            defaultSorting: 'Id ASC',
-            actions: {
-                listAction: '/QuestionAdmin/GetRows',
-                updateAction: '/QuestionAdmin/EditRow'
-            },
-            fields: {
-                SchemeId: {
-                    title: 'Scheme',
-                    width: '5%',
-                    options: { 1: 'Adult', 2: 'Youth', 3: 'Exemplar' },
-                    edit: false
-                },
-                Description: {
-                    title: 'Description',
-                    width: '90%',
-                    type: 'textarea'
-                },
-                LanguageCode: {
-                    title: 'Language',
-                    width: '5%',
-                    options: ['en-GB'],
-                    edit: false
-                },
-                Id: {
-                    key: true,
-                    list: false
-                }
-            }
+        $('#searchquestionsbutton').click(function (e) {
+            e.preventDefault();
+            loadQuestionTable();
         });
-        $('#questionlistall').jtable('load');
+
+        loadQuestionTable();
+
+        $("select[id='AdminLanguageSelect']").on('change', function () {
+            loadQuestionTable();
+        });
+
+        $("select[id='AdminSchemeSelect']").on('change', function () {
+            loadQuestionTable();
+        });
     }
 
 });

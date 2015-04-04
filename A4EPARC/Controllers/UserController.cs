@@ -23,9 +23,9 @@ namespace A4EPARC.Areas.Admin.Controllers
         private readonly IEmailService _emailService;
         private readonly IAuthenticationService _authenticationService;
 
-        public UserController(ISecurityService securityService, 
-            IUserRepository userRepository, ICompanyRepository companyRepository, 
-            IEmailRepository emailRepository, IEmailService emailService, 
+        public UserController(ISecurityService securityService,
+            IUserRepository userRepository, ICompanyRepository companyRepository,
+            IEmailRepository emailRepository, IEmailService emailService,
             IAuthenticationService authenticationService)
         {
             _securityService = securityService;
@@ -35,8 +35,6 @@ namespace A4EPARC.Areas.Admin.Controllers
             _emailService = emailService;
             _authenticationService = authenticationService;
         }
-
-        #region User
 
         public ActionResult Index()
         {
@@ -59,7 +57,7 @@ namespace A4EPARC.Areas.Admin.Controllers
                 var users = _userRepository.GetJtableView();
 
                 var currentCompanyId = GetCurrentUser().CompanyId;
-                if(currentCompanyId > 1)
+                if (currentCompanyId > 1)
                 {
                     users = users.Where(u => u.CompanyId == currentCompanyId).ToList();
                 }
@@ -141,8 +139,8 @@ namespace A4EPARC.Areas.Admin.Controllers
         {
             try
             {
-                if (_userRepository.SingleOrDefault("Email = @Email", new {model.Email}) != null)
-                    return Json(new {Result = "Error", Message = "User email must be unique"});
+                if (_userRepository.SingleOrDefault("Email = @Email", new { model.Email }) != null)
+                    return Json(new { Result = "Error", Message = "User email must be unique" });
 
                 if (Utils.IsValidEmail(model.Email))
                 {
@@ -156,11 +154,9 @@ namespace A4EPARC.Areas.Admin.Controllers
                                            .FirstOrDefault(u => u.Email.ToLower() == GetCurrentUser().Email.ToLower())
                                            .CompanyName;
                     }
-                  
-                    var defaultPassword = ConfigurationManager.AppSettings["DefaultPassword"];
 
                     var salt = _authenticationService.CreateSalt(16);
-                    var saltedPassword = defaultPassword + salt;
+                    var saltedPassword = model.Password + salt;
                     var hash = FormsAuthentication.HashPasswordForStoringInConfigFile(saltedPassword, "SHA1").ToUpper();
 
                     IUser user = new User
@@ -179,15 +175,16 @@ namespace A4EPARC.Areas.Admin.Controllers
 
                     try
                     {
+                        var company = GetCompanyDetails();
                         var html = new SerializeService().RenderRazorViewToString(this.ControllerContext,
                                                                             "_NewUserEmail",
                                                                             new PasswordViewModel
                                                                             {
                                                                                 Username = user.Email,
-                                                                                Password = defaultPassword
+                                                                                Password = model.Password
                                                                             });
 
-                        _emailService.Send(ConfigurationManager.AppSettings["EmailFromAddress"], user.Email, "New User", html);
+                        _emailService.Send(company.EmailFromAddress, user.Email, "New User", html);
 
                         _emailRepository.InsertEmailLog();
                     }
@@ -209,7 +206,7 @@ namespace A4EPARC.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new {Result = "ERROR", ex.Message});
+                return Json(new { Result = "ERROR", ex.Message });
             }
         }
 
@@ -232,21 +229,38 @@ namespace A4EPARC.Areas.Admin.Controllers
             user.Id = model.Id;
             user.IsAdmin = model.IsAdmin;
             user.IsViewer = model.IsViewer;
-          
+
             _userRepository.Save(user);
             var returnUser = _userRepository.SingleOrDefault(user.Id);
             return Json(new { Result = "OK", Record = returnUser });
         }
 
         [HttpPost]
+        public ActionResult AdminResetPassword(int id)
+        {
+            var user = _userRepository.SingleOrDefault(id);
+            var company = _companyRepository.SingleOrDefault(user.CompanyId);
+
+            var returnValue = SendResetPasswordEmail(user, company);
+
+            return Json(new { IsValid = returnValue, Password = company.DefaultPassword });
+        }
+
+        [HttpPost]
         public ActionResult ResetPassword(int id)
         {
             var user = _userRepository.SingleOrDefault(id);
+            var company = GetCompanyDetails();
 
+            var returnValue = SendResetPasswordEmail(user, company);
+
+            return Json(new { IsValid = returnValue, Password = company.DefaultPassword });
+        }
+
+        private bool SendResetPasswordEmail(IUser user, ICompany company)
+        {
             if (_emailRepository.GetEmailLogCount() < 201)
             {
-                var defaultPassword = ConfigurationManager.AppSettings["DefaultPassword"];
-                var salt = _securityService.RandomString(10);
                 try
                 {
                     var html = new SerializeService().RenderRazorViewToString(this.ControllerContext,
@@ -254,28 +268,22 @@ namespace A4EPARC.Areas.Admin.Controllers
                                                                         new PasswordViewModel
                                                                         {
                                                                             Username = user.Email,
-                                                                            Password = defaultPassword
+                                                                            Password = company.DefaultPassword
                                                                         });
+                    _authenticationService.ChangePassword(user.Email, company.DefaultPassword);
 
-                    user.Password = _securityService.Encrypt(defaultPassword + salt);
-                    user.Salt = salt;
-                    _userRepository.Save(user);
-
-                    _emailService.Send(ConfigurationManager.AppSettings["EmailFromAddress"], user.Email, "Account Info", html);
+                    _emailService.Send(company.EmailFromAddress, user.Email, "Account Info", html);
 
                     _emailRepository.InsertEmailLog();
                 }
                 catch (Exception exception)
                 {
-
+                    return false;
                 }
-
-                return Json(new { IsValid = true });
+                return true;
             }
-            return Json(new { IsValid = true });
+            return false;
         }
-
-        #endregion
 
     }
 }

@@ -1,0 +1,110 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+@using A4EPARC.Services;
+
+@if (!string.IsNullOrEmpty(Model.CaseWorkerName))
+{
+    <div class="form-group">
+        <label class="col-sm-4 control-label" id="CaseWorkerNameLabel">@LabelService.Get("CaseWorkerName", "CaseWorkerName", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6">
+            @Html.DisplayFor(m => m.CaseWorkerName, new { @class = "form-control" })
+        </div>
+    </div>
+}
+@if (!string.IsNullOrEmpty(Model.CaseWorkerId))
+{
+    <div class="form-group">
+        <label class="col-sm-4 control-label" id="CaseWorkerIdLabel">@LabelService.Get("CaseWorkerId", "CaseWorkerId", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6">
+            @Html.DisplayFor(m => m.CaseWorkerId, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.FirstName))
+{
+    <div class="form-group">
+        <label class="col-sm-4 control-label" id="FirstNameLabel">@LabelService.Get("FirstName", "FirstName", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6">
+            @Html.DisplayFor(m => m.FirstName, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.Surname))
+{
+    <div class="form-group">
+        <label class="col-sm-4 control-label" id="SurnameLabel">@LabelService.Get("Surname", "Surname", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6">
+            @Html.DisplayFor(m => m.Surname, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.EnrolmentID))
+{
+    <div class="form-group">
+        <label class="col-sm-4 control-label" id="EnrolmentIDLabel">@LabelService.Get("EnrolmentID", "Enrolment ID", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6">
+            @Html.DisplayFor(m => m.EnrolmentID, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.JobSeekerID))
+{
+    <div class="form-group">
+        <label class="col-sm-4 control-label" id="JobSeekerIDLabel">@LabelService.Get("JobSeekerID", "JobSeekerID", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6">
+            @Html.DisplayFor(m => m.JobSeekerID, new { @class = "form-control" })
+        </div>
+    </div>
+}
+@if (!string.IsNullOrEmpty(Model.Gender))
+{
+    <div class="form-group">
+        <label class="col-sm-4 control-label" id="GenderLabel">@LabelService.Get("Gender", "Gender", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-1">
+            @Html.DisplayFor(m => m.Gender, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@if (Model.DateOfBirth.HasValue)
+{
+    <div class="form-group">
+        <label class="col-sm-4 control-label" id="DateOfBirthLabel">@LabelService.Get("DateOfBirth", "DateOfBirth", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6">
+            @Html.DisplayFor(m => m.DateOfBirth, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.State))
+{
+    <div class="form-group" id="StateGroup">
+        <label class="col-sm-4 control-label" id="StateLabel">@LabelService.Get("State", "State", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6" style="margin-bottom: 10px">
+            @Html.DisplayFor(m => m.State)
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.Comments))
+{
+    <div class="form-group" id="CommentsGroup">
+        <label class="col-sm-4 control-label" id="CommentsLabel">@LabelService.Get("Comments", "Comments", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6" style="margin-bottom: 10px">
+            @Html.DisplayFor(m => m.Comments)
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.LengthOfUnemployment))
+{
+    <div class="form-group">
+        <label class="col-sm-4 control-label" id="LengthOfUnemploymentLabel">@LabelService.Get("LengthOfUnemployment", "LengthOfUnemployment", Model.SiteLabels, Model.SchemeId)</label>
+        <div class="col-md-6">
+            @Html.DisplayFor(m => m.LengthOfUnemployment, new { @class = "form-control" })
+        </div>
+    </div>
+}

@@ -1,0 +1,34 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+@{
+    Layout = "~/Views/Shared/_GlsPdfLayout.cshtml";
+}
+
+    @*@Html.Partial("_GlsInterventionGuide", Model)*@
+
+    <div style="border-width:2px; padding-left:10em;padding-top:5em;padding-bottom:1em; background-color:white;">
+        <h4 style="color:red">WHAT THIS STUDENT IS THINKING:</h4>
+        <div>
+            <label style="font-size:larger;color:red">&bull;&nbsp;</label><label style="font-size:large;"> Perhaps under-informed about the course and not convinced that the Pros outweigh the Cons.</label>
+        </div>
+        <div>
+            <label style="font-size:larger;color:red">&bull;&nbsp;</label><label style="font-size:large;"> Perhaps under-informed about the course and not convinced that the Pros outweigh the Cons.</label>
+        </div>
+        <div>
+            <label style="font-size:larger;color:red">&bull;&nbsp;</label><label style="font-size:large;"> Expect little support for their efforts and low confidence in completing the course.</label>
+        </div>    
+    </div>
+      
+    <div class="container-fluid">
+        <div class="row">
+            <div class="span12">
+                <div class="row-fluid">
+                        <h2 style="color:darkblue" class="col-xs-1">Name:</h2>
+                        <h2 class="col-xs-4">@Html.DisplayFor(m => m.FirstName)&nbsp;@Html.DisplayFor(m => m.Surname)</h2>
+                        <h2 style="color:darkblue" class="col-xs-1">DOB:</h2>
+                        <h2 class="col-xs-3">@Html.DisplayFor(m => m.DateOfBirth)</h2>
+                        <h2 style="color:darkblue" class="col-xs-1">State:</h2>
+                        <h2 class="col-xs-2">@Html.DisplayFor(m => m.State)</h2>
+                </div>
+            </div>
+        </div>
+    </div>

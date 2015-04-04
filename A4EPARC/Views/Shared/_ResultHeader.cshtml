@@ -1,0 +1,18 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+<h1 class="col-xs-4" style="color:darkblue" id="@Model.ActionTypeName + Name">@Model.SiteLabels.FirstOrDefault(l => l.Name == Model.ActionTypeName + "Name").Description</h1>
+<h3 class="col-xs-8" style="color:red" id="@Model.ActionTypeName + Summary">@Model.SiteLabels.FirstOrDefault(l => l.Name == Model.ActionTypeName + "Summary").Description</h3>
+
+<div style="padding-top:7em;padding-left:2em;padding-right:5em;">
+    <h4 id="MotivatatingStatementTitle">@Model.SiteLabels.FirstOrDefault(l => l.Name == "MotivatingStatementTitle").Description</h4>
+    <h3 id="@Model.ActionTypeName + Statement">@Model.SiteLabels.FirstOrDefault(l => l.Name == Model.ActionTypeName + "Description").Description</h3>
+</div>
+<div style="padding:2em;">
+    <h4>@Model.SiteLabels.FirstOrDefault(l => l.Name == "BodyTitle").Description</h4>
+    <ul>
+        @foreach (var item in Model.SiteLabels.Where(l => l.Name == Model.ActionTypeName + "BulletPoint"))
+        {
+            <li class="h3">@item.Description</li>
+        }
+    </ul>
+</div>

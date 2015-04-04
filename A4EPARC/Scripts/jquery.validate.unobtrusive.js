@@ -39,12 +39,17 @@
     }
 
     function onError(error, inputElement) {  // 'this' is the form element
-        var container = $(this).find("[data-valmsg-for='" + escapeAttributeValue(inputElement[0].name) + "']"),
-            replaceAttrValue = container.attr("data-valmsg-replace"),
-            replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) !== false : null;
+        var container = $(this).find("[data-valmsg-for='" + escapeAttributeValue(inputElement[0].name) + "']");
 
-        container.removeClass("field-validation-valid").addClass("field-validation-error");
-        error.data("unobtrusiveContainer", container);
+        if (container !== undefined) {
+            var replaceAttrValue = container.attr("data-valmsg-replace"),
+                replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) !== false : null;
+
+            container.removeClass("field-validation-valid").addClass("field-validation-error");
+            error.data("unobtrusiveContainer", container);
+        } else {
+            error.hide();
+        }
 
         if (replace) {
             container.empty();
@@ -70,9 +75,11 @@
     }
 
     function onSuccess(error) {  // 'this' is the form element
-        var container = error.data("unobtrusiveContainer"),
-            replaceAttrValue = container.attr("data-valmsg-replace"),
-            replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) : null;
+        var container = error.data("unobtrusiveContainer");
+        if (container !== undefined) {
+            var replaceAttrValue = container.attr("data-valmsg-replace"),
+                replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) : null;
+        }
 
         if (container) {
             container.addClass("field-validation-valid").removeClass("field-validation-error");
@@ -107,7 +114,7 @@
             result = {
                 options: {  // options structure passed to jQuery Validate's validate() method
                     errorClass: "input-validation-error",
-                    errorElement: "span",
+                    errorElement: "div",
                     errorPlacement: $.proxy(onError, form),
                     invalidHandler: $.proxy(onErrors, form),
                     messages: {},
@@ -364,4 +371,4 @@
     $(function () {
         $jQval.unobtrusive.parse(document);
     });
-} (jQuery));
+}(jQuery));

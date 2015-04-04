@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Silver</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    @Styles.Render("~/Content/themes/base/css")
+    @Styles.Render("~/Content/css_gls")
+    <!--[if lt IE 9]>
+      @Scripts.Render("~/bundles/ie8specific")
+    <![endif]-->
+</head>
+<body id="top" style="background-color:white">
+    <div id="wrap" class="pdfwrap">
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="navigation-bar" style="padding-bottom:30px;background-color:#FFCC00">
+
+            <div class="container-fluid navbar-inner" style="margin:0px;padding-top:40px">
+                <div class="col-xs-offset-1 col-xs-2">
+                    <a><img style="max-height: 200px; cursor: pointer;" src="~/Content/images/AC3-Silver-logo.png" alt=""></a>
+                </div>
+                <div class="col-xs-9">
+                    <h1 style="color:white">Genuinely trying, but might</h1>
+                    <h1 style="color:white">drop out if not supported.</h1>
+                </div>
+            </div>
+        </div>
+
+        <div id="page" class="container-fluid" style="padding-top: 150px;">
+            @RenderBody()
+        </div>
+    </div>
+
+</body>
+</html>
+<footer>
+    <div class="footer container" style="background-color:white">
+        <br />
+        <div class="col-xs-9" style="background-color:dimgray;padding-top:1em;padding-bottom:1em">
+            <a><img style="max-height: 105px; cursor: pointer;" src="~/Content/images/GLSLogo.png" alt=""></a>
+        </div>
+        <div class="col-xs-3 pull-right text-right" style="background-color:dimgray;padding-top:1em;padding-bottom:1em">
+            <a><img title=" home" style="max-height: 105px; cursor: pointer;" src="~/Content/images/AC3Logo.png" alt=""></a>
+        </div>
+    </div>
+</footer>

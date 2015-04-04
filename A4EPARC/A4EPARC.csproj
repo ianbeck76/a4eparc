@@ -48,8 +48,12 @@
     <Reference Include="DataAnnotationsExtensions.ClientValidation">
       <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
     </Reference>
-    <Reference Include="itextsharp">
-      <HintPath>..\packages\iTextSharp.5.5.3\lib\itextsharp.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.5.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\iTextSharp.5.5.5\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker">
+      <HintPath>..\packages\itextsharp.xmlworker.5.5.5\lib\itextsharp.xmlworker.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -70,6 +74,9 @@
     </Reference>
     <Reference Include="Ninject.Web.Mvc">
       <HintPath>..\packages\Ninject.MVC3.3.2.0.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorPDF">
+      <HintPath>..\packages\RazorPDF.1.0.0\lib\net45\RazorPDF.dll</HintPath>
     </Reference>
     <Reference Include="Rotativa">
       <HintPath>..\packages\Rotativa.1.6.0\lib\net40\Rotativa.dll</HintPath>
@@ -231,9 +238,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Controllers\SelectController.cs" />
     <Compile Include="Controllers\QuestionAdminController.cs" />
     <Compile Include="Controllers\SiteLabelsController.cs" />
-    <Compile Include="Controllers\SiteTextController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Constants\UserRoles.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -243,6 +250,7 @@
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\WebServiceResultsController.cs" />
     <Compile Include="Enums\ActionType.cs" />
+    <Compile Include="Enums\SelectKey.cs" />
     <Compile Include="Enums\SiteTextCode.cs" />
     <Compile Include="Extensions\HtmlHelper.cs" />
     <Compile Include="Extensions\QueryHelper.cs" />
@@ -259,16 +267,17 @@
     <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="Repositories\CompanyRepository.cs" />
     <Compile Include="Repositories\SiteLabelsRepository.cs" />
-    <Compile Include="Repositories\SiteTextRepository.cs" />
     <Compile Include="Repositories\EmailRepository.cs" />
     <Compile Include="Repositories\SqlConnectionFactory.cs" />
     <Compile Include="Repositories\WebServiceResultsRepository.cs" />
     <Compile Include="Repositories\QuestionsRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Services\LabelService.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\CacheService.cs" />
     <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\ResultService.cs" />
     <Compile Include="Services\SecurityService.cs" />
     <Compile Include="Services\SerializeService.cs" />
     <Compile Include="Services\_Service.cs" />
@@ -276,11 +285,11 @@
     <Compile Include="ViewModels\ClientResultListViewModel.cs" />
     <Compile Include="ViewModels\ClientResultViewModel.cs" />
     <Compile Include="ViewModels\ClientViewModel.cs" />
+    <Compile Include="ViewModels\CompanySelectValuesViewModel.cs" />
     <Compile Include="ViewModels\CompanyLanguageViewModel.cs" />
     <Compile Include="ViewModels\CompanyPageItemViewModel.cs" />
     <Compile Include="ViewModels\CompanySchemeViewModel.cs" />
     <Compile Include="ViewModels\SiteLabelsViewModel.cs" />
-    <Compile Include="ViewModels\SiteTextViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
     <Compile Include="ViewModels\PasswordEmailViewModel.cs" />
     <Compile Include="ViewModels\WebServiceAdminViewModel.cs" />
@@ -312,6 +321,7 @@
     <Content Include="Content\bootstrap\js\tooltip.js" />
     <Content Include="Content\bootstrap\js\transition.js" />
     <Content Include="Content\css\theme - Copy.css" />
+    <Content Include="Content\css_a4e\theme.css" />
     <Content Include="Content\css_gls\theme%28old%29.css" />
     <Content Include="Content\css_gls\theme.css" />
     <Content Include="Content\css\theme.css" />
@@ -354,10 +364,18 @@
     <Content Include="Content\fonts\roboto\Roboto-Regular-webfont.svg" />
     <Content Include="Content\fonts\roboto\Roboto-Thin-webfont.svg" />
     <Content Include="Content\fonts\roboto\Roboto-ThinItalic-webfont.svg" />
+    <Content Include="Content\images\a4e-group-logo.png" />
+    <Content Include="Content\images\a4e_logo.png" />
+    <Content Include="Content\images\ABSLogo.png" />
+    <Content Include="Content\images\AC3-Bronze-logo.png" />
+    <Content Include="Content\images\AC3-Gold-logo.png" />
+    <Content Include="Content\images\AC3-Silver-logo.png" />
     <Content Include="Content\images\AC3Logo.png" />
     <Content Include="Content\images\bg_fade_right.png" />
     <Content Include="Content\images\bg_fade_top.png" />
+    <Content Include="Content\images\esherhouse.png" />
     <Content Include="Content\images\GLSLogo.png" />
+    <Content Include="Content\images\jobFutures.jpg" />
     <Content Include="Content\jquery.timepicker.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -393,6 +411,12 @@
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jqplot.canvasAxisLabelRenderer.min.js" />
     <Content Include="Scripts\jqplot.canvasTextRenderer.min.js" />
+    <Content Include="Images\Pdfs\AC3 Outcome webpage 02b - bronze_1.pdf" />
+    <Content Include="Images\Pdfs\AC3 Outcome webpage 02b - gold_1.pdf" />
+    <Content Include="Images\Pdfs\AC3 Outcome webpage 02b - silver_1.pdf" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-migrate-1.2.1.js" />
     <Content Include="Content\themes\base\jquery-ui.css" />
     <Content Include="Content\themes\base\jquery.ui.accordion.css" />
@@ -622,13 +646,16 @@
     <Content Include="Images\orderedList9.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.widget.js" />
+    <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\xjquery.validate.unobtrusive - Copy.js" />
     <Content Include="Scripts\jtable\questions.js" />
     <Content Include="Scripts\jtable\siteLabels.js" />
-    <Content Include="Scripts\jtable\sitetext.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\ui-validation.js" />
     <Content Include="Areas\Admin\Views\Web.config" />
+    <Content Include="Views\Shared\_InterventionGuide.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="App_Browsers\qt.browser" />
@@ -646,21 +673,33 @@
     <Content Include="Content\css_gls\fonts.less" />
     <Content Include="Content\css_gls\theme.less" />
     <Content Include="Content\css_gls\variables.less" />
+    <Content Include="Content\css_a4e\bootstrap-metro\alerts.less" />
+    <Content Include="Content\css_a4e\bootstrap-metro\checkbox.less" />
+    <Content Include="Content\css_a4e\bootstrap-metro\labels.less" />
+    <Content Include="Content\css_a4e\bootstrap-metro\modals.less" />
+    <Content Include="Content\css_a4e\bootstrap-metro\navbar-side.less" />
+    <Content Include="Content\css_a4e\bootstrap-metro\radio.less" />
+    <Content Include="Content\css_a4e\bootstrap-metro\tiles.less" />
+    <Content Include="Content\css_a4e\bootstrap-metro\variables.less" />
+    <Content Include="Content\css_a4e\bootstrap.less" />
+    <Content Include="Content\css_a4e\custom.less" />
+    <Content Include="Content\css_a4e\datepicker.less" />
+    <Content Include="Content\css_a4e\fonts.less" />
+    <Content Include="Content\css_a4e\theme.less" />
+    <Content Include="Content\css_a4e\variables.less" />
     <None Include="Properties\PublishProfiles\SOC.pubxml" />
-    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
-    <Content Include="Scripts\jquery-1.9.1.js" />
-    <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Scripts\jquery-ui-1.10.4.custom.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
     <Content Include="Scripts\jquery.jqplot.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\xjquery.unobtrusive-ajax.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\xjquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\jtable\bootstrap3-depend\jquery-ui-1.10.3.widget.js" />
     <Content Include="Scripts\jtable\bootstrap3-depend\jquery-ui-1.10.3.widget.min.js" />
     <Content Include="Scripts\jtable\extensions\jquery.jtable.aspnetpagemethods.js" />
@@ -818,8 +857,31 @@
     <Content Include="Views\Shared\_Layout_GLS.cshtml" />
     <Content Include="Views\Survey\GlsOne.cshtml" />
     <Content Include="Views\Survey\GlsTwo.cshtml" />
-    <Content Include="Views\Results\GlsPdf.cshtml" />
+    <Content Include="Views\Results\GlsBronzePdfCopy.cshtml" />
     <Content Include="Views\Results\DetailsGls.cshtml" />
+    <Content Include="Views\Shared\_PdfLayout.cshtml" />
+    <Content Include="Views\Shared\_Layout_A4E.cshtml" />
+    <Content Include="Views\Select\Company.cshtml" />
+    <Content Include="Views\Shared\_AdminSelectPartial.cshtml" />
+    <Content Include="Views\Shared\_AimStatement.cshtml" />
+    <Content Include="Views\Shared\_QuestionsGrid.cshtml" />
+    <Content Include="Views\Shared\_GlsInterventionGuide.cshtml" />
+    <Content Include="Views\Shared\_ResultHeader.cshtml" />
+    <Content Include="Views\Shared\_BronzePdfLayoutCopy.cshtml" />
+    <Content Include="Views\Shared\_Layout_Exemplar.cshtml" />
+    <Content Include="Views\Shared\_PersonDetails.cshtml" />
+    <Content Include="Views\Results\GlsPdfOld.cshtml" />
+    <Content Include="Views\Shared\_SilverPdfLayout.cshtml" />
+    <Content Include="Views\Results\GlsSilverPdfCopy.cshtml" />
+    <Content Include="Views\Shared\_PdfDetailsPartial.cshtml" />
+    <Content Include="Views\Shared\_GoldPdfLayout.cshtml" />
+    <Content Include="Views\Results\GlsGoldPdfCopy.cshtml" />
+    <Content Include="Views\Results\GlsBronzePdf.cshtml" />
+    <Content Include="Views\Shared\_BronzePdfLayout.cshtml" />
+    <Content Include="Views\Results\GlsGoldPdf.cshtml" />
+    <Content Include="Views\Results\GlsSilverPdf.cshtml" />
+    <Content Include="Views\Shared\_GoldPdfLayoutCopy.cshtml" />
+    <Content Include="Views\Shared\_SilverPdfLayoutCopy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -842,9 +904,6 @@
     <Content Include="packages.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\jquery-1.9.1.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

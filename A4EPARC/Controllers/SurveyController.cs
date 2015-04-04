@@ -27,21 +27,21 @@ namespace A4EPARC.Controllers
     {    
         private readonly IClientRepository _clientRepository;
         private readonly IQuestionRepository _questionRepository;
-        private readonly ISiteTextRepository _siteTextRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly ISiteLabelsRepository _siteLabelsRepository;
+        private readonly IResultService _resultService;
         
         public SurveyController(IClientRepository clientRepository, 
             IQuestionRepository questionRepository, 
-            ISiteTextRepository siteTextRepository,
             ISiteLabelsRepository siteLabelsRepository,
-            ICompanyRepository companyRepository)
+            ICompanyRepository companyRepository,
+            IResultService resultService)
         {
             _clientRepository = clientRepository;
             _questionRepository = questionRepository;
-            _siteTextRepository = siteTextRepository;
             _siteLabelsRepository = siteLabelsRepository;
             _companyRepository = companyRepository;
+            _resultService = resultService;
         }
 
         #region GLS Methods
@@ -64,7 +64,7 @@ namespace A4EPARC.Controllers
                 viewmodel.DateOfBirthYear = viewmodel.DateOfBirth.Value.Year;
             }
 
-            viewmodel = InitializeDropdowns(viewmodel);
+            viewmodel = InitializeDropdowns(viewmodel, GetCompanyId());
 
             return View(viewmodel);
         }
@@ -111,11 +111,16 @@ namespace A4EPARC.Controllers
 
             if (!ModelState.IsValid || !isDateOfBirthValid)
             {
-                viewmodel = InitializeDropdowns(viewmodel);
+                viewmodel = InitializeDropdowns(viewmodel, GetCompanyId());
                 return View(viewmodel);
             }
 
-            viewmodel.Result = CalculateDecision(viewmodel, sb.ToString().TrimEnd(','));
+            viewmodel.Result = _resultService.CalculateDecision(viewmodel, sb.ToString().TrimEnd(','));
+
+            if (!string.IsNullOrWhiteSpace(viewmodel.JobSeekerID))
+            {
+                viewmodel.HowManyTimesHasSurveyBeenCompleted = _clientRepository.GetNumberOfPreviousAttempts(viewmodel.JobSeekerID);
+            }
 
             if (viewmodel.Result.ActionIdToDisplay > ActionType.Undefined)
             {
@@ -153,20 +158,13 @@ namespace A4EPARC.Controllers
            
             var viewmodel = id.HasValue ? _clientRepository.GetClient(id.Value) : new ClientViewModel();
 
-            var schemes = _companyRepository.GetSchemes().Where(s => s.CompanyId == GetCurrentUser().CompanyId);
-                                
-            if(schemes.Count() == 1)
-            {
-                viewmodel.SchemeId = schemes.First().SchemeId;
-            }
-            if (schemes.Count() > 1)
-            {
-                viewmodel.SchemeDropdownList = GetSchemeDropdownList(schemes);
-            }
+            var companyId = GetCurrentUser().CompanyId;
 
-            var schemeId = viewmodel.SchemeId > 0 ? viewmodel.SchemeId : 1;
+            viewmodel = SetScheme(viewmodel, companyId);
 
-            viewmodel.SiteLabels = _siteLabelsRepository.Get(schemeId, LanguageCode);
+            viewmodel.SiteLabels = _siteLabelsRepository.All();
+
+            viewmodel.PageItems = GetPageItems(companyId).Where(c => c.IsDisplay.GetValueOrDefault() == true);
 
             if (viewmodel.DateOfBirth.HasValue)
             {
@@ -175,7 +173,7 @@ namespace A4EPARC.Controllers
                 viewmodel.DateOfBirthYear = viewmodel.DateOfBirth.Value.Year;
             }
 
-            viewmodel = InitializeDropdowns(viewmodel);
+            viewmodel = InitializeDropdowns(viewmodel, companyId);
 
             return View(viewmodel);
         }
@@ -185,27 +183,16 @@ namespace A4EPARC.Controllers
         {
             var isDateOfBirthValid = CheckDateOfBirth(viewmodel);
 
-            var schemes = _companyRepository.GetSchemes().Where(s => s.CompanyId == GetCurrentUser().CompanyId);
+            var companyId = GetCompanyId();
 
-            if (viewmodel.SchemeId == 0)
-            {
-                if (schemes.Count() == 1)
-                {
-                    viewmodel.SchemeId = schemes.First().SchemeId;
-                }
-            }
-            if (schemes.Count() > 1)
-            {
-                viewmodel.SchemeDropdownList = GetSchemeDropdownList(schemes);
-            }
+            viewmodel = SetScheme(viewmodel, companyId);
+            viewmodel.SchemeId = viewmodel.SchemeId > 0 ? viewmodel.SchemeId : 1;
 
-            var schemeId = viewmodel.SchemeId > 0 ? viewmodel.SchemeId : 1;
+            viewmodel.PageItems = GetPageItems(companyId).Where(c => c.IsDisplay.GetValueOrDefault() == true);
 
-            viewmodel.SiteLabels = _siteLabelsRepository.Get(schemeId, LanguageCode);
+            viewmodel.SiteLabels = _siteLabelsRepository.All();
 
-            var items = GetPageItems(AuthenticationService.GetCompanyId()).Where(c => c.IsRequired.GetValueOrDefault() == true);
-
-            var gender = items.FirstOrDefault(c => c.Name == "Gender"); 
+            var gender = viewmodel.PageItems.FirstOrDefault(c => c.Name == "Gender"); 
             if (gender != null)
             {
                 if (gender.IsRequired.GetValueOrDefault() == true)
@@ -219,7 +206,7 @@ namespace A4EPARC.Controllers
 
             if (!ModelState.IsValid || !isDateOfBirthValid)
             {
-                viewmodel = InitializeDropdowns(viewmodel);
+                viewmodel = InitializeDropdowns(viewmodel, companyId);
                 return View(viewmodel);
             }
 
@@ -234,6 +221,11 @@ namespace A4EPARC.Controllers
             viewmodel.FirstName = string.IsNullOrEmpty(viewmodel.FirstName) ? "N/A" : viewmodel.FirstName;
             viewmodel.Surname = string.IsNullOrEmpty(viewmodel.Surname) ? "N/A" : viewmodel.Surname;
             viewmodel.Deleted = false;
+
+            if (!string.IsNullOrWhiteSpace(viewmodel.JobSeekerID))
+            {
+                viewmodel.HowManyTimesHasSurveyBeenCompleted = _clientRepository.GetNumberOfPreviousAttempts(viewmodel.JobSeekerID);
+            }
 
             var id = _clientRepository.InsertPerson(viewmodel);
 
@@ -292,7 +284,7 @@ namespace A4EPARC.Controllers
                 return View(viewmodel);
             }
 
-            viewmodel.Result = CalculateDecision(viewmodel, sb.ToString().TrimEnd(','));
+            viewmodel.Result = _resultService.CalculateDecision(viewmodel, sb.ToString().TrimEnd(','));
 
             if (viewmodel.Result.ActionIdToDisplay > ActionType.Undefined)
             {
@@ -355,10 +347,10 @@ namespace A4EPARC.Controllers
         private IEnumerable<CompanyPageItemViewModel> GetPageItems(int companyId) 
         {
             var items = new List<CompanyPageItemViewModel>();
-            var pageitems = _companyRepository.GetPageItems().Where(c => c.CompanyId == companyId);
+            var pageitems = _companyRepository.GetPageItems().Where(c => c.CompanyId == companyId).ToList();
             if (!pageitems.Any())
             {
-                pageitems = _companyRepository.GetPageItems().Where(c => c.CompanyId == 1);
+                pageitems = _companyRepository.GetPageItems().Where(c => c.CompanyId == 1).ToList();
             }
             return pageitems;
         }
@@ -370,143 +362,6 @@ namespace A4EPARC.Controllers
             return Json(new { PageItems = pageitems }, JsonRequestBehavior.AllowGet);
         }
 
-        private ResultViewModel CalculateDecision(ClientViewModel viewmodel, string answerString)
-        {
-            var actionScore = viewmodel.Questions.Where(r => r.ActionTypeId == 1).Select(r => r.Answer).Sum();
-            var preContemplationScore = viewmodel.Questions.Where(r => r.ActionTypeId == 3).Select(r => r.Answer).Sum();
-            var contemplationScore = viewmodel.Questions.Where(r => r.ActionTypeId == 2).Select(r => r.Answer).Sum();
-
-            //Convert to total scores
-            var ta = 50 + 10 * (actionScore - 13.2000) / 4.7460;
-            var tp = 50 + 10 * (preContemplationScore - 7.4258) / 2.8306;
-            var tc = 50 + 10 * (contemplationScore - 16.5484) / 2.5538;
-
-            var reldist2 = Math.Pow((65.0558 - tp.GetValueOrDefault()), 2) + Math.Pow((41.7343 - tc.GetValueOrDefault()), 2) + Math.Pow((42.7966 - ta.GetValueOrDefault()), 2);
-            var nradist2 = Math.Pow((60.0000 - tp.GetValueOrDefault()), 2) + Math.Pow((40.0000 - tc.GetValueOrDefault()), 2) + Math.Pow((60.0000 - ta.GetValueOrDefault()), 2);
-            var refdist2 = Math.Pow((47.1980 - tp.GetValueOrDefault()), 2) + Math.Pow((50.1701 - tc.GetValueOrDefault()), 2) + Math.Pow((41.6665 - ta.GetValueOrDefault()), 2);
-            var pardist2 = Math.Pow((45.3448 - tp.GetValueOrDefault()), 2) + Math.Pow((53.4616 - tc.GetValueOrDefault()), 2) + Math.Pow((58.6332 - ta.GetValueOrDefault()), 2);
-
-            var distmin2a = Math.Min(reldist2, nradist2);
-            var distmin2b = Math.Min(refdist2, pardist2);
-            var distmin2 = Math.Min(distmin2a, distmin2b);
-
-            var result = new ResultViewModel();
-            result.ClientId = viewmodel.Id;
-            result.ActionScore = actionScore.GetValueOrDefault();
-            result.PreContemplationScore = preContemplationScore.GetValueOrDefault();
-            result.ContemplationScore = contemplationScore.GetValueOrDefault();
-            result.ActionScoreMatrix = (int)ta;
-            result.PreContemplationScoreMatrix = (int)tp;
-            result.ContemplationScoreMatrix = (int)tc;
-            result.AnswerString = answerString;
-
-            if (distmin2 == reldist2)
-            {
-                //stage 1 reluctant - precontemplation
-                result.ActionIdToDisplay = ActionType.Precontemplation;
-            }
-            if (distmin2 == nradist2)
-            {
-                // stage 2 superficial action - Unauthentic Action
-                result.ActionIdToDisplay = ActionType.UnauthenticAction;
-            }
-            if (distmin2 == refdist2)
-            {
-                // stage 3  Reflective = Contemplation
-                result.ActionIdToDisplay = ActionType.Contemplation;
-            }
-            if (distmin2 == pardist2)
-            {
-                // stage 4 - if matrix score is greater than 44 Action else Preparation
-                result.ActionIdToDisplay = result.ActionScoreMatrix > 55 ? ActionType.Action : ActionType.Preparation;
-            }
-
-            return result;
-        }
-
-        //Use this and remove above method if given to clients...
-        private ResultViewModel GetDecision(ClientViewModel viewmodel, string answerString)
-        {
-            var url = string.Format("http://psychass.com/SOCActionService.svc/Get?key={0}&answers={1}", WebConfigurationManager.AppSettings["WebServiceKey"], answerString);
-
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            try
-            {
-                var response = request.GetResponse();
-                using(var responseStream = response.GetResponseStream())
-                {
-                    var reader = new StreamReader(responseStream, Encoding.UTF8);
-                    var stream =  reader.ReadToEnd();
-                    var jsonObject = JObject.Parse(stream);
-
-                    var jsonResult = JsonConvert.DeserializeObject<JsonResultModel>( jsonObject.ToString() );
-
-                    var result = new ResultViewModel
-                                     {
-                                         ClientId = viewmodel.Id,
-                                         ActionScore =
-                                             viewmodel.Questions.Where(r => r.ActionTypeId == 1)
-                                                      .Select(r => r.Answer.GetValueOrDefault())
-                                                      .Sum(),
-                                         PreContemplationScore =
-                                             viewmodel.Questions.Where(r => r.ActionTypeId == 3)
-                                                      .Select(r => r.Answer.GetValueOrDefault())
-                                                      .Sum(),
-                                         ContemplationScore =
-                                             viewmodel.Questions.Where(r => r.ActionTypeId == 2)
-                                                      .Select(r => r.Answer.GetValueOrDefault())
-                                                      .Sum(),
-                                         ActionScoreMatrix = Convert.ToInt32(jsonResult.GetResult.ActionScore),
-                                         PreContemplationScoreMatrix = Convert.ToInt32(jsonResult.GetResult.PreContemplationScore),
-                                         ContemplationScoreMatrix = Convert.ToInt32(jsonResult.GetResult.ContemplationScore),
-                                         AnswerString = answerString
-                                     };
-                    switch (jsonResult.GetResult.Result)
-                    {
-                        case "PreContemplation":
-                            {
-                                result.ActionIdToDisplay =  ActionType.Precontemplation;
-                                break;
-                            }
-                        case "UnreflectiveAction":
-                            {
-                                result.ActionIdToDisplay = ActionType.UnauthenticAction;
-                                break;
-                            }
-                        case "Contemplation":
-                            {
-                                result.ActionIdToDisplay =  ActionType.Contemplation;
-                                break;
-                            }
-                        case "Preparation":
-                            {
-                                result.ActionIdToDisplay = ActionType.Preparation;
-                                break;
-                            }
-                        case "Action":
-                            {
-                                result.ActionIdToDisplay = ActionType.Action;
-                                break;
-                            }
-                    }
-                    return result;
-                }
-            }
-            catch (WebException ex)
-            {
-                var errorResponse = ex.Response;
-                using (Stream responseStream = errorResponse.GetResponseStream())
-                {
-                    var reader = new StreamReader(responseStream, Encoding.GetEncoding("utf-8"));
-                    var errorText = reader.ReadToEnd();
-                    // log errorText
-                }
-            }
-
-            //action = 1, contemplation = 2, precontemplation = 3, preparer = 4, unauthenticaction = 5
- 
-            return new ResultViewModel{ ActionIdToDisplay = ActionType.Undefined };
-        }
 
         private bool CheckDateOfBirth(ClientViewModel model)
         {
@@ -516,37 +371,53 @@ namespace A4EPARC.Controllers
                 model.DateOfBirthYear,
                 model.DateOfBirthMonth,
                 model.DateOfBirthDay);
+                model.DateOfBirth = date;
                 return true;
             }
             catch (Exception e)
             {
-                ModelState.AddModelError("InvalidDate", "Invalid DOB");
+                ModelState.AddModelError("InvalidDate", "Invalid");
                 return false;
             }
         }
 
-        private List<string> GetLengthOfUnemploymentDropdownList()
+        private List<string> GetLengthOfUnemploymentDropdownList(int companyId)
         {
-            var ddl = new List<string>();
-            ddl.Add("0-2 months");
-            ddl.Add("3-5 months");
-            ddl.Add("6-12 months");
-            ddl.Add("1-3 years");
-            ddl.Add("4+ years");
-            ddl.Add("N/A - currently employed");
-            return ddl;
+            var values = _companyRepository.GetSelectValues().Where(c => c.CompanyId == companyId && c.Key == (int)SelectKey.LengthOfUnemployment);
+
+            if (values.Any())
+            {
+                return values.Select(c => c.Value).ToList();
+            }
+            return new List<string>();
         }
 
-        private List<string> GetStateDropdownList()
+        private List<string> GetStateDropdownList(int companyId)
         {
+            var values = _companyRepository.GetSelectValues().Where(c => c.CompanyId == companyId && c.Key == (int)SelectKey.State);
+
+            if (values.Any())
+            {
+                return values.Select(c => c.Value).ToList();
+            }
+            return new List<string>();
+        }
+
+        private List<string> GetStreamDropdownList(int companyId)
+        {
+            var values = _companyRepository.GetSelectValues().Where(c => c.CompanyId == companyId && c.Key == (int)SelectKey.Stream);
+
+            if (values.Any())
+            {
+                return values.Select(c => c.Value).ToList();
+            }
+
             var ddl = new List<string>();
-            ddl.Add("NSW");
-            ddl.Add("NT");
-            ddl.Add("WA");
-            ddl.Add("VIC");
-            ddl.Add("ACT");
-            ddl.Add("TAS");
-            ddl.Add("QLD");
+            ddl.Add("Stream 1");
+            ddl.Add("Stream 2");
+            ddl.Add("Stream 3");
+            ddl.Add("Stream 4");
+            ddl.Add("DES");
             return ddl;
         }
 
@@ -593,20 +464,34 @@ namespace A4EPARC.Controllers
             return years;
         }
 
-        private ClientViewModel InitializeDropdowns(ClientViewModel model)
+        private ClientViewModel SetScheme(ClientViewModel model, int companyId) 
+        {
+            var schemes = _companyRepository.GetSchemes().Where(s => s.CompanyId == companyId);
+
+            if (model.SchemeId == 0)
+            {
+                if (schemes.Count() == 1)
+                {
+                    model.SchemeId = schemes.First().SchemeId;
+                }
+            }
+            if (schemes.Count() > 1)
+            {
+                model.SchemeDropdownList = GetSchemeDropdownList(schemes);
+            }
+
+            return model;
+        }
+
+        private ClientViewModel InitializeDropdowns(ClientViewModel model, int companyId)
         {
             model.DayDropdownList = GetDayDropdownList();
             model.MonthDropdownList = GetMonthDropdownList();
             model.YearDropdownList = GetYearDropdownList();
-            model.LengthOfUnemploymentDropdownList = GetLengthOfUnemploymentDropdownList();
-            model.StateDropdownList = GetStateDropdownList();
+            model.LengthOfUnemploymentDropdownList = GetLengthOfUnemploymentDropdownList(companyId);
+            model.StateDropdownList = GetStateDropdownList(companyId);
+            model.StreamDropdownList = GetStreamDropdownList(companyId);
             return model;
         }
-
-        public string Next 
-        {
-            get { return _siteTextRepository.Get(SiteTextCode.Next, 1, LanguageCode).FirstOrDefault().Description; }
-        }
-
     }
 }

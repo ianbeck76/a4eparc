@@ -1,0 +1,149 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+<div>
+    @if (Model.ActionIdToDisplay == 1 || Model.ActionIdToDisplay == 3)
+    {
+        <h1 class="col-xs-3" style="color:darkblue">BRONZE</h1>
+        <h3 class="col-xs-9" style="color:red">(Most in danger of dropping out. Need to be nurtured)</h3>
+
+    <div style="border-width:2px; padding-left:5em;padding-top:5em;padding-bottom:1em;">
+        <h4>WHAT THIS STUDENT IS THINKING:</h4>
+        <ul>
+            <li class="h4">Perhaps under-informed about the course and not convinced that the Pros outweigh the Cons.</li>
+            <li class="h4">Not completely committed and may be defensive when pressured to change.</li>
+            <li class="h4">Expect little support for their efforts and low confidence in completing the course.</li>
+        </ul>
+    </div>
+        <div style="border-style:solid; border-width:2px;padding-left:2em;background-color:white;">
+            <h4>STUDY COACH PRINCIPLES</h4>
+            <ul>
+                <li>Need to be less intensive as too much pressuring might see them give up. Perhaps weekly calls, but keep them brief and non-confrontational.</li>
+                <li>Lectures don’t work, the goal is engagement and improving commitment to the course.</li>
+                <li>Once the “Pros” start to outweigh the “Cons” of committing to the course, you can help them start to plan.</li>
+                <li>Acknowledge that they might have too many things going on in their life – so help them to prioritise. Consider their survey answers and address their concerns.</li>
+                <li>Remind them of why they considered doing the course in the first place.</li>
+                <li>Raise awareness of course requirements and success factors (e.g. finding private time and space in a regular schedule to study).</li>
+            </ul>
+            <h4>STUDY COACH STRATEGIES</h4>
+            <h4>1. FOCUS ON THE “PROS” </h4>
+            <label>weigh the PROS of the course (eg ‘sense of independence’, ‘future opportunities’) vs the CONS (eg ‘it will take time and energy and I might embarrass myself’, ‘fear of failure’).</label>
+            <ul>
+                <li>Ask these students to name as many benefits of the course as they can (they’ll typically name around 3. Keep these for future reference.)</li>
+                <li>Let them know there are double or triple that many, and challenge them to name more..</li>
+                <li>Then run through your own list of the Pros of the course that they might have missed out.</li>
+            </ul>
+            <h4>2. ALIGN YOURSELF WITH THEM</h4>
+            <label>Say “I felt like that when I first started a course…but I persevered and achieved it in the end. My family were very proud” etc. This makes you part of their “In Group” and what you say will have more credibility. Assure them that you are there for them.</label>
+            <h4>3. BE FUTURE FOCUSED</h4>
+            <label>3. Raise the student’s awareness of what they can do when they’ve completed the course – how will they feel about themselves, what will others think of them, how will their completion improve things for others in their life?</label>
+            <h4>4. START TO PLAN</h4>
+            <label>Once they are starting to genuinely value what the course will do for them, you can start to plan:</label>
+            <ul>
+                <li>Identify the distractions in their life – what’s likely to prevent them from finding enough study time. What are practical strategies for the student to make time and minimise distractions.</li>
+                <li>Plan specific activities for the first part of the course.</li>
+                <li>Set SMALL STEPS – highly achievable ones – and measure achievement of these. This will build a perception of “self-efficacy” in the student – they can achieve what they set their mind to.</li>
+            </ul>
+        </div>
+    }
+    else if (Model.ActionIdToDisplay == 2)
+    {
+        <h1 class="col-xs-3" style="color:darkblue">SILVER</h1>
+        <h3 class="col-xs-9" style="color:red">Genuinely trying, but might drop out if not supported.</h3>
+
+    <div style="border-width:2px; padding-left:5em;padding-top:5em;">
+
+        <h4>WHAT THIS STUDENT IS THINKING:</h4>
+        <ul>
+            <li class="h4">Such Students are trying, but finding some aspects of the course difficult: usually time requirements, distractions and the requirement for support.</li>
+            <li class="h4">This Student might have felt “coerced” onto the course, or they’ve leapt onto the course without really understanding what is involved. So the Study Coach must remind them of the benefits.</li>
+            <li class="h4">They will have self-doubts, so remind them of their Strengths and achievements so far.</li>
+        </ul>
+    </div>
+    <div style="border-style:solid; border-width:2px;padding-left:2em;background-color:white;">
+        <h4>STUDY COACH PRINCIPLES</h4>
+        <ul>
+            <li>Praise participants for steps that are being taken.</li>
+            <li>Reiterate them of the ‘point’ of the course.</li>
+            <li>Ask them for examples of where they’ve successfully achieved a goal before: driving tests, exams, moving house, asking someone out on a date etc.</li>
+        </ul>
+        <h4>STUDY COACH STRATEGIES</h4>
+        <h4>1. FOCUS ON THE “PROS” </h4>
+        <label>Weigh the PROS (eg ‘sense of independence’, ‘future opportunities’) vs the CONS (eg ‘it will take time and energy and I might embarrass myself’, ‘fear of failure’).</label>
+        <ul>
+            <li>Ask these students to name as many benefits of the course as they can (they’ll typically name around 3. Keep these for future reference.)</li>
+            <li>Let them know there are double or triple that many, and challenge them to name more.</li>
+            <li>Then run through your own list of the Pros of the course that they might have missed out.</li>
+        </ul>
+        <h4>2. RAISE RESILIENCE</h4>
+        <label>The student is likely to be hiding from doubts and issues. Raise the student’s awareness of their own doubts, “are there any issues that might prevent you from finishing this course?”</label>
+        <ul>
+            <li>Normalise these doubts by saying, “yes, many people initially have issues with finding the time/course content/interest, then overcome it.”</li>
+            <li>Reassure them that you’re there for them.</li>
+            <li>Ask students about issues they’ve overcome in the past – driving tests, exams, asking someone out, buying a house, moving home etc. Ask how did they find the strength and resilience to succeed in the end? Affirm that they were strong and determined to achieve those things.</li>
+            <li>Offer tips on finding private time and space to study, on dealing with family to allow them to progress with their studies.</li>
+        </ul>
+        <h4>3. BUILD SELF-EFFICACY</h4>
+        <label>Use the “SCALING” technique: Ask them to score out of 10 (1 being ‘very poor’ and 10 being ‘great’) on how well they’re doing on the course. If they say “2” ask “why a 2, why not a 1?” and build on those positives. Ask “How can we get you to a 3?” This builds only positives, even if the student is feeling negative.</label>
+        <ul>
+            <li>Ask them to describe when they’ve completed courses before – including at school. What was different then? How can they make that happen again?</li>
+            <li>Set an Action Plan and small steps to achieve it.</li>
+            <li>Consider their survey answers and address their concerns.</li>
+            <li>Remind them of their “Pros” for completing the course and what others will think of them once they’ve completed it – the example they’re setting, the pride, the better prospects etc.</li>
+            <li>Remember: Coach – don’t lecture.</li>
+        </ul>
+    </div>
+    }
+    else if (Model.ActionIdToDisplay == 4 || Model.ActionIdToDisplay == 5)
+    {
+        <h1 class="col-xs-3" style="color:darkblue">GOLD</h1>
+        <h3 class="col-xs-9" style="color:red">Very likely to succeed: praise them & light touch support.</h3>
+
+    <div style="border-width:2px; padding-left:5em;padding-top:5em;padding-bottom:1em;">
+
+        <h4>WHAT THIS STUDENT IS THINKING:</h4>
+        <ul>
+            <li class="h4">Pros of completing the course outweigh the Cons: they’re likely to complete…with your help.</li>
+            <li class="h4">They are pretty confident and need some only light student support.</li>
+            <li class="h4">They may have already taken small steps and are moving towards their goal.</li>
+            <li class="h4">Slipping back is common – especially among individuals with unrealistic goals or those who haven’t adequately prepared…so Coach expectations and be there when they have doubts.</li>
+        </ul>
+
+    </div>
+    <div style="border-style:solid; border-width:2px;padding-left:2em;background-color:white;">
+
+        <h4>STUDY COACH PRINCIPLES</h4>
+        <ul>
+            <li>Encourage, excite and empower through praise, compliments and support.</li>
+            <li>Problem Solve: describe how others have succeeded.</li>
+            <li>Keep interventions short and focused.</li>
+            <li>Assist students with planning ahead to prevent lapses.</li>
+            <li>Simply be there to provide support during stressful or demanding times.</li>
+        </ul>
+        <h4>STUDY COACH STRATEGIES</h4>
+        <h4>1. ACTION PLANNING  </h4>
+        <ul>
+            <li>Together, set specific, realistic and measurable Action Plans.</li>
+            <li>Role play course-end tests…how should they react, what should they expect, what to do if their fail the first time?</li>
+        </ul>
+        <h4>2. POSITIVITY</h4>
+        <ul>
+            <li>Ask what benefits the course is already delivering.</li>
+            <li>Remind students that they’re likely to be unable to complete study sometimes, but this happens to everybody, they just have to “keep on putting one foot in front of the other”.</li>
+            <li>Describe others who have succeeded in completing the course.</li>
+            <li>Perhaps refer the student to groups/other students, which will enhance their peer group and support.</li>
+        </ul>
+        <h4>3. REINFORCE SELF-IMAGE</h4>
+        <ul>
+            <li>Compliment the student on how well they are progressing.</li>
+            <li>Check their scores out of 10 (“Scaling”) in terms of how well they are progressing, or how well they’re finding time and space to study. Remind them of the end-goal and benefits.</li>
+            <li>Discuss the STRENGTHS that they are displaying.</li>
+        </ul>
+        <h4>4. THINK OF THE FUTURE</h4>
+        <ul>
+            <li>Consider what they’re going to do after the course.</li>
+            <li>How are they going to fill the study time?</li>
+            <li>Would they want to do another course etc?</li>
+        </ul>
+    </div>
+    }
+    </div>

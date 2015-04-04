@@ -65,6 +65,18 @@
                 Id: {
                     key: true,
                     list: false
+                },
+                Password: {
+                    title: 'Password',
+                    list: false
+                },
+                ResetPassword: {
+                    title: 'Password',
+                    edit: false,
+                    create: false,
+                    display: function (data) {
+                        return resetPassword(data, "/User/ResetPassword")
+                    }
                 }
             }
         });
@@ -173,13 +185,20 @@
                     sorting: true,
                     edit: true,
                     options: '/User/GetCompanies'
-                 },
+                },
                 Id: {
-                    key: true,
-                    list: false
+                key: true,
+                list: false
+                },
+                ResetPassword: {
+                title: 'Password',
+                display: function (data) {
+                    return resetPassword(data, "/User/AdminResetPassword")
+                    }
                 }
             }
         });
+
         
         function loadSuperAdminTable() {
             $('#superadminuserlist').jtable('load',
@@ -196,4 +215,36 @@
         loadSuperAdminTable();
 
     }
+
+    function resetPassword(data, url) {
+
+        var $link = $('<a href="#" id="ResetLink_' + data.record.Id + '">Reset</a>');
+
+        var password = '';
+
+        $link.click(function () {
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                async: false,
+                type: 'POST',
+                data: { id: data.record.Id },
+                success: function (result) {
+                    if (result.IsValid == true) {
+                        alert('Password reset and email sent!')
+                    }
+                    else {
+                        alert('Password reset but email failed to send!')
+                    }
+                    $('#ResetLink_' + data.record.Id).html(result.Password);
+                },
+                error: function () {
+                    alert('Password reset but email failed to send!')
+                }
+            });
+        });
+        return $link;
+    }
+
 });

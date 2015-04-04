@@ -23,8 +23,9 @@ namespace A4EPARC.ViewModels
         public int? FirstPage { get; set; }
         public int? CurrentPage { get; set; }
         public int? PageSize { get; set; }
-        public bool ShowAllRecords { get; set; }
-        public List<string> EnvironemntTypeList { get; set; }
+        public List<string> Companies { get; set; }
+        public string Company { get; set; }
+        public string Environment { get; set; }
         
         public PagedViewModel<T> AddFilter(Expression<Func<T, bool>> predicate)
         {

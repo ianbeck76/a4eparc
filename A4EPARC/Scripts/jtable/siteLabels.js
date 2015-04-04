@@ -5,34 +5,24 @@
         $('#sitelabelsdata').jtable({
             title: ' ',
             paging: true,
-            pageSize: 50,
+            pageSize: 1000,
             sorting: true,
-            defaultSorting: 'Id ASC',
+            defaultSorting: 'Name ASC',
             actions: {
                 listAction: '/SiteLabels/GetRows',
-                updateAction: '/SiteLabels/EditRow'
+                updateAction: '/SiteLabels/EditRow',
+                createAction: '/SiteLabels/AddRow'
             },
             fields: {
                 Name: {
                     title: 'Name',
-                    width: '10%'
+                    edit: false,
+                    width: '20%'
                 },
                 Description: {
                     title: 'Description',
                     width: '80%',
                     type: 'textarea'
-                },
-                SchemeId: {
-                    title: 'Scheme',
-                    width: '5%',
-                    options: { 1: 'Adult', 2: 'Youth', 3: 'Exemplar', 4: 'GSM' },
-                    edit: false
-                },
-                LanguageCode: {
-                    title: 'Language',
-                    width: '5%',
-                    options: ['en-GB'],
-                    edit: false
                 },
                 Id: {
                     key: true,
@@ -44,16 +34,26 @@
         function loadTable() {
             $('#sitelabelsdata').jtable('load',
             {
-                name: $("#name").val()
+                name: '',
+                scheme: $("#AdminSchemeSelect").val(),
+                language: $("#AdminLanguageSelect").val()
             });
         }
 
-        $('#searchbutton').click(function (e) {
+        $('#searchlabelsbutton').click(function (e) {
             e.preventDefault();
             loadTable();
         });
-        
+
         loadTable();
+
+        $("select[id='AdminLanguageSelect']").on('change', function () {
+            loadTable();
+        });
+
+        $("select[id='AdminSchemeSelect']").on('change', function () {
+            loadTable();
+        });
 
     }
 

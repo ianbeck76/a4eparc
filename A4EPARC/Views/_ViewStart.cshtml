@@ -1,9 +1,116 @@
 ﻿@{
-//    if (!(Request.Url.AbsoluteUri.Contains("global")))
-  //  {
-       Layout = "~/Views/Shared/_Layout_GLS.cshtml";
-//    }
-  //  else{
-       // Layout = "~/Views/Shared/_Layout.cshtml";
-  //  }
+    var companyId = 1;
+
+    if (Request.IsAuthenticated)
+    {
+        companyId = A4EPARC.Services.AuthenticationService.GetCompanyId();
+
+        <input id="CompanyId" value="@companyId" type="hidden" />
+    }
+
+    if (Request.Url.AbsoluteUri.Contains("gls") || Request.Url.AbsoluteUri.Contains("ac3"))
+    {
+        if (Request.IsAuthenticated)
+        {
+            if (companyId == 5)
+            {
+                Layout = "~/Views/Shared/_Layout_A4E.cshtml";
+            }
+            else if (companyId == 11 || companyId == 13)
+            {
+                Layout = "~/Views/Shared/_Layout_GLS.cshtml";
+            }
+            else if (companyId == 10)
+            {
+                Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+            }
+            else
+            {
+                Layout = "~/Views/Shared/_Layout.cshtml";
+            }
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_Layout_GLS.cshtml";        
+        }
+
+    }
+    else if (Request.Url.AbsoluteUri.Contains("a4e"))
+    {
+        if (Request.IsAuthenticated)
+        {
+            if (companyId == 5)
+            {
+                Layout = "~/Views/Shared/_Layout_A4E.cshtml";
+            }
+            else if (companyId == 11 || companyId == 13)
+            {
+                Layout = "~/Views/Shared/_Layout_GLS.cshtml";
+            }
+            else if (companyId == 10)
+            {
+                Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+            }
+            else
+            {
+                Layout = "~/Views/Shared/_Layout.cshtml";
+            }
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_Layout_A4E.cshtml";        
+        }
+    }
+    else if (Request.Url.AbsoluteUri.Contains("exemplar"))
+    {
+        if (Request.IsAuthenticated)
+        {
+            if (companyId == 5)
+            {
+                Layout = "~/Views/Shared/_Layout_A4E.cshtml";
+            }
+            else if (companyId == 11 || companyId == 13)
+            {
+                Layout = "~/Views/Shared/_Layout_GLS.cshtml";
+            }
+            else if (companyId == 10)
+            {
+                Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+            }
+            else
+            {
+                Layout = "~/Views/Shared/_Layout.cshtml";
+            }
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";        
+        }
+    }
+    else
+    {
+        if (Request.IsAuthenticated)
+        {
+            if (companyId == 5)
+            {
+                Layout = "~/Views/Shared/_Layout_A4E.cshtml";
+            }
+            else if (companyId == 11 || companyId == 13)
+            {
+                Layout = "~/Views/Shared/_Layout_GLS.cshtml";
+            }
+            else if (companyId == 10)
+            {
+                Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+            }
+            else
+            {
+                Layout = "~/Views/Shared/_Layout.cshtml";
+            }
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_Layout.cshtml";
+        }
+    }
 }

@@ -8,5 +8,6 @@
         public bool IsViewer { get; set; }
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
+        public string Password { get; set; }
     }
 }

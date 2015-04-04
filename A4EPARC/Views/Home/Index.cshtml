@@ -1,7 +1,8 @@
-﻿<div class="row">
+﻿@model int
+<div class="row">
     <div class="col-sm-4 col-sm-offset-4">
 
-        <p><br /></p>
+        <p><br /><br /></p>
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -10,13 +11,13 @@
             <div class="panel-body">
 
                     <p class="text-center">
-                        @if (Request.Url.AbsoluteUri.ToLower().Contains("exemplar"))
+                        @if (Model == 11 || Model == 13)
                         {
-                            @Html.ActionLink("Begin Survey", "PageOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
+                            @Html.ActionLink("Begin Survey", "GlsOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
                         }
                         else
                         {
-                            @Html.ActionLink("Begin Survey", "GlsOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
+                            @Html.ActionLink("Begin Survey", "PageOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
                         }
                     </p>
             
@@ -27,16 +28,16 @@
                         </p>
                     }
                 
-                  @*  @if (Context.User.IsInRole("IsSuperAdmin"))
+                    @if (Context.User.IsInRole("IsSuperAdmin"))
                     {
                         <p class="text-center">
                             @Html.ActionLink("View WebService Data", "Index", "WebServiceResults", null, new {@class = "btn btn-primary btn-block btn-lg"})
                         </p>
-                    }*@
+                    }
 
             </div>
             <div class="panel-footer text-center">
-                Please choose a option from above.
+                Please choose an option from above.
             </div>
         </div>
 

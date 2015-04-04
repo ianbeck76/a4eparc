@@ -7,7 +7,7 @@ using A4EPARC.ViewModels;
 
 namespace A4EPARC.Controllers
 {
-    [Authorize(Roles = "IsAdmin")]
+    [Authorize(Roles = "IsSuperAdmin")]
     public class QuestionAdminController : BaseController
     {
         private readonly IQuestionRepository _questionRepository;
@@ -24,11 +24,11 @@ namespace A4EPARC.Controllers
             return View();
         }
 
-        public ActionResult GetRows(int jtStartIndex, int jtPageSize, string jtSorting)
+        public ActionResult GetRows(int? scheme, string language, int jtStartIndex, int jtPageSize, string jtSorting)
         {
             try
             {
-                var list = _questionRepository.GetJtableView();
+                var list = _questionRepository.GetJtableView().Where(q => q.SchemeId == scheme.GetValueOrDefault() && q.LanguageCode == language).ToList();
 
                 var models = list.Select(item => new QuestionViewModel
                 {

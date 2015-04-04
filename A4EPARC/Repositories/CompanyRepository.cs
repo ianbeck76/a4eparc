@@ -59,6 +59,23 @@ namespace A4EPARC.Repositories
 
             return itemList;
         }
+
+        public List<CompanySelectValuesViewModel> GetSelectValues() 
+        {
+            var itemList = HttpContext.Current.Cache["CompanySelectValues"] as List<CompanySelectValuesViewModel>;
+
+            if (itemList != null)
+            {
+                return itemList;
+            }
+
+            const string query = @"SELECT [CompanyId],[Key],[Value] FROM [dbo].[CompanySelectValues]";
+            itemList = (List<CompanySelectValuesViewModel>)Query<CompanySelectValuesViewModel>(query).ToList();
+
+            HttpContext.Current.Cache.Insert("CompanySelectValues", itemList, null, DateTime.Now.AddDays(1), TimeSpan.Zero);
+
+            return itemList;
+        }
     }
 
     public interface ICompanyRepository : IRepository<Company>
@@ -66,5 +83,6 @@ namespace A4EPARC.Repositories
         List<CompanySchemeViewModel> GetSchemes();
         List<CompanyPageItemViewModel> GetPageItems();
         List<CompanyLanguageViewModel> GetLanguages();
+        List<CompanySelectValuesViewModel> GetSelectValues();
     }
 }

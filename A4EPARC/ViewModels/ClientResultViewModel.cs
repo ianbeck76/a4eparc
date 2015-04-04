@@ -17,7 +17,10 @@ namespace A4EPARC.ViewModels
         public string ActionName { get; set; }
         public string AnswerString { get; set; }
         public string Username { get; set; }
-        public string CaseID { get; set; }
+        [ScaffoldColumn(false)]
+        public string Company { get; set; }
+        public string JobSeekerID { get; set; }
+        public string Surname { get; set; }
         [ScaffoldColumn(false)]
         public int MatrixPreContemplationPoints { get; set; }
         [ScaffoldColumn(false)]

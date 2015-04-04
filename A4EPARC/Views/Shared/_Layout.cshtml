@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta charset="utf-16" />
-        <title>Exemplar Assessment</title>
+        <title>Psychass Assessment</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/themes/base/css")
@@ -17,12 +17,21 @@
         
         <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="navigation-bar">
             
-            <div class="container-fluid navbar-inner">
-                    <a class="navbar-brand navbar-right" href="/">Exemplar Survey Home</a>
-       
+            <div class="container-fluid navbar-inner">       
                 @if (Request.IsAuthenticated)
                 {
-                    <input id="CompanyId" value="@A4EPARC.Services.AuthenticationService.GetCompanyId()" type="hidden"/>
+                    var companyId = @A4EPARC.Services.AuthenticationService.GetCompanyId();
+                    <input id="CompanyId" value="@companyId" type="hidden"/>
+
+                    if (companyId == 10)
+                    {
+                        <a class="navbar-brand navbar-right" href="/">Exemplar Survey Home</a>
+                    }
+                    else
+                    {
+                        <a class="navbar-brand navbar-right" href="/">Psychass Survey Home</a>
+                    }
+
                     <div class="navbar-header">
                         <button id="toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="icon-bar"></span>
@@ -31,19 +40,28 @@
                         </button>
                     </div>
                       <form class="collapse navbar-collapse navbar-form navbar-left">
-                        <a title="Home" href="/" class="btn btn-primary btn-sm navbar-btn"><i class="icon icon-home"></i></a>
+                         <a title="Home" href="/"><img style="max-height: 80px; cursor: pointer;" src="~/Content/images/esherhouse.png" alt=""></a>
                     </form>
                     <div class="collapse navbar-collapse navbar-right">
                         @Html.Partial("_NavigationLinks")
-                        @Html.Partial("_LanguageSelect")
+                        @if (@A4EPARC.Services.AuthenticationService.ShowLanguages(companyId))
+                        {
+                            @Html.Partial("_LanguageSelect")
+                        }
                     </div>
+                }
+                else
+                {
+                    <form class="collapse navbar-collapse navbar-form navbar-left">
+                        <a title="Home" href="/"><img style="max-height: 80px; cursor: pointer;" src="~/Content/images/esherhouse.png" alt=""></a>
+                    </form>
                 }
             </div>
         </div>  
 
         <div id="mask"></div>
         <br/>
-        <div id="page" class="container-fluid page" style="padding-top: 10px;">
+        <div id="page" class="container-fluid page" style="padding-top: 50px;">
             @RenderBody()
         </div>
     </div>
@@ -52,7 +70,7 @@
         <div id="footer" class="container-fluid footer">
             <div class="row">
                 <div class="col-xs-11">
-                    <p>&copy; @DateTime.UtcNow.Year Powered by Esher House Pty Ltd Pro-Change Behavior Inc</p>
+                    <p>&copy; @DateTime.UtcNow.Year Powered by Esher House Pty Ltd</p>
                 </div>
                 <div class="col-xs-1 pull-right text-right">
                     <a href="#top" title="Top"><i class="fa fa-chevron-up fa-lg"></i></a>

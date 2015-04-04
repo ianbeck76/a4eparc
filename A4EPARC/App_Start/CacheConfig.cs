@@ -19,10 +19,10 @@ namespace A4EPARC.App_Start
             var questionsList = (List<QuestionViewModel>) questionRepository.Query(query);
             HttpContext.Current.Cache.Insert("GetQuestions", questionsList, null, DateTime.Now.AddHours(2), TimeSpan.Zero);
 
-            var siteTextRepository = DependencyResolver.Current.GetService<ISiteTextRepository>();
-            const string siteText = @"SELECT Id, Code, SchemeId, LanguageCode, Description, Name, Summary FROM [dbo].[SiteText]";
-            var siteTextList = (List<SiteTextViewModel>)siteTextRepository.Query(siteText);
-            HttpContext.Current.Cache.Insert("GetSiteText", siteTextList, null, DateTime.Now.AddHours(2), TimeSpan.Zero);
+            var siteLabelsRepository = DependencyResolver.Current.GetService<ISiteLabelsRepository>();
+            const string siteLabels = @"SELECT Id, SchemeId, LanguageCode, Description, Name FROM [dbo].[SiteLabels]";
+            var siteLabelsList = (List<SiteLabelsViewModel>)siteLabelsRepository.Query(siteLabels);
+            HttpContext.Current.Cache.Insert("GetSiteText", siteLabelsList, null, DateTime.Now.AddHours(2), TimeSpan.Zero);
         }        
     }
 }

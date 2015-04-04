@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MvcContrib.Pagination;
 using MvcContrib.UI.Grid;
+using System.Collections.Generic;
 
 namespace A4EPARC.ViewModels
 {
@@ -12,7 +13,10 @@ namespace A4EPARC.ViewModels
         public string DateFrom { get; set; }
         [Display(Name = "Date To")]
         public string DateTo { get; set; }
-        public string CaseID { get; set; }
-        public string ClientID { get; set; }
+        public string JobSeekerID { get; set; }
+        public string Surname { get; set; }
+        public string Username { get; set; }
+        public string Company { get; set; }
+        public List<string> Companies { get; set; }
     }
 }

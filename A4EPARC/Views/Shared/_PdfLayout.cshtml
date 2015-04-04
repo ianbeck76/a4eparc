@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta charset="utf-16" />
+        <title>Assessment</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/themes/base/css")
+        @Styles.Render("~/Content/css")
+           <!--[if lt IE 9]>
+          @Scripts.Render("~/bundles/ie8specific")
+        <![endif]-->
+    </head>
+<body id="top">
+    <div id="wrap" class="pdfwrap">
+        
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="navigation-bar">
+            
+            <div class="container-fluid navbar-inner" style="padding-top: 5px;padding-bottom: 10px;">
+                <div class="col-xs-3">
+                    <a title="Home"><img title="Home" style="max-height: 125px; cursor: pointer;" src="~/Content/images/ABSLogo.png" alt=""></a>
+                </div>
+                <div class="col-xs-4">
+                    <h3>&nbsp;</h3>
+                    <h3 title="InterventionGuideLabel" style="color:white;">INTERVENTION GUIDE</h3>
+                </div>
+                <div class="col-xs-5 pull-right text-right">
+                    <a title="Home"><img style="max-height: 125px; cursor: pointer;" src="~/Content/images/esherhouse.png" alt=""></a>                   
+                </div>
+            </div>
+        </div>  
+
+        <div id="page" class="container-fluid page" style="padding-top: 80px;">
+            @RenderBody()
+        </div>
+    </div>
+
+</body>
+</html>

@@ -498,7 +498,7 @@ textarea {
 
 /* styles for validation helpers */
 .field-validation-error {
-    color: #e80c4d;
+    color: red;
     font-weight: bold;
 }
 

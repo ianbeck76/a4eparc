@@ -4,10 +4,11 @@ using System.Web.Mvc;
 using A4EPARC.Repositories;
 using A4EPARC.ViewModels;
 using System.Collections.Generic;
+using A4EPARC.Services;
 
 namespace A4EPARC.Controllers
 {
-    [Authorize(Roles = "IsAdmin")]
+    [Authorize(Roles = "IsSuperAdmin")]
     public class SiteLabelsController : Controller
     {
         private readonly ISiteLabelsRepository _siteLabelsRepository;
@@ -22,11 +23,11 @@ namespace A4EPARC.Controllers
             return View();
         }
 
-        public ActionResult GetRows(string name, int jtStartIndex, int jtPageSize, string jtSorting)
+        public ActionResult GetRows(int? scheme, string language, string name, int jtStartIndex, int jtPageSize, string jtSorting)
         {
             try
             {
-                var list = _siteLabelsRepository.GetJtableView();
+                var list = _siteLabelsRepository.GetJtableView().Where(s => s.SchemeId == scheme.GetValueOrDefault() && s.LanguageCode == language).ToList();
 
                 if (!string.IsNullOrWhiteSpace(name))
                 {
@@ -44,7 +45,7 @@ namespace A4EPARC.Controllers
                     Sorting = jtSorting
                 }).ToList();
 
-                return Json(new { Result = "OK", Records = models.Skip(jtStartIndex).Take(jtPageSize).ToList(), TotalRecordCount = models.Count() });
+                return Json(new { Result = "OK", Records = models.Skip(jtStartIndex).Take(jtPageSize).ToList().OrderBy(m => m.Name), TotalRecordCount = models.Count() });
             }
             catch (Exception ex)
             {
@@ -88,16 +89,10 @@ namespace A4EPARC.Controllers
         [HttpGet]
         public JsonResult Get(int? schemeId, string languageCode)
         {
-            var labels = new List<KeyValuePair<string,string>>();
-            var list = _siteLabelsRepository.Get(schemeId.GetValueOrDefault(), languageCode);
-            if (list.Any())
-            {
-                labels = list.Select(s => new KeyValuePair<string, string>(s.Name, s.Description)).ToList();
-            }
-            else
-            {
-                labels = _siteLabelsRepository.Get(schemeId.GetValueOrDefault(), languageCode).Select(q => new KeyValuePair<string, string>(q.Name, q.Description)).ToList();
-            }
+            var items = new List<SiteLabelsViewModel>();
+
+            var labels = _siteLabelsRepository.All().Where(l => l.LanguageCode == languageCode && l.SchemeId == schemeId.GetValueOrDefault()).ToList();
+            
             return Json(new { Labels = labels }, JsonRequestBehavior.AllowGet);
         }
     }

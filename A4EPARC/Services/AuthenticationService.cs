@@ -18,16 +18,19 @@ namespace A4EPARC.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ICompanyRepository _companyRepository;
         private readonly ISecurityService _securityService;
 
         public const string IsAdmin = "IsAdmin";
         public const string IsViewer = "IsViewer";
         public const string IsSuperAdmin = "IsSuperAdmin";
 
-        public AuthenticationService(ISecurityService securityService, IUserRepository userRepository)
+        public AuthenticationService(ISecurityService securityService, 
+            IUserRepository userRepository, ICompanyRepository companyRepository)
         {
             _userRepository = userRepository;
             _securityService = securityService;
+            _companyRepository = companyRepository;
         }
 
         public int Login(string email, string password)
@@ -40,16 +43,17 @@ namespace A4EPARC.Services
 
                 if (user.Password == hash)
                 {
-                    Login(user);
+                    var showLanguages = _companyRepository.GetLanguages().Where(c => c.CompanyId == user.CompanyId).Count() > 1;
+                    Login(user, showLanguages);
                     return user.Id;      
                 }
             }
             return 0;
         }
 
-        public void Login(User user)
+        public static void Login(User user, bool showLanguages)
         {
-            var authenticationTicket = new FormsAuthenticationTicket(1, user.Email + ";" + user.Id.ToString() + ";" + user.CompanyId.ToString(), DateTime.Now,
+            var authenticationTicket = new FormsAuthenticationTicket(1, user.Email + ";" + user.Id.ToString() + ";" + user.CompanyId.ToString() + ";" + showLanguages.ToString(), DateTime.Now,
                                                                      DateTime.Now.AddHours(1),
                                                                      true, GetDeliminatedRoles(user, ","), "/");
             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
@@ -92,6 +96,13 @@ namespace A4EPARC.Services
                 int.TryParse(HttpContext.Current.User.Identity.Name.Split(Convert.ToChar(";"))[1], out loginId);
 
             return loginId;
+        }
+
+        public static bool ShowLanguages(int companyId)
+        {
+            if (!string.IsNullOrWhiteSpace(HttpContext.Current.User.Identity.Name))
+                return Convert.ToBoolean(HttpContext.Current.User.Identity.Name.Split(Convert.ToChar(";"))[3]);
+            return false;
         }
 
         public static int GetCompanyId()
@@ -156,16 +167,16 @@ namespace A4EPARC.Services
                 string hash = FormsAuthentication.HashPasswordForStoringInConfigFile(saltedPassword, "SHA1");
                 user.Password = hash;
                 user.Salt = salt;
-               // _userRepository.Save(user);
+                _userRepository.UpdatePassword(user);
             }
             return user;
         }
+
     }
 
     public interface IAuthenticationService
     {
         int Login(string email, string password);
-        void Login(User userProfile);
         string CreateSalt(int size);
         bool LoginExists(string email);
         User ValidatePassword(string email, string password);

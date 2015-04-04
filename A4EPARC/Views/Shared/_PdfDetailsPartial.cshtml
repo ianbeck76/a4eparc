@@ -1,0 +1,37 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+<div style="float:none;padding-right:2em;padding-left:2em;padding-bottom:70em;background-color:white;page-break-before:always">
+
+    <h3 style="color:dimgray" class="col-xs-offset-2 col-xs-3">Name:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-7">@Html.DisplayFor(m => m.FirstName)&nbsp;@Html.DisplayFor(m => m.Surname)</h3>
+    <h3 style="color:dimgray" class="col-xs-offset-2 col-xs-3">DOB:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-7">@Html.DisplayFor(m => m.DateOfBirth)</h3>
+    <h3 style="color:dimgray" class="col-xs-offset-2 col-xs-3">State:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-7">@Html.DisplayFor(m => m.State)</h3>
+    <h3 style="color:dimgray" class="col-xs-offset-2 col-xs-3">Enrolment ID:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-7">@Html.DisplayFor(m => m.EnrolmentID)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "1").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(0, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "2").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(2, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "3").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(4, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "4").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(6, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "5").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(8, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "6").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(10, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "7").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(12, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "8").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(14, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "9").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(16, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "10").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(18, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "11").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(20, 1)</h3>
+    <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "12").Description)</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(22, 1)</h3>
+</div>

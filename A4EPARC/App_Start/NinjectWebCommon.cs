@@ -78,8 +78,8 @@ namespace A4EPARC.App_Start
             kernel.Bind<IEmailService>().To<EmailService>().InRequestScope();
             kernel.Bind<ISerializeService>().To<SerializeService>().InRequestScope();
             kernel.Bind<IWebServiceResultsRepository>().To<WebServiceResultsRepository>().InRequestScope();
-            kernel.Bind<ISiteTextRepository>().To<SiteTextRepository>().InRequestScope();
             kernel.Bind<ISiteLabelsRepository>().To<SiteLabelsRepository>().InRequestScope();
+            kernel.Bind<IResultService>().To<ResultService>().InRequestScope();
         }        
     }
 }

@@ -5,12 +5,9 @@
       
     <div class="container" id="pageoneform">
         
-        <h2>AIM – this 3-4 minute assessment helps to ensure that the support that Student Support provides to you is relevant to YOU and doesn’t waste your time.</h2>
-
-        <br />
-
+        <h2>This 3 minute assessment helps to ensure that your "Study Coach" provides you with the support you will need to successfully complete the course. Please answer the questions quickly and honestly.</h2>
         <input type="hidden" id="SchemeId" value=@Model.SchemeId />
-        
+        <br />
       
         <div class="form-group" id="FirstNameGroup">
             <label class="col-md-4 control-label">First Name</label>
@@ -27,68 +24,40 @@
                 <div style="color: red">@Html.ValidationMessageFor(m => m.Surname)</div>
             </div>
         </div>
+        <div class="form-group" id="EnrolmentIDGroup">
+            <label class="col-md-4 control-label">Enrolment ID</label>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.EnrolmentID, new { @class = "form-control", @maxlength = "50", @id = "EnrolmentID" })
+            </div>
+        </div>
 
         <div class="form-group" id="DateOfBirthGroup">
-            @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-4 control-label" })
-            <div class="col-md-2">
+            <label class="col-xs-12 col-md-4 control-label">Date of Birth</label>
+            <div class="col-xs-4 col-md-2">
                 @Html.DropDownListFor(m => m.DateOfBirthMonth, new SelectList(Model.MonthDropdownList, "key", "value"), "Month", new { @class = "form-control" })
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-4 col-md-2">
                 @Html.DropDownListFor(m => m.DateOfBirthDay, new SelectList(Model.DayDropdownList), "Day", new { @class = "form-control" })
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-4 col-md-2">
                 @Html.DropDownListFor(m => m.DateOfBirthYear, new SelectList(Model.YearDropdownList), "Year", new { @class = "form-control" })
             </div>
             <div>@Html.ValidationMessage("InvalidDate", new { @style = "color:red;" })</div>
         </div>
         
-        <div class="form-group" id="StateGroup">
-            @Html.LabelFor(m => m.State, new { @class = "col-md-4 control-label" })
-            <div class="col-md-6" style="margin-bottom: 10px">
-                @Html.DropDownListFor(m => m.State, new SelectList(Model.StateDropdownList), "Please Select", new { @class = "form-control", @id = "LengthOfUnemployment", @required="true" })
-                @Html.ValidationMessageFor(m => m.State)
-            </div>
-        </div>
-        <div class="form-horizontal">
-            <div class="form-group">
-                <input type="hidden" name="ResultId" value="@Model.ResultId" id="ResultId" />
-                @Html.ValidationMessage("WebserviceUnavailable", new { @style = "color:red;" })
-                @Html.ValidationMessage("RecordAlreadyAdded", new { @style = "color:red;" })
-                <h4 id="QuestionHeaderLabel">@Model.SiteLabels.FirstOrDefault(q => q.Name == "QuestionHeaderLabel").Description</h4>
-                <hr class="divider" />
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-
-                </div>
-                <div class="hidden-xs hidden-sm col-md-6">
-                    <label class="col-md-2-4 text-center" id="StronglyDisagree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "StronglyDisagree").Description</label>
-                    <label class="col-md-2-4 text-center" id="Disagree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "Disagree").Description</label>
-                    <label class="col-md-2-4 text-center" id="Neutral">@Model.SiteLabels.FirstOrDefault(q => q.Name == "Neutral").Description</label>
-                    <label class="col-md-2-4 text-center" id="Agree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "Agree").Description</label>
-                    <label class="col-md-2-4 text-center" id="StronglyAgree">@Model.SiteLabels.FirstOrDefault(q => q.Name == "StronglyAgree").Description</label>
+        @if(Model.StateDropdownList.Any())
+        {
+            <div class="form-group" id="StateGroup">
+                @Html.LabelFor(m => m.State, new { @class = "col-md-4 control-label" })
+                <div class="col-md-6" style="margin-bottom: 10px">
+                    @Html.DropDownListFor(m => m.State, new SelectList(Model.StateDropdownList), "Please Select", new { @class = "form-control", @id = "LengthOfUnemployment", @required="true" })
+                    @Html.ValidationMessageFor(m => m.State)
                 </div>
             </div>
-            @foreach (var question in Model.Questions)
-            {
-                <div class="form-group">
-                    <div class="col-md-6">
-                        <label class="control-label questionlabels">@question.Description</label>
-                    </div>
-                    <input class="form-control" type="hidden" id="@question.Code" name="@question.Code" value="@question.Answer" data-val="true" data-val-required="Required" />
-                    <div class="col-md-6 col-xs-12 btn-group" data-toggle="buttons">
-                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 1 ? "active" : "")" data-radio-name="@question.Code" data-text="1">1</button>
-                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 2 ? "active" : "")" data-radio-name="@question.Code" data-text="2">2</button>
-                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 3 ? "active" : "")" data-radio-name="@question.Code" data-text="3">3</button>
-                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 4 ? "active" : "")" data-radio-name="@question.Code" data-text="4">4</button>
-                        <button type="button" class="btn btn-default col-sm-2-4 col-md-2-4 radiolist @(question.Answer == 5 ? "active" : "")" data-radio-name="@question.Code" data-text="5">5</button>
-                        <div class="field-validation-error" style="color:red;">@Html.ValidationMessage(question.Code)</div>
-                    </div>
-                </div>
-            }
-
-        </div>
-
+        }
+        <br />
+        @Html.Partial("_QuestionsGrid", @Model)
+        
     </div>
     
     <br/>

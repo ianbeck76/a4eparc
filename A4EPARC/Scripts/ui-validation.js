@@ -21,7 +21,7 @@ $(document).ready(function() {
             var labels = getSiteLabels($(this).val());
 
             labels.forEach(function (label) {
-                $('#' + label.Key).html(label.Value).val(label.Value)
+                $('#' + label.Name).html(label.Description).val(label.Description);
             })
 
             if ($('.surveyPageTwo').length > 0) {
@@ -36,27 +36,27 @@ $(document).ready(function() {
         });
     }
 
-    if ($('#surveyPage').length > 0) {
+    //if ($('#surveyPage').length > 0) {
 
-        var pageitems = getPageItems();
-        pageitems.forEach(function (item) {
+    //    var pageitems = getPageItems();
+    //    pageitems.forEach(function (item) {
 
-            if (item.IsDisplay == true) {
-                $('#' + item.Name + 'Group').show();
-            }
-            else {
-                $('#' + item.Name + 'Group').hide();
-            }
-            if (item.IsRequired == true) {
-                $('#' + item.Name).attr('required', 'required');
-            }
-            else {
-                $('#' + item.Name).removeAttr('required');
-            }
+    //        if (item.IsDisplay == true) {
+    //            $('#' + item.Name + 'Group').show();
+    //        }
+    //        else {
+    //            $('#' + item.Name + 'Group').hide();
+    //        }
+    //        if (item.IsRequired == true) {
+    //            $('#' + item.Name).attr('required', 'required');
+    //        }
+    //        else {
+    //            $('#' + item.Name).removeAttr('required');
+    //        }
 
-        })
+    //    })
 
-    }
+    //}
 
     function getSchemeId() {
 
@@ -71,6 +71,7 @@ $(document).ready(function() {
     function getCompanyId() {
 
         var companyId = $('#CompanyId').val();
+
         if (companyId == 'undefined') {
             companyId = 1;
         }
@@ -172,14 +173,36 @@ $(document).ready(function() {
 		).trigger('change');
     });
 
+    if ($('#surveyPageOne').length > 0) {
 
-    if ($('#surveyPage').length > 0) {
-        var validator = $.data($('.surveyPage')[0], 'validator');
+        $('button[data-radio-name="Gender"]').click(function () {
+            $('#Gender').data('val', false);
+        });
 
-        //$('#journeyForm').validate();
-        var validatorSettings = validator.settings;
-        //validatorSettings.ignore = '';
-        validatorSettings.ignore = ".ignore";
+        $('#DateOfBirthDay').change(function () {
+            dateChange();
+        });
+
+        $('#DateOfBirthMonth').change(function () {
+            dateChange();
+        });
+
+        $('#DateOfBirthYear').change(function () {
+            dateChange();
+        });
+
+        function dateChange() {
+            if ($('#DateOfBirthDay').val() != ''
+                && $('#DateOfBirthMonth').val() != ''
+                && $('#DateOfBirthYear').val() != '') {
+                $('#DateOfBirth').val('01/01/2000');
+                $('#DateOfBirth').data('val', false);
+            }
+        }
     }
-    
+
+    $.validator.setDefaults({
+        ignore: [],
+        // any other default options and/or rules
+    });
 });

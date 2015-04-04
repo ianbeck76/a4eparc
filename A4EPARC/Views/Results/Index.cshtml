@@ -22,35 +22,56 @@
         </form>
         <form class="form-horizontal" role="form">
             <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-3">
+                <div class="col-xs-6 col-sm-6 col-md-4">
                     @Html.Label("Date From")
                       <div class="input-group date" data-date-autoclose="true" data-date-format="mm-dd-yyyy">                        
-                        <input type="text" name="datefrominput"  id="datefrominput"  class="form-control " value="@Model.DateFrom"/>
+                        <input type="text" name="datefrom"  id="datefrominput"  class="form-control " value="@Model.DateFrom"/>
                         <span class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-6 col-sm-6 col-md-3">
+                <div class="col-xs-6 col-sm-6 col-md-4">
                 @Html.Label("Date To  ")
                     <div class="input-group date" data-date-autoclose="true" data-date-format="mm-dd-yyyy">                        
-                        <input type="text" name="datetoinput"  id="datetoinput"  class="form-control " value="@Model.DateTo"/>
+                        <input type="text" name="dateto" id="datetoinput" class="form-control " value="@Model.DateTo" />
                         <span class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-6 col-sm-6 col-md-3">
-                    @Html.Label("Case ID")
-                    <input type="text" name="caseidinput"  id="caseidinput"  class="form-control col-xs-3" value="@Model.CaseID"/>
+                <div class="col-xs-6 col-sm-6 col-md-4">
+                    @Html.Label("Job Seeker ID")
+                    <input type="text" name="jobseekerid" id="jobseekeridinput" class="form-control col-xs-4" value="@Model.JobSeekerID" />
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-4">
+                    @Html.Label("Surname")
+                    <input type="text" name="surname" id="surnameinput" class="form-control col-xs-4" value="@Model.Surname" />
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-4">
+                    <label>Username</label>
+                    <input type="text" name="username" id="usernameinput" class="form-control col-xs-4" value="@Model.Username" />
+                </div>
+               @if (Context.User.IsInRole("IsSuperAdmin"))
+               {
+                    <div class="col-xs-6 col-sm-6 col-md-4">
+                        @Html.Label("Company")
+                        @Html.DropDownListFor(m => m.Company, new SelectList(Model.Companies), "Please Select", new { @class = "form-control", @id = "companyinput", @name = "company" })
+                    </div>
+               }
+               else
+               {
+                <input type="hidden" value="@Model.Company" id="companyInput" , name="company" />
+               }
             </div>
         </form>
     <br/>
-        <input class="btn btn-primary" type="button" id="filterLink" name="filterLink" value="Search" />
-    &nbsp;&nbsp;
-        <input class="btn btn-secondary" type="button" id="print" name="print" value="Print" />
     
+    <button class="btn btn-primary" title="Search" id="filterLink" name="filterLink" value="Search">Search <span class="glyphicon glyphicon-search"></span></button>
+    &nbsp;&nbsp;
+    <button class="btn btn-primary" title="Excel" id="export" name="export" value="Excel">Excel <span class="glyphicon glyphicon-download-alt"></span></button>
          <br/>
       <div class="row">
             <br/>
@@ -64,12 +85,12 @@
     column.For(a => a.ActionName).Named("Action Name").Sortable(false);
     column.For(a => a.AnswerString).Named("Answer String").Sortable(false);
     column.For(a => a.Username).Named("Username").Sortable(false);
-    if (@companyId == 11)
+    if (@companyId == 11 || @companyId == 13)
     {
         column.For(a => "<a href='" + @Url.Action("DetailsGls", "Results", new { Area = "", id = a.Id }) + "' class='icon icon-edit' title='Display'></a>").Encode(false).Sortable(false);
     }
     else {
-        column.For(a => a.CaseID).Named("Case ID").Sortable(false);
+        column.For(a => a.JobSeekerID).Named("Job Seeker ID").Sortable(false);
         column.For(a => "<a href='" + @Url.Action("Details", "Results", new { Area = "", id = a.Id }) + "' class='icon icon-edit' title='Display'></a>").Encode(false).Sortable(false);
     }
 }).Sort(Model.GridSortOptions).Attributes(@width => "100%", @class => "table table-striped table-bordered table-hover")
