@@ -2,7 +2,9 @@
 
 <div class="container" style="border: 5px solid; padding-left: 20px; padding-bottom: 40px; background-color: white; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;">
 
-    @{var items = Model.SiteLabels.Where(s => s.Name.Contains("AimStatement"));
+    @{
+        var items = Model.SiteLabels.Where(s => s.Name.Contains("AimStatement"));
+        
     var i = 0;
 
     foreach (var item in items)
@@ -37,6 +39,7 @@
             <h4 id="AimStatement7">@Model.SiteLabels.LastOrDefault(a => a.Name.Contains("AimStatement")).Description</h4>
         </div>
     </div>
+
     <br />
     <div class="row float-left">
         <p style="color: #283E94">&copy;&nbsp;Esher House Pty Ltd</p>

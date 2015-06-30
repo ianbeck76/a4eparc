@@ -79,7 +79,6 @@ namespace A4EPARC.Controllers
         public JsonResult EditRow(SiteLabelsViewModel model)
         {
             var label = _siteLabelsRepository.SingleOrDefault(model.Id);
-            label.Name = model.Name;
             label.Description = model.Description;
             _siteLabelsRepository.Save(label);
             var returnValue = label;

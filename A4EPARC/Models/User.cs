@@ -12,6 +12,7 @@ namespace A4EPARC.Models
         public bool IsViewer { get; set; }
         public int CompanyId { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool IsActive { get; set; }
     }
 
     public interface IUser : IEntity
@@ -24,5 +25,6 @@ namespace A4EPARC.Models
         bool IsViewer { get; set; }
         int CompanyId { get; set; }
         DateTime CreatedDate { get; set; }
+        bool IsActive { get; set; }
     }
 }

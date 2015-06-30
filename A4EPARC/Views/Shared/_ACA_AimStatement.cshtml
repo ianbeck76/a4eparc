@@ -1,0 +1,12 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+<div class="container" style="border: 5px solid; padding-left: 20px; padding-bottom: 40px; background-color: white; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;">
+    <div class="row">
+        <h2 id="AimStatement1">@A4EPARC.Services.LabelService.Get("AimStatement1", "This survey is to ensure you get the right and relevant support. So relax - take a breath - and think about where you want to go with your career.", Model.SiteLabels, Model.SchemeId)</h2>
+    </div>
+        <div class="row">
+            <h4 id="AimStatement2">@A4EPARC.Services.LabelService.Get("AimStatement2", "(If you have difficulty with some words, please contact your Career & Placement Advisor, who is here to help.)", Model.SiteLabels, Model.SchemeId)</h4>
+        </div>
+    <input type="hidden" id="AcceptCheckBox" name="AcceptCheckBox" value="true">
+    </div>
+    <br />

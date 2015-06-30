@@ -14,5 +14,6 @@
 
         public string LanguageCode { get; set; }
 
+        public int OrderNumber { get; set; }
     }
 }

@@ -8,12 +8,12 @@ using A4EPARC.ViewModels;
 namespace A4EPARC.Controllers
 {
     [Authorize(Roles = "IsSuperAdmin")]
-    public class QuestionAdminController : BaseController
+    public class QuestionAdminController : AuthBaseController
     {
-        private readonly IQuestionRepository _questionRepository;
+        private readonly IQuestionsRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         
-        public QuestionAdminController(IQuestionRepository questionRepository, IUserRepository userRepository)
+        public QuestionAdminController(IQuestionsRepository questionRepository, IUserRepository userRepository)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;

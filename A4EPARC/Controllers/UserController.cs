@@ -14,7 +14,7 @@ namespace A4EPARC.Areas.Admin.Controllers
 {
 
     [Authorize(Roles = "IsAdmin")]
-    public class UserController : BaseController
+    public class UserController : AuthBaseController
     {
         private readonly IUserRepository _userRepository;
         private readonly ISecurityService _securityService;
@@ -122,6 +122,7 @@ namespace A4EPARC.Areas.Admin.Controllers
                     IsViewer = item.IsViewer,
                     CompanyId = item.CompanyId,
                     CompanyName = item.CompanyName,
+                    IsActive = item.IsActive,
                     StartIndex = jtStartIndex,
                     Sorting = jtSorting
                 }).ToList();
@@ -156,7 +157,7 @@ namespace A4EPARC.Areas.Admin.Controllers
                     }
 
                     var salt = _authenticationService.CreateSalt(16);
-                    var saltedPassword = model.Password + salt;
+                    var saltedPassword = model.ResetPassword + salt;
                     var hash = FormsAuthentication.HashPasswordForStoringInConfigFile(saltedPassword, "SHA1").ToUpper();
 
                     IUser user = new User
@@ -167,6 +168,7 @@ namespace A4EPARC.Areas.Admin.Controllers
                                          IsSuperAdmin = false,
                                          IsAdmin = model.IsAdmin,
                                          IsViewer = model.IsViewer,
+                                         IsActive = true,  
                                          CompanyId =
                                              _companyRepository.All().FirstOrDefault(c => c.Name == companyName).Id,
                                          CreatedDate = DateTime.UtcNow
@@ -181,7 +183,7 @@ namespace A4EPARC.Areas.Admin.Controllers
                                                                             new PasswordViewModel
                                                                             {
                                                                                 Username = user.Email,
-                                                                                Password = model.Password
+                                                                                Password = model.ResetPassword
                                                                             });
 
                         _emailService.Send(company.EmailFromAddress, user.Email, "New User", html);
@@ -229,6 +231,7 @@ namespace A4EPARC.Areas.Admin.Controllers
             user.Id = model.Id;
             user.IsAdmin = model.IsAdmin;
             user.IsViewer = model.IsViewer;
+            user.IsActive = true;
 
             _userRepository.Save(user);
             var returnUser = _userRepository.SingleOrDefault(user.Id);
@@ -241,10 +244,37 @@ namespace A4EPARC.Areas.Admin.Controllers
             var user = _userRepository.SingleOrDefault(id);
             var company = _companyRepository.SingleOrDefault(user.CompanyId);
 
-            var returnValue = SendResetPasswordEmail(user, company);
+            var newpassword = Guid.NewGuid().ToString().Substring(0, 8);
 
-            return Json(new { IsValid = returnValue, Password = company.DefaultPassword });
+            var returnValue = SendResetPasswordEmail(user, company, newpassword);
+
+            return Json(new { IsValid = returnValue, Password = newpassword });
         }
+
+        [HttpPost]
+        public ActionResult Deactivate(int id)
+        {
+            var user = _userRepository.SingleOrDefault(id);
+
+            user.IsActive = false;
+
+            _userRepository.Save(user);
+
+            return Json(new { IsValid = true });
+        }
+
+        [HttpPost]
+        public ActionResult Reactivate(int id)
+        {
+            var user = _userRepository.SingleOrDefault(id);
+
+            user.IsActive = true;
+
+            _userRepository.Save(user);
+
+            return Json(new { IsValid = true });
+        }
+
 
         [HttpPost]
         public ActionResult ResetPassword(int id)
@@ -252,12 +282,14 @@ namespace A4EPARC.Areas.Admin.Controllers
             var user = _userRepository.SingleOrDefault(id);
             var company = GetCompanyDetails();
 
-            var returnValue = SendResetPasswordEmail(user, company);
+            var newpassword = Guid.NewGuid().ToString().Substring(0,8);
 
-            return Json(new { IsValid = returnValue, Password = company.DefaultPassword });
+            var returnValue = SendResetPasswordEmail(user, company, newpassword);
+
+            return Json(new { IsValid = returnValue, Password = newpassword });
         }
 
-        private bool SendResetPasswordEmail(IUser user, ICompany company)
+        private bool SendResetPasswordEmail(IUser user, ICompany company, string newpassword)
         {
             if (_emailRepository.GetEmailLogCount() < 201)
             {
@@ -268,9 +300,9 @@ namespace A4EPARC.Areas.Admin.Controllers
                                                                         new PasswordViewModel
                                                                         {
                                                                             Username = user.Email,
-                                                                            Password = company.DefaultPassword
+                                                                            Password = newpassword
                                                                         });
-                    _authenticationService.ChangePassword(user.Email, company.DefaultPassword);
+                    _authenticationService.ChangePassword(user.Email, newpassword);
 
                     _emailService.Send(company.EmailFromAddress, user.Email, "Account Info", html);
 

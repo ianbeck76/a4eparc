@@ -1,0 +1,74 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+<div class="container form-horizontal">
+    <input type="hidden" id="SchemeId" value=@Model.SchemeId />
+
+        @Html.Partial("_ResultHeader", Model)
+
+        @*@Html.Partial("_InterventionGuide", Model)*@
+
+</div>    
+
+<br />
+<br />
+<br />
+<br />
+
+<div class="form-group">
+    <div class="col-md-offset-3 col-md-2 col-xs-6">
+        <a class="btn btn-primary" href="/Home/Index">Back to Home <span class="glyphicon glyphicon-backward"></span></a>
+    </div>
+    @if (Model.SchemeId != 5)//ACA
+    {
+
+    <div class="col-md-2 col-xs-6">
+        @if (Model.ActionIdToDisplay == 1)
+        {
+            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/PrecontemplationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+        }
+        else if (Model.ActionIdToDisplay == 2)
+        {
+            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/UnauthenticActionInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+        }
+        else if (Model.ActionIdToDisplay == 3)
+        {
+            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ContemplationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+        }
+        else if (Model.ActionIdToDisplay == 4)
+        {
+            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/PreparationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+        }
+        else if (Model.ActionIdToDisplay == 5)
+        {
+            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ActionInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+        }
+            <!--<a class="btn btn-primary" href="/Results/GeneratePdf/@Model.Id">PDF <span class="glyphicon glyphicon-download-alt"></span></a>-->
+        </div>
+    <div class="col-md-offset-2 col-md-3 col-xs-offset-6 col-xs-6">
+
+        @if (Model.ActionIdToDisplay == 1)
+        {
+            <h3 style="color:darkblue;">Precontemplator</h3>
+        }
+        else if (Model.ActionIdToDisplay == 2)
+        {
+            <h3 style="color:darkblue;">Unauthentic Actor</h3>
+        }
+        else if (Model.ActionIdToDisplay == 3)
+        {
+            <h3 style="color:darkblue;">Contemplator</h3>
+        }
+        else if (Model.ActionIdToDisplay == 4)
+        {
+            <h3 style="color:darkblue;">Preparer</h3>
+        }
+        else if (Model.ActionIdToDisplay == 5)
+        {
+            <h3 style="color:darkblue;">Actor</h3>
+        }
+        <!--<a class="btn btn-primary" href="/Results/GeneratePdf/@Model.Id">PDF <span class="glyphicon glyphicon-download-alt"></span></a>-->
+    </div>
+    }
+        <br />
+        <br />
+</div>

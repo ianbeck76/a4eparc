@@ -10,7 +10,7 @@ namespace A4EPARC.Repositories
     {
         public int InsertPerson(ClientViewModel model)
         {
-            const string query = @"INSERT INTO Client 
+            const string query = @"INSERT INTO ClientNew 
             (FirstName
             ,Surname
             ,DateOfBirth
@@ -31,7 +31,13 @@ namespace A4EPARC.Repositories
             ,Comments
             ,EnrolmentID
             ,HowManyTimesHasSurveyBeenCompleted
-            ,JobSeekerID)
+            ,JobSeekerID
+            ,IsIslander
+            ,RTO
+            ,IsCurrentlyCollectingBenefits
+            ,UnemploymentInsuranceId
+            ,IsOverEighteen
+            ,HasDiplomaOrGED)
             VALUES(@FirstName
             ,@Surname
             ,@DateOfBirth
@@ -52,7 +58,13 @@ namespace A4EPARC.Repositories
             ,@Comments
             ,@EnrolmentID
             ,@HowManyTimesHasSurveyBeenCompleted
-            ,@JobSeekerID);
+            ,@JobSeekerID
+            ,@IsIslander
+            ,@RTO
+            ,@IsCurrentlyCollectingBenefits
+            ,@UnemploymentInsuranceId
+            ,@IsOverEighteen
+            ,@HasDiplomaOrGED);
             SELECT CAST(SCOPE_IDENTITY() as int);";
 
             return Query<int>(query, model).SingleOrDefault();
@@ -106,9 +118,15 @@ namespace A4EPARC.Repositories
                                 ,cr.AnswerString
                                 ,cr.Id AS ResultId
                              	,com.Name AS Company
-								FROM Client c 
+                                ,c.IsIslander
+                                ,c.RTO
+                                ,c.IsCurrentlyCollectingBenefits
+                                ,c.UnemploymentInsuranceId
+                                ,c.IsOverEighteen
+                                ,c.HasDiplomaOrGED
+								FROM ClientNew c 
                                 INNER JOIN [user] u ON u.id = c.UserId
-								INNER JOIN [Company] com ON com.Id = u.CompanyId
+								INNER JOIN [CompanyNew] com ON com.Id = u.CompanyId
                                 LEFT OUTER JOIN ClientResult cr ON cr.ClientId = c.Id
                                 WHERE c.Id = @Id";
 
@@ -121,18 +139,12 @@ namespace A4EPARC.Repositories
                                             u.Email AS Username, 
                                             c.CreatedDate,
                                             a.ActionType AS ActionName, 
-                                            cr.AnswerString,
-                                            cr.PreContemplationPoints,
-                                            cr.MatrixPreContemplationPoints,
-                                            cr.ContemplationPoints,
-                                            cr.MatrixContemplationPoints,
-                                            cr.ActionPoints,
-                                            cr.MatrixActionPoints
-                                            FROM [dbo].[Client] c 
+                                            cr.AnswerString
+                                            FROM [dbo].[ClientNew] c 
                                             INNER JOIN [dbo].[ClientResult] cr ON cr.ClientId = c.Id
                                             INNER JOIN [dbo].[ActionType] a ON a.Id = cr.ActionIdToDisplay
                                             INNER JOIN [dbo].[User] u ON c.UserId = u.Id
-                                            INNER JOIN [dbo].[Company] com ON com.Id = u.CompanyId");
+                                            INNER JOIN [dbo].[CompanyNew] com ON com.Id = u.CompanyId");
             var clause = " WHERE ";
 
             if (!string.IsNullOrWhiteSpace(jobSeekerID))
@@ -167,44 +179,57 @@ namespace A4EPARC.Repositories
             }
             query += " ORDER BY c.CreatedDate DESC";
 
-            var model = new ClientResultViewModel {JobSeekerID = jobSeekerID, Surname = surname, DateFrom = dateFrom, DateTo = dateTo, Username = username, Company = company };
+            var model = new ClientQueryViewModel {JobSeekerID = jobSeekerID, Surname = surname, DateFrom = dateFrom, DateTo = dateTo, Username = username, Company = company };
             
             return Query<ClientResultViewModel>(query, model).AsQueryable();
         }
 
-        public IList<ClientCsvModel> GetCsvData(DateTime? dateFrom, DateTime? dateTo, string jobseekerId, string surname, string username, string company)
+        public IList<ClientCsvModel> GetCsvData(DateTime? dateFrom, DateTime? dateTo, string jobseekerId, string surname, string username, string company, string fieldstring)
         {
-            var query = string.Format(@"select c.Id
-                                            ,c.DateOfBirth
-                                            ,c.FirstName
-                                            ,c.Surname
-                                            ,c.CaseWorkerId
-                                            ,c.CaseWorkerName
-                                            ,u.Email AS Username
-                                            ,c.CreatedDate
-                                            ,c.LengthOfUnemployment
-                                            ,c.Gender
-                                            ,c.State
-                                            ,c.AdvisorName
-                                            ,c.JobSeekerID
-                                            ,c.Organisation
-                                            ,c.Stream
-                                            ,c.CompletedAllFiveWorkshops
-                                            ,c.Comments
-                                            ,c.HowManyTimesHasSurveyBeenCompleted
-                                            ,a.ActionType AS ActionName
-                                            ,cr.AnswerString
-                                            ,cr.PreContemplationPoints
-                                            ,cr.MatrixPreContemplationPoints
-                                            ,cr.ContemplationPoints
-                                            ,cr.MatrixContemplationPoints
-                                            ,cr.ActionPoints
-                                            ,cr.MatrixActionPoints
-                                            FROM [dbo].[Client] c 
+
+                                            //            ,c.AdvisorName
+                                            //,c.CaseWorkerId
+                                            //,c.CaseWorkerName
+                                            //,c.FirstName
+                                            //,c.DateOfBirth
+                                            //,c.Gender
+                                            //,c.JobSeekerID
+                                            //,c.LengthOfUnemployment
+                                            //,c.Organisation
+                                            //,c.Surname
+                                            //,c.State
+                                            //,c.Stream
+                                            //,c.CompletedAllFiveWorkshops
+                                            //,c.Comments
+                                            //,c.IsIslander
+                                            //,c.RTO
+                                            //,c.IsCurrentlyCollectingBenefits
+                                            //,c.UnemploymentInsuranceId
+                                            //,c.IsOverEighteen
+                                            //,c.HasDiplomaOrGED
+
+
+                var query = string.Format(@"select
+                                            c.CreatedDate,
+                                            com.Name AS Company,
+                                            u.Email AS Username,
+                                            c.HowManyTimesHasSurveyBeenCompleted,
+                                            a.ActionType AS ActionName,
+                                            cr.AnswerString,
+                                            cr.PreContemplationPoints,
+                                            cr.MatrixPreContemplationPoints,
+                                            cr.ContemplationPoints,
+                                            cr.MatrixContemplationPoints,
+                                            cr.ActionPoints,
+                                            cr.MatrixActionPoints,
+                                            s.Name AS SchemeName,");
+                query += fieldstring;
+                query += string.Format(@" FROM [dbo].[ClientNew] c 
                                             INNER JOIN [dbo].[ClientResult] cr ON cr.ClientId = c.Id
                                             INNER JOIN [dbo].[ActionType] a ON a.Id = cr.ActionIdToDisplay
                                             INNER JOIN [dbo].[User] u ON c.UserId = u.Id
-                                            INNER JOIN [dbo].[Company] com ON com.Id = u.CompanyId");
+                                            INNER JOIN [dbo].[CompanyNew] com ON com.Id = u.CompanyId
+                                            INNER JOIN [dbo].[Scheme] s ON c.SchemeId = s.Id");
             var clause = " WHERE ";
             
             if (!string.IsNullOrWhiteSpace(jobseekerId))
@@ -246,7 +271,7 @@ namespace A4EPARC.Repositories
 
         public int GetNumberOfPreviousAttempts(string reference)
         {
-            var query = string.Format(@"select count(id) from client where JobSeekerId = @jobSeekerID");
+            var query = string.Format(@"select count(id) from [dbo].[ClientNew] where JobSeekerId = @jobSeekerID");
             return Query<int>(query, new { JobSeekerID = reference }).FirstOrDefault();
         }
     }
@@ -258,7 +283,7 @@ namespace A4EPARC.Repositories
         ClientViewModel GetClient(int id);
         IQueryable<ClientResultViewModel> All(DateTime? dateFrom, 
         DateTime? dateTo, string jobseekerId, string surname, string username, string company);
-        IList<ClientCsvModel> GetCsvData(DateTime? dateFrom, DateTime? dateTo, string jobseekerId, string surname, string username, string company);
+        IList<ClientCsvModel> GetCsvData(DateTime? dateFrom, DateTime? dateTo, string jobseekerId, string surname, string username, string company, string fieldstring);
         int GetNumberOfPreviousAttempts(string reference);
 
     }

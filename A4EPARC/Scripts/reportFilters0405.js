@@ -4,11 +4,21 @@ $(document).ready(function() {
     if ($('#results').length > 0) {
 
         $('#filterLink').click(function () {
+            postresults();
+        });
+
+        $('#resrefresh').click(function () {
             refresh();
         });
         
-        function refresh() {
+        function postresults() {
             $("#filterForm").attr('action', getUrl());
+            $("#filterForm").submit();
+            return false;
+        }
+
+        function refresh() {
+            $("#filterForm").attr('action', '/Results/null/null/null/null/null/null');
             $("#filterForm").submit();
             return false;
         }
@@ -41,12 +51,18 @@ $(document).ready(function() {
     if ($('#wsresults').length > 0) {
 
         $('#wssearch').click(function () {
-            refreshws();
+            postws();
         });
 
+        function postws() {
+            $("#wsresults").attr('action', getwsUrl());
+            $("#wsresults").submit();
+            return false;
+        }
+
         function refreshws() {
-            $("#wsfilterForm").attr('action', getwsUrl());
-            $("#wsfilterForm").submit();
+            $("#wsresults").attr('action', '/WebServiceResults/Index/null/null/null/null/null');
+            $("#wsresults").submit();
             return false;
         }
 
@@ -59,13 +75,17 @@ $(document).ready(function() {
         }
 
         $('#wsexport').click(function () {
-            $("#wsfilterForm").attr('action', getwsExportUrl());
-            $("#wsfilterForm").submit();
+            $("#wsresults").attr('action', getwsExportUrl());
+            $("#wsresults").submit();
             return false;
         });
 
+        $('#wsrefresh').click(function () {
+            refreshws();
+        });
+
         function getwsExportUrl() {
-            return '/webserviceresults/ExportList/' + getUrlString($('#datefrominput')) +
+            return '/WebServiceResults/ExportList/' + getUrlString($('#datefrominput')) +
                 '/' + getUrlString($('#datetoinput')) +
                 '/' + getUrlString($('#jobseekeridinput')) +
                 '/' + getUrlString($('#environmentinput')) +

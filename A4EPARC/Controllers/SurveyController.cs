@@ -23,22 +23,22 @@ using iTextSharp.text;
 
 namespace A4EPARC.Controllers
 {
-    public class SurveyController : BaseController
+    public class SurveyController : AuthBaseController
     {    
         private readonly IClientRepository _clientRepository;
-        private readonly IQuestionRepository _questionRepository;
+        private readonly IQuestionsService _questionsService;
         private readonly ICompanyRepository _companyRepository;
         private readonly ISiteLabelsRepository _siteLabelsRepository;
         private readonly IResultService _resultService;
         
         public SurveyController(IClientRepository clientRepository, 
-            IQuestionRepository questionRepository, 
+            IQuestionsService questionsService, 
             ISiteLabelsRepository siteLabelsRepository,
             ICompanyRepository companyRepository,
             IResultService resultService)
         {
             _clientRepository = clientRepository;
-            _questionRepository = questionRepository;
+            _questionsService = questionsService;
             _siteLabelsRepository = siteLabelsRepository;
             _companyRepository = companyRepository;
             _resultService = resultService;
@@ -55,7 +55,7 @@ namespace A4EPARC.Controllers
 
             viewmodel.SiteLabels = _siteLabelsRepository.Get(4, "en-GB");
 
-            viewmodel.Questions = _questionRepository.Get(4, "en-GB");
+            viewmodel.Questions = _questionsService.Get(4, "en-GB");
 
             if (viewmodel.DateOfBirth.HasValue)
             {
@@ -76,7 +76,7 @@ namespace A4EPARC.Controllers
 
             viewmodel.SiteLabels = _siteLabelsRepository.Get(4, "en-GB");
 
-            viewmodel.Questions = _questionRepository.Get(4, "en-GB");
+            viewmodel.Questions = _questionsService.Get(4, "en-GB");
 
             var isDateOfBirthValid = CheckDateOfBirth(viewmodel);
 
@@ -181,14 +181,33 @@ namespace A4EPARC.Controllers
         [HttpPost]
         public ActionResult PageOne(ClientViewModel viewmodel)
         {
-            var isDateOfBirthValid = CheckDateOfBirth(viewmodel);
-
             var companyId = GetCompanyId();
 
             viewmodel = SetScheme(viewmodel, companyId);
             viewmodel.SchemeId = viewmodel.SchemeId > 0 ? viewmodel.SchemeId : 1;
 
             viewmodel.PageItems = GetPageItems(companyId).Where(c => c.IsDisplay.GetValueOrDefault() == true);
+
+            var dob = viewmodel.PageItems.FirstOrDefault(p => p.Name == "DateOfBirth");
+
+            var isDateOfBirthValid = true;
+
+            if (dob != null && dob.IsRequired.GetValueOrDefault() || 
+                (viewmodel.DateOfBirthDay != 0
+                || viewmodel.DateOfBirthMonth != 0
+                || viewmodel.DateOfBirthYear != 0))
+            {
+                isDateOfBirthValid = CheckDateOfBirth(viewmodel);
+
+                if (isDateOfBirthValid)
+                {
+                    viewmodel.DateOfBirth = new DateTime(
+                         viewmodel.DateOfBirthYear,
+                         viewmodel.DateOfBirthMonth,
+                         viewmodel.DateOfBirthDay);                    
+                }
+
+            }
 
             viewmodel.SiteLabels = _siteLabelsRepository.All();
 
@@ -204,16 +223,11 @@ namespace A4EPARC.Controllers
                 }
             }          
 
-            if (!ModelState.IsValid || !isDateOfBirthValid)
+            if(!ModelState.IsValid || !isDateOfBirthValid)
             {
                 viewmodel = InitializeDropdowns(viewmodel, companyId);
                 return View(viewmodel);
             }
-
-            viewmodel.DateOfBirth = new DateTime(
-               viewmodel.DateOfBirthYear,
-               viewmodel.DateOfBirthMonth,
-               viewmodel.DateOfBirthDay);
 
             viewmodel.UserId = GetCurrentUser().Id;
 
@@ -239,7 +253,7 @@ namespace A4EPARC.Controllers
          
             viewmodel.SiteLabels = _siteLabelsRepository.Get(viewmodel.SchemeId, LanguageCode);
 
-            viewmodel.Questions = _questionRepository.Get(viewmodel.SchemeId, LanguageCode);
+            viewmodel.Questions = _questionsService.Get(viewmodel.SchemeId, LanguageCode);
 
             return View(viewmodel);
         }
@@ -255,7 +269,7 @@ namespace A4EPARC.Controllers
             
             viewmodel.SiteLabels = _siteLabelsRepository.Get(viewmodel.SchemeId, LanguageCode);
 
-            viewmodel.Questions = _questionRepository.Get(viewmodel.SchemeId, LanguageCode);
+            viewmodel.Questions = _questionsService.Get(viewmodel.SchemeId, LanguageCode);
 
             var sb = new StringBuilder();
 
@@ -290,6 +304,10 @@ namespace A4EPARC.Controllers
             {
                 _clientRepository.InsertResult(viewmodel.Result);
 
+                if (viewmodel.SchemeId == 6)
+                {
+                    return RedirectToAction("ThankYou", new {viewmodel.Id});                
+                }
                 return RedirectToAction("PageThree", new {viewmodel.Id});
             }
 
@@ -313,17 +331,19 @@ namespace A4EPARC.Controllers
         }
 
         [HttpGet]
+        public ActionResult ThankYou(int id)
+        {
+            return View();
+        }
+
+        [HttpGet]
         public JsonResult GetQuestionLabels(int? schemeId, string languageCode)
         {
             var labels = new List<string>();
-            var questions = _questionRepository.Get(schemeId.GetValueOrDefault(), languageCode);
+            var questions = _questionsService.Get(schemeId.GetValueOrDefault(), languageCode);
             if (questions.Any())
             {
                 labels = questions.Select(s => s.Description).ToList();
-            }
-            else
-            {
-                labels = _questionRepository.Get(1, "en-GB").Select(q => q.Description).ToList();
             }
             return Json(new { Labels = labels }, JsonRequestBehavior.AllowGet);
         }
@@ -362,6 +382,10 @@ namespace A4EPARC.Controllers
             return Json(new { PageItems = pageitems }, JsonRequestBehavior.AllowGet);
         }
 
+        private string ConvertYesNoToTrueFalse(string yesno)
+        {
+            return string.IsNullOrEmpty(yesno) ? yesno == "Yes" ? "true" : "false": null;
+        }
 
         private bool CheckDateOfBirth(ClientViewModel model)
         {
@@ -381,20 +405,9 @@ namespace A4EPARC.Controllers
             }
         }
 
-        private List<string> GetLengthOfUnemploymentDropdownList(int companyId)
+        private List<string> GetCompanySelectValues(int companyId, int key)
         {
-            var values = _companyRepository.GetSelectValues().Where(c => c.CompanyId == companyId && c.Key == (int)SelectKey.LengthOfUnemployment);
-
-            if (values.Any())
-            {
-                return values.Select(c => c.Value).ToList();
-            }
-            return new List<string>();
-        }
-
-        private List<string> GetStateDropdownList(int companyId)
-        {
-            var values = _companyRepository.GetSelectValues().Where(c => c.CompanyId == companyId && c.Key == (int)SelectKey.State);
+            var values = _companyRepository.GetSelectValues().Where(c => c.CompanyId == companyId && c.Key == key);
 
             if (values.Any())
             {
@@ -413,10 +426,9 @@ namespace A4EPARC.Controllers
             }
 
             var ddl = new List<string>();
-            ddl.Add("Stream 1");
-            ddl.Add("Stream 2");
-            ddl.Add("Stream 3");
-            ddl.Add("Stream 4");
+            ddl.Add("Stream A");
+            ddl.Add("Stream B");
+            ddl.Add("Stream C");
             ddl.Add("DES");
             return ddl;
         }
@@ -488,9 +500,10 @@ namespace A4EPARC.Controllers
             model.DayDropdownList = GetDayDropdownList();
             model.MonthDropdownList = GetMonthDropdownList();
             model.YearDropdownList = GetYearDropdownList();
-            model.LengthOfUnemploymentDropdownList = GetLengthOfUnemploymentDropdownList(companyId);
-            model.StateDropdownList = GetStateDropdownList(companyId);
+            model.LengthOfUnemploymentDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.LengthOfUnemployment);
+            model.StateDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.State);
             model.StreamDropdownList = GetStreamDropdownList(companyId);
+            model.RTODropdownList = GetCompanySelectValues(companyId, (int)SelectKey.RTO);
             return model;
         }
     }

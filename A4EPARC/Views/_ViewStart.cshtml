@@ -24,10 +24,19 @@
             {
                 Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
             }
+            else if (companyId == 14)
+            {
+                Layout = "~/Views/Shared/_Layout_Incite.cshtml";
+            }
+            else if (companyId == 12)
+            {
+                Layout = "~/Views/Shared/_Layout_ACA.cshtml";
+            }
             else
             {
                 Layout = "~/Views/Shared/_Layout.cshtml";
             }
+            
         }
         else
         {
@@ -50,6 +59,14 @@
             else if (companyId == 10)
             {
                 Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+            }
+            else if (companyId == 14)
+            {
+                Layout = "~/Views/Shared/_Layout_Incite.cshtml";
+            }
+            else if (companyId == 12)
+            {
+                Layout = "~/Views/Shared/_Layout_ACA.cshtml";
             }
             else
             {
@@ -77,6 +94,14 @@
             {
                 Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
             }
+            else if (companyId == 14)
+            {
+                Layout = "~/Views/Shared/_Layout_Incite.cshtml";
+            }
+            else if (companyId == 12)
+            {
+                Layout = "~/Views/Shared/_Layout_ACA.cshtml";
+            }
             else
             {
                 Layout = "~/Views/Shared/_Layout.cshtml";
@@ -86,6 +111,73 @@
         {
             Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";        
         }
+    }
+    else if (Request.Url.AbsoluteUri.ToLower().Contains("incite"))
+    {
+        Layout = "~/Views/Shared/_Layout_AnonIncite.cshtml";
+    }
+    else if (Request.Url.AbsoluteUri.ToLower().Contains("incite") && Request.IsAuthenticated)
+    {
+                if (companyId == 5)
+                {
+                    Layout = "~/Views/Shared/_Layout_A4E.cshtml";
+                }
+                else if (companyId == 11 || companyId == 13)
+                {
+                    Layout = "~/Views/Shared/_Layout_GLS.cshtml";
+                }
+                else if (companyId == 10)
+                {
+                    Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+                }
+                else if (companyId == 14)
+                {
+                    Layout = "~/Views/Shared/_Layout_Incite.cshtml";
+                }
+                else if (companyId == 12)
+                {
+                    Layout = "~/Views/Shared/_Layout_ACA.cshtml";
+                }
+                else
+                {
+                    Layout = "~/Views/Shared/_Layout_Incite.cshtml";
+                }
+        
+    }
+    else if (Request.Url.AbsoluteUri.Contains("aca."))
+    {
+        if (Request.IsAuthenticated)
+        {
+            if (companyId == 5)
+            {
+                Layout = "~/Views/Shared/_Layout_A4E.cshtml";
+            }
+            else if (companyId == 11 || companyId == 13)
+            {
+                Layout = "~/Views/Shared/_Layout_GLS.cshtml";
+            }
+            else if (companyId == 10)
+            {
+                Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+            }
+            else if (companyId == 14)
+            {
+                Layout = "~/Views/Shared/_Layout_Incite.cshtml";
+            }
+            else if (companyId == 12)
+            {
+                Layout = "~/Views/Shared/_Layout_ACA.cshtml";
+            }
+            else
+            {
+                Layout = "~/Views/Shared/_Layout.cshtml";
+            }
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_Layout_ACA.cshtml";
+        }
+
     }
     else
     {
@@ -102,6 +194,14 @@
             else if (companyId == 10)
             {
                 Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+            }
+            else if (companyId == 14)
+            {
+                Layout = "~/Views/Shared/_Layout_Incite.cshtml";
+            }
+            else if (companyId == 12)
+            {
+                Layout = "~/Views/Shared/_Layout_ACA.cshtml";
             }
             else
             {

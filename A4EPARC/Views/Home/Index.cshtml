@@ -30,9 +30,12 @@
                 
                     @if (Context.User.IsInRole("IsSuperAdmin"))
                     {
-                        <p class="text-center">
-                            @Html.ActionLink("View WebService Data", "Index", "WebServiceResults", null, new {@class = "btn btn-primary btn-block btn-lg"})
-                        </p>
+                        if (!Request.Url.AbsoluteUri.Contains("exemplar"))
+                        {
+                            <p class="text-center">
+                                @Html.ActionLink("View WebService Data", "Index", "WebServiceResults", null, new { @class = "btn btn-primary btn-block btn-lg" })
+                            </p>
+                        }
                     }
 
             </div>

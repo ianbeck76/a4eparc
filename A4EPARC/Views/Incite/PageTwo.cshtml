@@ -1,0 +1,22 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+@using A4EPARC.Services
+
+@using (Html.BeginForm("PageTwo", "Incite", FormMethod.Post, new { @class = "form-horizontal surveyPageTwo", id = "incitePageTwo", role = "form" }))
+{
+   <input type="hidden" name="SchemeId" value="@Model.SchemeId" id="SchemeId" />
+
+  <div class="container" id="pagetwoform">            
+      <hr class="divider"/>
+      <label id="warningmessage" hidden class="input-validation-error">If you choose not to answer any question, please exit the survey. You may still claim this as a job search activity.</label>
+
+        <br/> 
+      @Html.Partial("_QuestionsGrid", @Model)
+ </div> 
+    <br/>
+    <br/>
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-6">
+            <input type="submit" value="@LabelService.Get("Next", "Next", Model.SiteLabels, Model.SchemeId)" class="btn btn-primary" id="Next" />
+        </div>
+    </div>          
+}

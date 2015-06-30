@@ -73,6 +73,25 @@ namespace A4EPARC
                 environment = UrlParameter.Optional,
                 company = UrlParameter.Optional
             });
+
+            routes.MapRoute(
+            name: "webserviceresultsexportlist",
+            url: "WebServiceResults/ExportList/" +
+                 "{datefrom}/" +
+                 "{dateto}/" +
+                 "{jobseekerid}/" +
+                 "{environment}/" +
+                 "{company}",
+            defaults: new
+            {
+                controller = "WebServiceResults",
+                action = "ExportList",
+                datefrom = UrlParameter.Optional,
+                dateto = UrlParameter.Optional,
+                jobseekerid = UrlParameter.Optional,
+                environment = UrlParameter.Optional,
+                company = UrlParameter.Optional
+            });
         }
     }
 }

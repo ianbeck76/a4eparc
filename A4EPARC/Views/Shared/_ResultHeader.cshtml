@@ -1,18 +1,44 @@
 ﻿@model A4EPARC.ViewModels.ClientViewModel
+@using A4EPARC.Services
 
-<h1 class="col-xs-4" style="color:darkblue" id="@Model.ActionTypeName + Name">@Model.SiteLabels.FirstOrDefault(l => l.Name == Model.ActionTypeName + "Name").Description</h1>
-<h3 class="col-xs-8" style="color:red" id="@Model.ActionTypeName + Summary">@Model.SiteLabels.FirstOrDefault(l => l.Name == Model.ActionTypeName + "Summary").Description</h3>
-
-<div style="padding-top:7em;padding-left:2em;padding-right:5em;">
-    <h4 id="MotivatatingStatementTitle">@Model.SiteLabels.FirstOrDefault(l => l.Name == "MotivatingStatementTitle").Description</h4>
-    <h3 id="@Model.ActionTypeName + Statement">@Model.SiteLabels.FirstOrDefault(l => l.Name == Model.ActionTypeName + "Description").Description</h3>
-</div>
-<div style="padding:2em;">
-    <h4>@Model.SiteLabels.FirstOrDefault(l => l.Name == "BodyTitle").Description</h4>
-    <ul>
-        @foreach (var item in Model.SiteLabels.Where(l => l.Name == Model.ActionTypeName + "BulletPoint"))
-        {
-            <li class="h3">@item.Description</li>
+    @*<div style="padding:1em;display: inline-block;">
+        <h1 class="col-md-12 text-center" style="color:darkblue" id="@Model.ActionTypeName + Name">@LabelService.Get(Model.ActionTypeName + "Name", "", Model.SiteLabels, Model.SchemeId)</h1>
+        <h2 class="col-md-12 text-center" style="color:darkblue" id="@Model.ActionTypeName + Statement">@LabelService.Get(Model.ActionTypeName + "Statement", "", Model.SiteLabels, Model.SchemeId)</h2>
+    </div>*@
+    <div style="padding:1em;border-style:solid; border-width:2px;background-color:white;">
+        @{
+            var actionName = Model.ActionTypeName + "Description";
         }
-    </ul>
-</div>
+        @*<h4 id="MotivatatingStatementTitle">@Model.SiteLabels.FirstOrDefault(l => l.Name == "MotivatingStatementTitle").Description</h4>*@
+        <h3 id="@actionName">@Model.SiteLabels.FirstOrDefault(l => l.Name == actionName).Description</h3>
+    </div>
+    <br />
+    @*<div style="display: inline-block;padding-bottom:1em;">
+        <div style="padding:1em;border-style:solid;border-width:2px;background-color:#C6DEFF;" class="col-md-5">
+            <h4>@LabelService.Get("CoachingPrinciplesTitle", "CLIENT COACHING PRINCIPLES:", Model.SiteLabels, Model.SchemeId)</h4>
+            @{
+                var title2 = LabelService.Get("CoachingPrinciplesTitle" + Model.ActionTypeName, "", Model.SiteLabels, Model.SchemeId);
+            }
+            @if (!string.IsNullOrEmpty(title2))
+            {
+                <h4>@title2</h4>
+            }
+            <ul>
+                @foreach (var item in Model.SiteLabels.Where(l => l.Name == Model.ActionTypeName + "CoachingPrinciples"))
+                {
+                    <li class="h4">@item.Description</li>
+                }
+            </ul>
+        </div>
+        <div class="col-md-2"></div>
+        <div style="padding:1em;border-style:solid; border-width:2px;background-color:white;float:left;" class="col-md-5">
+            <h4>@LabelService.Get("ClientThinkingTitle", "WHAT THIS CLIENT IS THINKING:", Model.SiteLabels, Model.SchemeId)</h4>
+            <ul>
+                @foreach (var item in Model.SiteLabels.Where(l => l.Name == Model.ActionTypeName + "ClientThinking"))
+                {
+                    <li class="h4">@item.Description</li>
+                }
+            </ul>
+        </div>
+</div>*@
+

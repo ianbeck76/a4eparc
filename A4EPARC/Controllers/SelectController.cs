@@ -10,7 +10,7 @@ using System;
 namespace A4EPARC.Controllers
 {
     [Authorize(Roles = "IsSuperAdmin")]
-    public class SelectController : BaseController
+    public class SelectController : AuthBaseController
     {
         private readonly IUserRepository _userRepository;
         private readonly ICompanyRepository _companyRepository;

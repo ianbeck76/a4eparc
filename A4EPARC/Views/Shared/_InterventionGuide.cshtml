@@ -1,162 +1,181 @@
 ﻿@model A4EPARC.ViewModels.ClientViewModel
 
    
-        <div style="border-style:solid; border-width:2px;padding:1em;background-color:white;">
-            @if (Model.ActionIdToDisplay == 1)
-            {
-                <h4>CLIENT SUPPORT PRINCIPLES</h4>
-                <label>Insisting that they actively continue study and forcing them to undertake some tasks might be counter-productive.</label>
-                <ul>
-                    <li>Less intensive.</li>
-                    <li>Lectures and confrontation don’t work, the goal is engagement in the change process and improving commitment to the course.</li>
-                    <li>Don’t try to move them straight to Action – progress to the next (Contemplation) stage.</li>
-                </ul>
-                <h4>CLIENT SUPPORT STRATEGIES – IF THEY WISH TO CONTINUE STUDYING</h4>
+        <div style="border-style:solid; border-width:2px;padding:1em;background-color:#C6DEFF;">
+    @if (Model.ActionIdToDisplay == 1)
+    {
+        <div style="display: inline-block;padding-bottom:1em;">
+            <div style="padding:1em;" class="col-md-6">
+                <h4>CLIENT COACHING STRATEGIES</h4>
                 <h4>1. FOCUS ON THE PROS</h4>
-                <label>the jobseeker must raise the PROS of working (eg ‘independence’, ‘future opportunities’) so they outweigh the CONS (eg ‘it will take time and energy and I might embarrass myself’, ‘fear of failure’).</label>
+                <label>The jobseeker must raise the PROS of working (eg ‘independence’, ‘future opportunities’) so they outweigh the CONS (eg ‘it will take time and energy and I might embarrass myself’, ‘fear of failure’).</label>
                 <ul>
-                    <li>Ask Precontemplators to name as many benefits of the course as they can.</li>
+                    <li>Ask Precontemplators to name as many benefits of working as they can.</li>
                     <li>They’ll typically name around 3 or 4.</li>
-                    <li>Let them know there are double or triple that many, and challenge <i>them</i> to name more.</li>
-                    <li>Then run through your own list of the Pros of the course that they might have missed out (e.g. an example for children, time structure, new friendships, sense of purpose).</li>
-                    <li>Align yourself with them – say “I felt like that when I first started a course… but I persevered and achieved it in the end. My family were very proud” etc.</li>
-                    <li>Make a note of their stated “Pros” and remind them of them in future.</li>
+                    <li>Let them know there are double or triple that many, and challenge them to name more.</li>
+                    <li>Then run through your own list of the Pros of working that they might have missed out (eg an example for children, time structure, new friendships, sense of purpose).</li>
+                    <li>Align yourself with them – say “I felt like that when I was unemployed…but I persevered and achieved a career in the end. My family were very proud.” etc.</li>
+                    <li>Make a note of their stated “Pros” and remind them of these in future.</li>
                 </ul>
                 <h4>2. DECREASE DEFENCES</h4>
-                <label>Raise the client’s awareness of their own doubts, “why do you think you don't really want to get a job?”</label>
+                <label>Raise the client’s awareness of their own doubts, “why do you think you don’t really want to get a job?”</label>
                 <ul>
-                    <li>Normalise these doubts by saying, “yes, many people think that at first, then overcome it…How would YOU deal with that concern?”</li>
+                    <li>Normalise these doubts by saying, “yes, many people think that, then overcome it…How would YOU deal with that concern?”</li>
+                </ul>
+            </div>
+            <div style="padding:1em;" class="col-md-6">
+                <br />
+                <br />
+                <ul>
                     <li>How do they react to failure in achieving goals? What do they blame for the issue?</li>
-                    <li>Reassure them of their proactivity on getting started: that’s the hardest bit…and they’ve achieved it!</li>
+                    <li>Reassure them of their proactivity on actually speaking with you: that’s the hardest bit…and they’ve achieved it!</li>
                     <li>Reassure them that you’re there for them.</li>
                 </ul>
                 <h4>3. BECOME INFORMED</h4>
-                <label>Advisors can also raise client’s awareness of their resources, potential, sense of purpose and success in overcoming previous issues. This is undertaken by:</label>
+                <label>Advisors can also raise a client’s awareness of their resources, potential, sense of purpose and success in overcoming previous issues. This can be undertaken by:</label>
                 <ul>
-                    <li>GONE IN 60 SECONDS (describe your life from birth until now in 60 seconds). This provides key clues to the client’s priorities, background, issues to avoid and, in particular, examples of their success and resilience in overcoming life challenges (moving, qualifications, break-ups etc).</li>
-                    <li>Undertake SOLUTIONS FOCUSED conversations – focusing upon successes through SCALING.</li>
+                    <li>“GONE IN 60 SECONDS” (ask client to describe their life from birth until now in 60 seconds). This provides key clues to the client’s priorities, background, issues to avoid and, in particular, examples of their success and resilience in overcoming life challenges (moving, qualifications, break-ups etc).</li>
+                    <li>Undertake SOLUTIONS FOCUSED conversations – focusing upon successes and turning conversations around through</li>
+                    <li>SCALING (ie scoring the issue/situation from 1 (poor) – 10 (great) and asking how they’d get just one point higher), or why they aren’t one point lower.</li>
+                    <label>WHAT’S WORKED BEFORE – How have they improved this situation before?</label>
                 </ul>
-            }
-            else if (Model.ActionIdToDisplay == 2)
-            {
-                <h4>STUDENT SUPPORT PRINCIPLES</h4>
+            </div>
+        </div>
+    }
+    else if (Model.ActionIdToDisplay == 2)
+    {
+        <div style="display: inline-block;padding-bottom:1em;">
+            <div style="padding:1em;" class="col-md-6">
+                <h4>CLIENT COACHING STRATEGIES</h4>
+                <h4>1. FOCUS ON THE PROS</h4>
+                <label>The jobseeker must raise the PROS of working (eg ‘independence’, ‘future opportunities’) so they outweigh the CONS (eg ‘it will take time and energy and I might embarrass myself’, ‘fear of failure’).</label>
                 <ul>
-                    <li>Acknowledge ambivalence.</li>
-                    <li>Ask them to think about the person they want to be - the benefits of completing he course.</li>
-                    <li>Encouraging students to make a verbal commitments to learning milestones.</li>
+                    <li>Ask Precontemplators to name as many benefits of working as they can.</li>
+                    <li>They’ll typically name around 3 or 4.</li>
+                    <li>Let them know there are double or triple that many, and challenge them to name more.</li>
+                    <li>Then run through your own list of the Pros of working that they might have missed out (eg an example for children, time structure, new friendships, sense of purpose).</li>
+                    <li>Align yourself with them – say “I felt like that when I was unemployed…but I persevered and achieved a career in the end. My family were very proud.” etc.</li>
                 </ul>
-                <h4>STUDENT SUPPORT STRATEGIES – IF THEY WISH TO CONTINUE STUDYING</h4>
+                <label>Make a note of their stated “Pros” and remind them of them in future.</label>
+                <h4>2. DECREASE DEFENCES</h4>
+                <label>Raise the client’s awareness of their own doubts, “why do you think you don’t really want to get a job?”</label>
+                <ul>
+                    <li>Normalise these doubts by saying, “yes, many people think that, then overcome it…How would YOU deal with that concern?”</li>
+                </ul>
+            </div>
+            <div style="padding:1em;" class="col-md-6">
+                <br />
+                <br />
+                <ul>
+                    <li>How do they react to failure in achieving goals? What do they blame for the issue?</li>
+                    <li>Reassure them of their proactivity on actually speaking with you: that’s the hardest bit…and they’ve achieved it!</li>
+                    <li>Reassure them that you’re there for them.</li>
+                </ul>
+                <h4>3. BECOME INFORMED</h4>
+                <label>Advisors can also raise client’s awareness of their resources, potential, sense of purpose and success in overcoming previous issues.</label>
+                <ul>
+                    <li>“GONE IN 60 SECONDS” (ask client to describe their life from birth until now in 60 seconds). This provides key clues to the client’s priorities, background, issues to avoid and, in particular, examples of their success and resilience in overcoming life challenges (moving, qualifications, break-ups etc).</li>
+                    <li>Undertake SOLUTIONS FOCUSED conversations – focusing upon successes and turning conversations around through</li>
+                    <li>SCALING (ie scoring the issue/situation from 1 (poor) – 10 (great) and asking how they’d get just one point higher), or why they aren’t one point lower.</li>
+                    <label>WHAT’S WORKED BEFORE – How have they improved this situation before?</label>
+                </ul>
+            </div>
+        </div>
+    }
+    else if (Model.ActionIdToDisplay == 3)
+    {
+        <div style="display: inline-block;padding-bottom:1em;">
+            <div style="padding:1em;" class="col-md-6">
+                <h4>CLIENT COACHING STRATEGIES</h4>
                 <h4>1. STAY INFORMED</h4>
-                <label>1. The goal is to raise consciousness. Advisors can help participants increase Consciousness just by being more aware, ie:</label>
-                <ul>
-                    <li>Ask clients to commit to learn more about the steps required to complete a course.</li>
-                    <li>Keep a diary of thoughts and behaviours relating to completing the course and report that back to student support (eg, minutes per day spent studying uninterrupted).</li>
-                </ul>
+                <label>The goal is to raise consciousness. Advisors can help participants increase awareness, ie:</label>
+                <label>Ask clients to commit to learn more about the steps required to get and hold down a job.</label>
                 <h4>2. PROS Vs CONS</h4>
-                <label>Students should list the Cons of the course and then weigh them against their list of Pros.</label>
+                <label>Clients should list the Cons of working and then weigh them against their list of Pros.</label>
                 <ul>
                     <li>Consider whether the Cons are so important after all?</li>
-                    <li>Student Support can acknowledge that there are some costs to completing the course…but the overall Pros are worth it.</li>
+                    <li>Advisors can acknowledge that there are some Cons to working, but the overall Pros are worth it.</li>
                 </ul>
                 <h4>3. CREATE A NEW SELF-IMAGE</h4>
-                <label>Question Students on how things would be different when they’ve completed the course. How others would act towards them, or how would they feel?</label>
+                <label>Question the client on how things would be different if they were working. How others would act towards them, or how would they feel?</label>
                 <ul>
                     <li>Consider what SMALL ACTIONS they might take to progress – realistic, measurable and achievable.</li>
                 </ul>
+            </div>
+            <div style="padding:1em;" class="col-md-6">
+                <br />
                 <h4>4. BUILD SELF-EFFICACY & RESILIENCE</h4>
-                <label>SCALING: Ask them to score out of 10 (1 being ‘very poor’ and 1 being ‘great’) on how well they’re doing on the course. If they say “2” ask “why a 2, why not a 1?” and build on those positives. Ask “how can we get you to a 3?”</label>
+                <label>SCALING: Ask them to score out of 10 (1 being ‘very poor’ and 1 being ‘great’) on how well they’re doing towards any ‘small steps’. If they say “2” ask “why a 2, why not a 1?” and build on those positives. Ask “how can we get you to a 3?”</label>
                 <ul>
-                    <li>Ask them to describe when they’ve been committed or able to complete parts of the course before. What was different then? How can they make that happen again?</li>
+                    <li>Ask them to describe when they’ve been committed or able to successfully achieve goals. What was different then? How can they make that happen again?</li>
+                    <li>Ask the client if they’ve ever struggled, but then overcome something in the past – e.g. driving tests, exams, asking someone out, buying a house, moving home etc. Question where did they find the strength and resilience? Affirm that they were strong and determined to achieve those things.</li>
+                    <li>Offer tips on managing family or friends who might mock them in their attempts to progress.</li>
                 </ul>
-            }
-            else if (Model.ActionIdToDisplay == 3)
-            {
-                <h4>STUDENT SUPPORT PRINCIPLES</h4>
-                <ul>
-                    <li>Praise participants for steps that are being taken.</li>
-                    <li>Establish the ‘point’ of the course.</li>
-                    <li>Ask them for examples of where they’ve successfully achieved a goal before: driving tests, exams, moving house, asking someone out on a date etc.</li>
-                </ul>
-                <h4>STUDENT SUPPORT STRATEGIES</h4>
-                <h4>FOCUS ON THE PROS</h4>
-                <label>Committing to the course requires weighting the PROS (eg ‘sense of independence’, ‘future opportunities’) vs the CONS (eg ‘it will take time and energy and I might embarrass myself’, ‘fear of failure’).</label>
-                <ul>
-                    <li>Ask Precontemplators to name as many benefits of the course as they can.</li>
-                    <li>They’ll typically name around 3 or 4.</li>
-                    <li>Let them know there are double or triple that many, and challenge them to name more.</li>
-                    <li>Then run through your own list of the Pros of the course that they might have missed out.</li>
-                    <li>Align yourself with them – say “I felt like that when I first started a course…but I persevered and achieved it in the end. My family were very proud” etc.</li>
-                    <li>Make a note of their stated “Pros” and remind them of them in future.</li>
-                </ul>
-                <h4>DECREASE DEFENCES, RAISE RESILIENCE</h4>
-                <label>Raise the student’s awareness of their own doubts, “why do you think you might not finish this course?”</label>
-                <ul>
-                    <li>Normalise these doubts by saying, “yes, many people think that at first, then overcome it…How would YOU deal with that concern?”</li>
-                    <li>How do they react to failure in achieving goals? What do they blame for the issue?</li>
-                    <li>Reassure them of their proactivity on getting started: that’s the hardest bit…and they’ve achieved it!</li>
-                    <li>Reassure them that you’re there for them.</li>
-                    <li>Ask students if they’ve ever struggled, but then overcome something in the past – driving tests, exams, asking someone out, buying a house, moving home etc. Question where did they find the strength and resilience? Affirm that they were strong and determined to achieve those things.</li>
-                    <li>Offer tips on finding private time and space to study, on dealing with family to allow them to progress with their studies.</li>
-                    <li>Ask students if they’ve ever struggled, but then overcome something in the past – driving tests, exams, asking someone out, buying a house, moving home etc. Question where did they find the strength and resilience? Affirm that they were strong and determined to achieve those things.</li>
-                    <li>Offer tips on finding private time and space to study.</li>
-                    <li>Offer tips on dealing with family to allow them to progress with their studies.</li>
-                </ul>
-            }
-            else if (Model.ActionIdToDisplay == 4)
-            {
-                <h4>STUDENT SUPPORT PRINCIPLES</h4>
-                <ul>
-                    <li>Encourage, excite & empower.</li>
-                    <li>Coach, don’t lecture.</li>
-                    <li>Focus on developing an effective plan.</li>
-                    <li>Praise, compliment, support and recognise.</li>
-                    <li>Problem Solve, describe how others have succeeded.</li>
-                    <li>Keep interventions short and focused, but be available for phone support.</li>
-                </ul>
-                <h4>STUDENT SUPPORT STRATEGIES</h4>
-                <h4>1. ACTION PLANNING</h4>
-                <ul>
-                    <li>Together, set more specific and measurable Action Plans.</li>
-                </ul>
-                <h4>2. POSITIVITY</h4>
-                <ul>
-                    <li>Ask what benefits the course is already.</li>
-                    <li>Remind students that they’re likely to be unable or forget to complete study sometimes, but this happens to everybody, they just have to “keep on putting one foot in front of the other”.</li>
-                    <li>Inform student of the benefits of completing the course and how much closer they are.</li>
-                    <li>Perhaps refer the student to groups/other students, which will enhance their peer group and support.</li>
-                </ul>
-                <h4>3. REINFORCE SELF-IMAGE</h4>
-                <ul>
-                    <li>Compliment the student on how well they are progressing.</li>
-                    <li>Checking their scores out of 10 in terms of how well they are progressing, or how well they’re finding time and space to study.</li>
-                </ul>
-            }
-            else if (Model.ActionIdToDisplay == 5)
-            {
-                <h4>STUDENT SUPPORT PRINCIPLES</h4>
-                <ul>
-                    <li>Encourage active efforts to study and cope with urges to slip.</li>
-                    <li>Assist students with planning ahead to prevent lapses.</li>
-                    <li>Simply be there to provide support during stressful or demanding times.</li>
-                </ul>
-                <h4>STUDENT SUPPORT STRATEGIES</h4>
-                <h4>1. RESILIENCE AND REALISTIC OPTIMISM</h4>
-                <ul>
-                    <li>Role play/imagine failing at course-end tests…how should they react, what should they expect?</li>
-                    <li>Remind them of the Pros – the positives – of completing the course and how far they’ve come.</li>
-                </ul>
-                <h4>2. SUPPORT & SOURCE JOBS</h4>
-                <ul>
-                    <li>Let students know of what they should expect during the rest of their course.</li>
-                    <li>Perhaps refer clients to groups, which will enhance their peer group.</li>
-                </ul>
-                <h4>3. REINFORCE SELF-IMAGE</h4>
-                <ul>
-                    <li>Compliment the student on their progress and performance.</li>
-                    <li>Remind them of the end-goal and benefits.</li>
-                    <li>Discuss the student’s STRENGTHS that they are displaying.</li>
-                </ul>
-                <h4>4. THINK OF THE FUTURE</h4>
-                <label>Consider what they’re going to do after the course, how are they going to fill the study time, would they want to do another course etc?</label>
-            }
+            </div>
         </div>
+    }
+    else if (Model.ActionIdToDisplay == 4)
+    {
+        <div style="display: inline-block;padding-bottom:1em;">
+            <div style="padding:1em;" class="col-md-6">
+                <h4>CLIENT COACHING STRATEGIES</h4>
+                <h4>1. ACTION PLANNING</h4>
+                <label>Together, set specific and measurable Action Plans.</label>
+
+                <h4>2. POSITIVITY</h4>
+                <label>Ask what benefits employment service support is already providing and how have they improved? Remind clients that on average there are around 20 interviews per job…so it can be a ‘numbers game’. Learn from each interview experience.</label>
+                <label>Remind the client of the benefits of working and how much closer they are.</label>
+                <label>Refer the client to groups that will enhance their peer group and support.</label>
+                <h4>3. REINFORCE SELF-IMAGE</h4>
+                <label>Compliment the client on how well they are progressing.</label>
+            </div>
+            <div style="padding:1em;" class="col-md-6">
+                <br />
+                <label>Check their scores out of 10 in terms of how well they are progressing, or how well they’re achieving small steps towards their goal: they’ll need consistent reassurance, support and constructive advice.</label>
+                <h4>4. EMPLOYMENT SKILLS</h4>
+                <label>Provide practical advice and training such as:</label>
+                <ul>
+                    <li>résumé writing</li>
+                    <li>interview skills</li>
+                    <li>job application skills</li>
+                    <li>job search</li>
+                    <li>vocational qualifications</li>
+                </ul>
+            </div>
+        </div>
+    }
+    else if (Model.ActionIdToDisplay == 5)
+    {
+        <div style="display: inline-block;padding-bottom:1em;">
+            <div style="padding:1em;" class="col-md-6">
+                <h4>CLIENT COACHING STRATEGIES</h4>
+                <h4>1. RESILIENCE AND REALISTIC OPTIMISM</h4>
+                <label>Role play/imagine failing at interviews…how should they react, what should they expect?</label>
+                <label>Remind them of the Pros – the positives – of working and how far they’ve improved.</label>
+                <h4>2. SUPPORT & SOURCE JOBS</h4>
+                <label>Let clients know of what they should expect during the rest of their course.</label>
+                <label>Perhaps refer clients to groups of similarly proactive/”Action” jobseekers, which will enhance their peer group.</label>
+                <h4>3. REINFORCE SELF-IMAGE</h4>
+                <label>Compliment the client on their progress and performance.</label>
+                <label>Remind them of the end-goal and benefits.</label>
+                <label>Discuss the client’s STRENGTHS that they are displaying.</label>
+            </div>
+            <div style="padding:1em;" class="col-md-6">
+                <br />
+                <h4>4. EMPLOYMENT SKILLS</h4>
+                <label>Continue to provide practical advice and training such as:</label>
+                <ul>
+                    <li>résumé writing</li>
+                    <li>interview skills</li>
+                    <li>job application skills</li>
+                    <li>job search</li>
+                    <li>vocational qualifications</li>
+                </ul>
+                <h4>5. THINK OF THE FUTURE</h4>
+                <label>Discuss what they’re going to do when they get a job. Address the likely issues that come up that might provoke a desire to drop out.</label>
+                <label>Explain that most people consider dropping out of interviews and work – it is only natural. Just turn up to the interview and treat it as experience…or give the job a month before resigning.</label>
+                <label>By then, one often wonders why one was even thinking of leaving!</label>
+            </div>
+        </div>
+    }
+ </div>

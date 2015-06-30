@@ -1,68 +1,91 @@
-﻿@model A4EPARC.ViewModels.PagedViewModel<A4EPARC.ViewModels.WebServiceResultsViewModel>
-@using MvcContrib.UI.Pager
+﻿@using MvcContrib.UI.Pager
 @using MvcContrib.UI.Grid;
+@model A4EPARC.ViewModels.WebServiceResultListViewModel
 
- <div class="container" id="wsresults">
-
-    <h2 class="divider">WebService Results</h2>
-
-        <form action="" id="wsfilterForm" method="get">
-
-        </form>
-        <form class="form-horizontal" role="form">
-            <div class="row">
-                <div class="col-xs-4">
-                    @Html.Label("Date From (required)")
-                    <input id="datefrominput" name="datefrom" class="form-control datepicker" placeholder="MM/DD/YYYY" />
-                </div>
-                <div class="col-xs-4">
-                    @Html.Label("Date To (optional)")
-                    <input id="datetoinput" name="dateto" class="form-control datepicker" placeholder="MM/DD/YYYY" />
-                </div>
-                <div class="col-xs-4">
-                    @Html.Label("Job Seeker ID (optional)")
-                    <input id="jobseekeridinput" name="jobseekerid" class="form-control" />
-                </div>
-            </div>
-            <br />
-            <div class="row">
-                <div class="col-xs-4">
-                    @Html.Label("Environment (optional)")
-                    <select id="environmentinput" name="environment" class="form-control">
-                        <option>BOTH</option>
-                        <option>LIVE</option>
-                        <option>TEST</option>
-                    </select>
-                </div>
-                <div class="col-xs-4">
-                    @Html.Label("Company (optional)")
-                    @Html.DropDownListFor(m => m.Company, new SelectList(Model.Companies), "Please Select", new { @class = "form-control", @id = "companyinput" , @name="company" })
-                </div>
-            </div>
-        </form>
-        <br />
-            <input class="btn btn-secondary" type="button" value="Reset" onclick="window.location = '';" />
-            <button class="btn btn-primary" title="Search"  id="wssearch" name="wssearch" value="Search">Search <span class="glyphicon glyphicon-search"></span></button>
-            <button class="btn btn-primary" title="Excel"  id="wsexport" name="wsexport" value="Excel">Excel <span class="glyphicon glyphicon-download-alt"></span></button>
-        <br />
-  
-    <br />
-    <div class="row">
-
-
-
-        @if (Model.Query.Any())
-        {
-            @Html.Grid(Model.PagedList).AutoGenerateColumns().Columns(column =>
+@{
+    ViewBag.Title = "Webservice Results";
+}
+@section scripts
 {
-    column.For(a => "<a href='" + @Url.Action("Index", "Home", new { reportId = a.Id }) + "' class='icon icon-edit' title='Display'></a>").Encode(false);
-    column.For(a => "<a href='" + @Url.Action("Index", "Home", new { id = a.Id }) + "' class='icon icon-print' title='Print'></a>").Encode(false);
-    column.For(a => "<a href='" + @Url.Action("Index", "Home", new { reportId = a.Id }) + "' class='icon icon-delete' title='Delete'></a>").Encode(false);
+    <script type="text/javascript">
+        $('.input-group.date').datepicker({
+            format: 'dd-mm-yyyy'
+        });
+    </script>
+}
+
+<div class="container" id="results">
+
+    <h2 class="divider">Webservice Results</h2>
+
+    <form action="" id="wsresults" method="get"></form>
+    <form class="form-horizontal" role="form">
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-4">
+                @Html.Label("Date From")
+                <div class="input-group date" data-date-autoclose="true" data-date-format="mm-dd-yyyy">
+                    <input type="text" name="datefrom" id="datefrominput" class="form-control " value="@Model.DateFrom" />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-4">
+                @Html.Label("Date To  ")
+                <div class="input-group date" data-date-autoclose="true" data-date-format="mm-dd-yyyy">
+                    <input type="text" name="dateto" id="datetoinput" class="form-control " value="@Model.DateTo" />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-4">
+                @Html.Label("Job Seeker ID")
+                <input type="text" name="jobseekerid" id="jobseekeridinput" class="form-control col-xs-4" value="@Model.JobSeekerID" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-4">
+                @Html.Label("Environment")
+                @Html.DropDownListFor(m => m.Environment, new SelectList(Model.EnvironmentList), "Please Select", new { @class = "form-control", @id = "environmentinput", @name = "environment" })
+            </div>
+            @if (Context.User.IsInRole("IsSuperAdmin"))
+            {
+                <div class="col-xs-6 col-sm-6 col-md-4">
+                    @Html.Label("Company")
+                    @Html.DropDownListFor(m => m.Company, new SelectList(Model.Companies), "Please Select", new { @class = "form-control", @id = "companyinput", @name = "company" })
+                </div>
+            }
+            else
+            {
+                <input type="hidden" value="@Model.Company" id="companyinput" , name="company" />
+            }
+        </div>
+    </form>
+    <br />
+
+    <button class="btn btn-primary" title="Search" id="wssearch" name="wssearch" value="Search">Search <span class="glyphicon glyphicon-search"></span></button>
+    &nbsp;&nbsp;
+    <button class="btn btn-primary" title="Excel" id="wsexport" name="wsexport" value="Excel">Excel <span class="glyphicon glyphicon-download-alt"></span></button>
+    &nbsp;&nbsp;
+    <button class="btn btn-secondary" title="Clear" id="wsrefresh" name="wsrefresh" value="Clear">Clear Filters <span class="glyphicon glyphicon-refresh"></span></button>
+  <br />
+    <div class="row">
+        <br />
+        @if (Model.Results.Any())
+        {
+            var companyId = A4EPARC.Services.AuthenticationService.GetCompanyId();
+
+            @Html.Grid(Model.Results).Columns(column =>
+{
+    column.For(a => a.CreatedDate).Named("Created Date").Sortable(false);
+    column.For(a => a.ActionResult).Named("Action Name").Sortable(false);
+    column.For(a => a.AnswerList).Named("Answer String").Sortable(false);
+    column.For(a => a.Company).Named("Company").Sortable(false);
+    column.For(a => a.JobSeekerId).Named("Job Seeker ID").Sortable(false);
 }).Sort(Model.GridSortOptions).Attributes(@width => "100%", @class => "table table-striped table-bordered table-hover")
 
-            <br />
-
-            @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous").QueryParam("page").ToString())
+            @Html.Raw(Html.Pager(Model.Results).First("First").Last("Last").Next("Next").Previous("Previous").QueryParam("page").ToString())
         }
 
     </div>

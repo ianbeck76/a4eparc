@@ -50,8 +50,18 @@
             <div class="form-group" id="StateGroup">
                 @Html.LabelFor(m => m.State, new { @class = "col-md-4 control-label" })
                 <div class="col-md-6" style="margin-bottom: 10px">
-                    @Html.DropDownListFor(m => m.State, new SelectList(Model.StateDropdownList), "Please Select", new { @class = "form-control", @id = "LengthOfUnemployment", @required="true" })
+                    @Html.DropDownListFor(m => m.State, new SelectList(Model.StateDropdownList), "Please Select", new { @class = "form-control", @id = "State", @required="true" })
                     @Html.ValidationMessageFor(m => m.State)
+                </div>
+            </div>
+        }
+        @if (Model.RTODropdownList.Any())
+        {
+            <div class="form-group" id="RTOGroup">
+                @Html.LabelFor(m => m.RTO, new { @class = "col-md-4 control-label" })
+                <div class="col-md-6" style="margin-bottom: 10px">
+                    @Html.DropDownListFor(m => m.RTO, new SelectList(Model.RTODropdownList), "Please Select", new { @class = "form-control", @id = "RTO", @required = "true" })
+                    @Html.ValidationMessageFor(m => m.RTO)
                 </div>
             </div>
         }

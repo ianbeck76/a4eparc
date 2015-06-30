@@ -13,7 +13,7 @@ namespace A4EPARC
                 "~/Scripts/jquery-migrate-1.2.1.js",
                 "~/Scripts/jquery.cookie.js",
                 "~/Scripts/ui-validation.js",
-                "~/Scripts/reportFilters.js"));
+                "~/Scripts/reportFilters0405.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                 "~/Scripts/jquery-ui-1.9.2.js",
@@ -45,7 +45,9 @@ namespace A4EPARC
             bundles.Add(new StyleBundle("~/Content/css_gls").Include("~/Content/css_gls/theme.css"));
 
             bundles.Add(new StyleBundle("~/Content/css_a4e").Include("~/Content/css_a4e/theme.css"));
-   
+
+            bundles.Add(new StyleBundle("~/Content/css_incite").Include("~/Content/css_incite/theme.css"));
+
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                 "~/Content/themes/base/jquery.ui.core.css",
                 "~/Content/themes/base/jquery.ui.resizable.css",

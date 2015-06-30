@@ -9,5 +9,7 @@
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string Password { get; set; }
+        public string ResetPassword { get; set; }
+        public bool IsActive { get; set; }
     }
 }

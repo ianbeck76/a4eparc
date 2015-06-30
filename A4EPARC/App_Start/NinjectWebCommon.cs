@@ -70,7 +70,7 @@ namespace A4EPARC.App_Start
             kernel.Bind<IClientRepository>().To<ClientRepository>().InRequestScope();
             kernel.Bind<ISecurityService>().To<SecurityService>().InRequestScope();
             kernel.Bind<IRepository<User>>().To<Repository<User>>().InRequestScope();
-            kernel.Bind<IQuestionRepository>().To<QuestionRepository>().InRequestScope();
+            kernel.Bind<IQuestionsRepository>().To<QuestionsRepository>().InRequestScope();
             kernel.Bind<IUserRepository>().To<UserRepository>().InRequestScope();
             kernel.Bind<IRepository<ClientViewModel>>().To<Repository<ClientViewModel>>().InRequestScope();
             kernel.Bind<ICompanyRepository>().To<CompanyRepository>().InRequestScope();
@@ -80,6 +80,7 @@ namespace A4EPARC.App_Start
             kernel.Bind<IWebServiceResultsRepository>().To<WebServiceResultsRepository>().InRequestScope();
             kernel.Bind<ISiteLabelsRepository>().To<SiteLabelsRepository>().InRequestScope();
             kernel.Bind<IResultService>().To<ResultService>().InRequestScope();
+            kernel.Bind<IQuestionsService>().To<QuestionsService>().InRequestScope();
         }        
     }
 }

@@ -9,6 +9,11 @@ namespace A4EPARC.Repositories
 {
     public class CompanyRepository : Repository<Company>, ICompanyRepository
     {
+        public Company SingleOrDefault(int id)
+        {
+            return Query<Company>("SELECT * FROM [dbo].[CompanyNew] WHERE Id = @Id", new { Id = id }).SingleOrDefault();
+        }
+
         public List<CompanySchemeViewModel> GetSchemes()
         {
             var schemeList = HttpContext.Current.Cache["GetSchemes"] as List<CompanySchemeViewModel>;
@@ -69,12 +74,32 @@ namespace A4EPARC.Repositories
                 return itemList;
             }
 
-            const string query = @"SELECT [CompanyId],[Key],[Value] FROM [dbo].[CompanySelectValues]";
+            const string query = @"SELECT [CompanyId],[Key],[Value] FROM [dbo].[CompanySelectValues] ORDER BY [Value]";
             itemList = (List<CompanySelectValuesViewModel>)Query<CompanySelectValuesViewModel>(query).ToList();
 
             HttpContext.Current.Cache.Insert("CompanySelectValues", itemList, null, DateTime.Now.AddDays(1), TimeSpan.Zero);
 
             return itemList;
+        }
+
+        public Company SingleOrDefault(string where, object parameters)
+        {
+            return Where(where, parameters).SingleOrDefault();
+        }
+
+        public IEnumerable<Company> Where(string where, object parameters)
+        {
+            return Query<Company>("SELECT * FROM [dbo].[CompanyNew] WHERE " + where, parameters);
+        }
+
+        public IEnumerable<Company> All()
+        {
+            return Query<Company>("SELECT * FROM [dbo].[CompanyNew]");
+        }
+
+        public Company Single(int id)
+        {
+            return Query<Company>("SELECT * FROM [dbo].[CompanyNew] WHERE Id = @Id", new { Id = id }).Single();
         }
     }
 
@@ -84,5 +109,10 @@ namespace A4EPARC.Repositories
         List<CompanyPageItemViewModel> GetPageItems();
         List<CompanyLanguageViewModel> GetLanguages();
         List<CompanySelectValuesViewModel> GetSelectValues();
+        Company SingleOrDefault(int id);
+        Company SingleOrDefault(string where, object parameters);
+        IEnumerable<Company> Where(string where, object parameters);
+        IEnumerable<Company> All();
+        Company Single(int id);
     }
 }

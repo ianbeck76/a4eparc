@@ -7,11 +7,13 @@ using System.Web.Mvc;
 using A4EPARC.Repositories;
 using A4EPARC.Services;
 using A4EPARC.ViewModels;
+using MvcContrib.Pagination;
+using MvcContrib.Sorting;
 using MvcContrib.UI.Grid;
 
 namespace A4EPARC.Controllers
 {
-    public class WebServiceResultsController : BaseController
+    public class WebServiceResultsController : AuthBaseController
     {
         private IWebServiceResultsRepository _webServiceResultsRepository { get; set; }
         private IAuthenticationService _authenticationService { get; set; }
@@ -25,70 +27,100 @@ namespace A4EPARC.Controllers
             _companyRepository = companyRepository;
         }
 
-        public ActionResult Index(string fromdate, string todate, string jobSeekerid, string environment, string company, GridSortOptions gridSortOptions, int? page)
+        public ActionResult Index(string datefrom, string dateto, string jobseekerid, string environment, string company, GridSortOptions gridSortOptions, int? page)
         {
-            int? currentPage = page != null ? page : 1;
-            int? nextPage = null;
-            int? lastPage = null;
-            int? firstPage = null;
-            int? previousPage = null;
-            const int pageSize = 20;
-
-            company = string.IsNullOrWhiteSpace(company) ? null : company.ToLower();
-            jobSeekerid = string.IsNullOrWhiteSpace(jobSeekerid) ? null : jobSeekerid.ToLower();
-            environment = string.IsNullOrWhiteSpace(environment) || environment == "BOTH" ? null : environment.ToLower();
-         //   var createdDateMin = fromdate;
-       //     var createdDateMax = todate.HasValue ? todate.Value.AddDays(1).AddSeconds(-1) : (DateTime?)null;
-
-            IQueryable<WebServiceResultsViewModel> query;
-
-            query = _webServiceResultsRepository.GetResultsView();           
-
-            if (currentPage != null)
+            if (String.IsNullOrWhiteSpace(gridSortOptions.Column))
             {
-                if (query.Count() > (pageSize * currentPage))
-                {
-                    nextPage = currentPage + 1;
-                }
-
-                if ((currentPage * pageSize) < query.Count())
-                {
-                    lastPage = (int)Math.Ceiling((double)query.Count() / (double)pageSize);
-                }
-
-                if (currentPage != null && currentPage != 1)
-                {
-                    previousPage = currentPage - 1;
-                    firstPage = 1;
-                }
+                gridSortOptions.Column = "CreatedDate";
+                gridSortOptions.Direction = SortDirection.Descending;
             }
 
-            var pagedViewModel = new PagedViewModel<WebServiceResultsViewModel>
+            datefrom = GetParameterValue("wsr", "datefrom", datefrom);
+            dateto = GetParameterValue("wsr", "dateto", dateto);
+            jobseekerid = GetParameterValue("wsr", "jobseekerid", jobseekerid);
+            environment = GetParameterValue("wsr", "environment", ConvertEnvironment(environment));
+            company = GetParameterValue("wsr", "company", company);
+
+            if (!GetCurrentUser().IsSuperAdmin)
             {
-                ViewData = ViewData,
-                Query = query,
+                company = GetCompanyDetails().Name;
+            }
+
+            var query = _webServiceResultsRepository.GetResultsView(ConvertMinDate(datefrom), ConvertMaxDate(dateto), jobseekerid, environment, company);
+
+            var model = new WebServiceResultListViewModel
+            {
                 GridSortOptions = gridSortOptions,
-                DefaultSortColumn = "CreatedDate",
-                CurrentPage = page,
-                FirstPage = firstPage,
-                PreviousPage = previousPage,
-                LastPage = lastPage,
-                NextPage = nextPage,
-                PageSize = pageSize,
+                Results = query.AsPagination(page.GetValueOrDefault() == 0 ? 1 : page.GetValueOrDefault(), 10),
+                DateFrom = datefrom,
+                DateTo = dateto,
+                JobSeekerID = jobseekerid,
                 Company = company,
-                Companies = _companyRepository.All().Select(c => c.Name).ToList()
-            }
-//            .AddFilter("fromDate", fromdate, c => c.CreatedDate > createdDateMin)
-  //          .AddFilter("toDate", todate, c => c.CreatedDate < createdDateMax)
-            .AddFilter("company", company, c => c.CompanyName.ToLower() == company)
-            .AddFilter("environmentType", environment, c => c.Environment.ToLower() == environment)
-            .AddFilter("jobSeekerID", jobSeekerid, c => c.JobSeekerId.ToLower() == jobSeekerid)
-            .Setup();
+                Companies = _companyRepository.All().Select(c => c.Name).ToList(),
+                EnvironmentList = new List<string> { "BOTH", "LIVE", "TEST" },
+                Environment = environment
+            };
 
-            return View(pagedViewModel);
+            return View(model);
         }
 
-     
+        public FileResult ExportList(string datefrom, string dateto, string jobseekerid, string environment, string company)
+        {
+            datefrom = GetParameterValue("wsr", "datefrom", datefrom);
+            dateto = GetParameterValue("wsr", "dateto", dateto);
+            jobseekerid = GetParameterValue("wsr", "jobseekerid", jobseekerid);
+            environment = GetParameterValue("wsr", "environment", ConvertEnvironment(environment));
+            company = GetParameterValue("wsr", "company", company);
+
+            if (!GetCurrentUser().IsSuperAdmin)
+            {
+                company = GetCompanyDetails().Name;
+            }
+
+            var query = _webServiceResultsRepository.GetResultsView(ConvertMinDate(datefrom), ConvertMaxDate(dateto), jobseekerid, environment, company);
+
+            var sb = new StringBuilder();
+
+            sb = GetWebServiceExcel(query.ToList());
+       
+            return File(new UTF8Encoding().GetBytes(sb.ToString()), "text/csv", string.Format("WebService_Data_{0}.csv", DateTime.Now.ToString("yyyyMMdd-HHmmss")));
+        }
+
+        private string ConvertEnvironment(string environment)
+        {
+            if (environment != null)
+            {
+                if (environment == "LIVE")
+                {
+                    environment = "PROD";
+                }
+                if (environment == "BOTH")
+                {
+                    environment = "";
+                }
+            }
+            return environment;
+        }
+
+        private StringBuilder GetWebServiceExcel(IList<WebServiceResultsViewModel> data)
+        {
+            var sb = new StringBuilder();
+            sb.Append("CreatedDate,ActionName,AnswerList,Environment,JobSeekerID,Company");
+            sb.AppendLine(Environment.NewLine);
+
+            foreach (var d in data)
+            {
+                sb.Append(d.CreatedDate + ",");
+                sb.Append(d.ActionResult + ",");
+                sb.Append(d.AnswerList.Replace(',', '-') + ",");
+                sb.Append(d.Environment + ",");
+                sb.Append(d.JobSeekerId + ",");
+                sb.Append(d.Company);
+                sb.Append(Environment.NewLine);
+            }
+            return sb;
+        }
+
     }
 }
 

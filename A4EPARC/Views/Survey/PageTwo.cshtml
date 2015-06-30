@@ -6,8 +6,20 @@
    <input type="hidden" name="SchemeId" value="@Model.SchemeId" id="SchemeId" />
 
   <div class="container" id="pagetwoform">            
-        <hr class="divider"/>
-        @Html.Partial("_AimStatement", @Model)
+      <hr class="divider"/>
+        @if (Model.SchemeId == 5)//ACA
+        {
+            @Html.Partial("_ACA_AimStatement", @Model)
+        }
+        else if (Model.SchemeId == 6)//Incite
+        {
+            @Html.Partial("_Incite_AimStatement", @Model)
+        }
+        else
+        {
+            @Html.Partial("_AimStatement", @Model)
+        }
+
       <br/> 
       @Html.Partial("_QuestionsGrid", @Model)
  </div> 

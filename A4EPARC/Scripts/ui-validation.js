@@ -36,28 +36,6 @@ $(document).ready(function() {
         });
     }
 
-    //if ($('#surveyPage').length > 0) {
-
-    //    var pageitems = getPageItems();
-    //    pageitems.forEach(function (item) {
-
-    //        if (item.IsDisplay == true) {
-    //            $('#' + item.Name + 'Group').show();
-    //        }
-    //        else {
-    //            $('#' + item.Name + 'Group').hide();
-    //        }
-    //        if (item.IsRequired == true) {
-    //            $('#' + item.Name).attr('required', 'required');
-    //        }
-    //        else {
-    //            $('#' + item.Name).removeAttr('required');
-    //        }
-
-    //    })
-
-    //}
-
     function getSchemeId() {
 
         var schemeId = $('#SchemeId').val();
@@ -173,6 +151,13 @@ $(document).ready(function() {
 		).trigger('change');
     });
 
+    $('.yesno.btn[data-radio-name]').click(function () {
+        $('.btn[data-radio-name="' + $(this).data('radioName') + '"]').removeClass('active');
+        $('input[name="' + $(this).data('radioName') + '"]').val(
+			$(this).attr('data-text')
+		).trigger('change');
+    });
+
     if ($('#surveyPageOne').length > 0) {
 
         $('button[data-radio-name="Gender"]').click(function () {
@@ -199,7 +184,37 @@ $(document).ready(function() {
                 $('#DateOfBirth').data('val', false);
             }
         }
+
+
     }
+
+    if ($('#incitePageOne').length > 0) {
+
+        submitInciteForm("incitePageOne");
+    }
+
+    if ($('#incitePageTwo').length > 0) {
+
+        submitInciteForm("incitePageTwo");
+    }
+
+
+    function submitInciteForm(formname) {
+
+        $('#' + formname).submit(function (e) {
+
+            $("#" + formname + " input").each(function () {
+
+                if ($(this).valid() == false) {
+                    $('#warningmessage').show();
+                    e.preventDefault();
+                }
+            });
+        });
+
+
+    }
+
 
     $.validator.setDefaults({
         ignore: [],

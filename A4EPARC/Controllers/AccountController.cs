@@ -11,7 +11,7 @@ using A4EPARC.Models;
 
 namespace A4EPARC.Controllers
 {
-    public class AccountController : BaseController
+    public class AccountController : AuthBaseController
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserRepository _userRepository;
@@ -34,6 +34,21 @@ namespace A4EPARC.Controllers
         {
             if (Request.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
+
+            //var username = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            //if (username.Contains("LAPTOP"))
+            //{
+            //    var userId = _authenticationService.Login("ianbeck76@gmail.com", "p5ycha55");
+            //    if (userId != 0)
+            //    {
+            //        var user = _userRepository.SingleOrDefault(userId);
+            //        if (user.IsSuperAdmin)
+            //        {
+            //            return RedirectToAction("Company", "Select");
+            //        }
+            //        return RedirectToAction("Index", "Home");
+            //    }
+            //}
 
             return View();
         }

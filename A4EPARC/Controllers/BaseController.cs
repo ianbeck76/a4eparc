@@ -7,19 +7,61 @@ using Ninject;
 using A4EPARC.ViewModels;
 using A4EPARC.Enums;
 using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Collections.Generic;
+using System.Web;
 
 namespace A4EPARC.Controllers
 {
-    [Authorize]
     public class BaseController : Controller
     {
+        protected string GetParameterValue(string controllername, string parametername, string parmaterdata)
+        {
+            var cookiename = controllername + parametername + "cookie";
+
+            var cookie = Request.Cookies[cookiename];
+
+            if (Request.Cookies[cookiename] == null)
+            {
+                cookie = new HttpCookie(cookiename);
+            }
+
+            if (parmaterdata == null)
+            {
+                if (cookie != null)
+                {
+                    var getcookie = Request.Cookies[cookiename];
+                    if (getcookie != null)
+                    {
+                        parmaterdata = getcookie.Value;
+                    }
+                }
+            }
+
+            if (parmaterdata == "null")
+            {
+                parmaterdata = "";
+                Response.Cookies[cookiename].Expires = DateTime.Now.AddDays(-1);
+            }
+
+            if (!string.IsNullOrEmpty(parmaterdata))
+            {
+                cookie.Value = parmaterdata.ToString();
+                cookie.Expires = DateTime.Now.AddYears(1);
+                Response.Cookies.Add(cookie);
+            }
+            return parmaterdata;
+        }
+
         protected DateTime? ConvertMinDate(string date)
         {
             if (!string.IsNullOrEmpty(date))
             {
                 try
                 {
-                    return Convert.ToDateTime(date);
+                    return DateTime.ParseExact(date, "dd-MM-yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
                 }
                 catch
                 {
@@ -35,7 +77,9 @@ namespace A4EPARC.Controllers
             {
                 try
                 {
-                    return Convert.ToDateTime(date).AddDays(1).AddSeconds(-1);
+                    var maxdate = DateTime.ParseExact(date, "dd-MM-yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+                    return maxdate.AddDays(1).AddSeconds(-1);
                 }
                 catch
                 {
@@ -43,6 +87,46 @@ namespace A4EPARC.Controllers
                 }
             }
             return null;
+        }
+
+        protected static string ObjectToCsvData<T>(List<T> objects)
+        {
+            var sb = new StringBuilder();
+            Type t = typeof(T);
+            PropertyInfo[] pi = t.GetProperties();
+            for (int index = 0; index < pi.Length; index++)
+            {
+                var value = pi[index].Name;
+                sb.Append(value.ToString().Contains(",") ? @"""" + value.ToString() + @"""" : value);
+                if (index < pi.Length - 1)
+                {
+                    sb.Append(",");
+                }
+            }
+            sb.Append(Environment.NewLine);
+
+            foreach (var obj in objects)
+            {
+                if (obj == null)
+                {
+                    throw new ArgumentNullException("obj", "Value can not be null or Nothing!");
+                }
+
+                for (int index = 0; index < pi.Length; index++)
+                {
+                    //sb.Append(@"=""" + pi[index].GetValue(obj, null)+ @"""");
+                    var value = pi[index].GetValue(obj, null);
+
+                    sb.Append(value != null && value.ToString().Contains(",") ? @"""" + value.ToString() + @"""" : value);
+
+                    if (index < pi.Length - 1)
+                    {
+                        sb.Append(",");
+                    }
+                }
+                sb.Append(Environment.NewLine);
+            }
+            return sb.ToString();
         }
 
         protected ClientViewModel AppendActionDetailsToViewModel(ClientViewModel viewmodel)

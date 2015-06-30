@@ -11,7 +11,7 @@ namespace A4EPARC.ViewModels
             [ScaffoldColumn(false)]
             public string Id { get; set; }
 
-            public string CompanyName { get; set; }
+            public string Company { get; set; }
 
             public string Environment { get; set; }
 
@@ -23,5 +23,10 @@ namespace A4EPARC.ViewModels
             public string ActionResult { get; set; }
 
             public string AnswerList { get; set; }
-    }
+
+            [ScaffoldColumn(false)]
+        public DateTime? DateTo { get; set; }
+          [ScaffoldColumn(false)]
+        public DateTime? DateFrom { get; set; }
+     }
 }

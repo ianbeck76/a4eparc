@@ -59,7 +59,7 @@ THE SOFTWARE.
             actions: {},
             fields: {},
             animationsEnabled: true,
-            defaultDateFormat: 'mm/dd/yy',
+            defaultDateFormat: 'dd/mm/yy',
             dialogShowEffect: 'fade',
             dialogHideEffect: 'fade',
             showCloseButton: false,

@@ -9,7 +9,7 @@
 {
     <script type="text/javascript">
         $('.input-group.date').datepicker({
-            format: 'mm-dd-yyyy'
+            format: 'dd-mm-yyyy'
         });
     </script>
 }
@@ -63,7 +63,7 @@
                }
                else
                {
-                <input type="hidden" value="@Model.Company" id="companyInput" , name="company" />
+                <input type="hidden" value="@Model.Company" id="companyinput" , name="company" />
                }
             </div>
         </form>
@@ -72,6 +72,9 @@
     <button class="btn btn-primary" title="Search" id="filterLink" name="filterLink" value="Search">Search <span class="glyphicon glyphicon-search"></span></button>
     &nbsp;&nbsp;
     <button class="btn btn-primary" title="Excel" id="export" name="export" value="Excel">Excel <span class="glyphicon glyphicon-download-alt"></span></button>
+    &nbsp;&nbsp;
+    <button class="btn btn-secondary" title="Clear" id="resrefresh" name="resrefresh" value="Clear">Clear Filters <span class="glyphicon glyphicon-refresh"></span></button>
+
          <br/>
       <div class="row">
             <br/>

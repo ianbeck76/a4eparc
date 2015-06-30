@@ -1,0 +1,52 @@
+﻿@model A4EPARC.ViewModels.ClientViewModel
+
+<div class="container" style="border: 5px solid; padding-left: 20px; padding-bottom: 40px; background-color: white; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;">
+
+    <div class="row">
+        <h2>AIM</h2>
+    </div>
+    <div class="row">
+        <h4>You are being asked to take part in a research study. This survey asks you about your feelings about job search at this time.  The survey is part of a project to improve services at WorkSource Centers and help job seekers like you reach their goals. The purpose of this study is to evaluate the program and whether it helps or is cost effective</h4>
+    </div>
+    <div class="row">
+        <h4>The survey takes about 4-5 minutes to complete.  The answers you provide are confidential.  They will not be shared with the Unemployment Insurance Division (UI) or WorkSource Center staff.  Only staff managing the survey (at Incite, Inc., Esher House, and Public Policy Associates, Inc.) will see your answers.  Your answers will have no impact on benefits payments.  Records identifying you will be kept confidential and, to the extent permitted by applicable laws and/or regulations, will not be made publically available.  If the results of the study are published, your identity will remain confidential.</h4>
+    </div>
+    <div class="row">
+        <h4>You may feel uncomfortable answering some of the survey questions. You do not have to answer any question that makes you feel uncomfortable and can simply enter “neutral” if you wish. You will be informed in a timely manner if new information that may influence your willingness to continue participation in the study becomes available.</h4>
+    </div>
+    <div class="row">
+        <h4>You may not directly benefit from your participation in the study. Your participation will assist with the understanding the effectiveness of this survey and may benefit others in the future.</h4>
+    </div>
+    <div class="row">
+        <h4>After completing the survey, you may report this as a job search activity to UI when you file your weekly claim. If you do not wish to take part in this study, you may complete another job search activity for UI. There is no cost to you. You will not be compensated for your participation in this study.</h4>
+    </div>
+    <div class="row">
+        <h4>Your participation in this study is voluntary. You may choose to not take part in this study or withdraw from this study without loss of benefits to which you are otherwise entitled. You will be removed from this study if the study is canceled.</h4>
+    </div>
+    <div class="row">
+        <h4>If you have questions about the survey, contact Jennifer Johnson at Incite, Inc. (503-581-1002 or rethinking@inciteworks.org) or Colleen Graber at Public Policy Associates, Inc. (1-800-665-8449 or cgraber@publicpolicy.com).</h4>
+    </div>
+    <div class="row">
+        <h4>If you have questions regarding your rights as a research participant, or if you have questions, concerns, complaints about the research, would like information, or would like to offer input, you may contact the Sterling Institutional Review Board Regulatory Department, 6300 Powers Ferry Road, Suite 600-351, Atlanta, Georgia 30339 (mailing address) or at telephone number 1-888-636-1062 (toll free). Your IRB ID is 5137.</h4>
+    </div>
+    <div class="row">
+        <h4>You do not waive any of your legal rights by taking part in this study.</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-1 col-sm-2 col-xs-2">
+            @Html.CheckBoxFor(m => m.AcceptCheckBox, new { @class = "form-control" })
+        </div>
+        <div class="col-md-11 col-sm-10 col-xs-10">
+            <h4>By clicking this box, you are providing your informed consent to participate in this study.</h4>
+        </div>
+        </div>
+        <br />
+        <div class="row">
+            <h4>Thank you for your participation!</h4>
+        </div>
+    <br />
+        <div class="row float-left">
+            <p style="color: #283E94">&copy;&nbsp;Esher House Pty Ltd</p>
+        </div>
+    </div>
+    <br />

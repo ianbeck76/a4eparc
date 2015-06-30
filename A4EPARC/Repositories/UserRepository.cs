@@ -11,14 +11,14 @@ namespace A4EPARC.Repositories
         {
             return
                 Execute(
-                    @"INSERT INTO [dbo].[User] (Email, Password, Salt, IsSuperAdmin, IsAdmin, IsViewer, CompanyId, CreatedDate) VALUES (@Email, @Password, @Salt, @IsSuperAdmin, @IsAdmin, @IsViewer, @CompanyId, @CreatedDate);SELECT CAST(SCOPE_IDENTITY() as int)", user);
+                    @"INSERT INTO [dbo].[User] (Email, Password, Salt, IsSuperAdmin, IsAdmin, IsViewer, CompanyId, CreatedDate, IsActive) VALUES (@Email, @Password, @Salt, @IsSuperAdmin, @IsAdmin, @IsViewer, @CompanyId, @CreatedDate, @IsActive)SELECT CAST(SCOPE_IDENTITY() as int)", user);
         }
 
         public int Save(IUser user)
         {
             return
                 Execute(
-                    @"UPDATE [dbo].[User] SET IsSuperAdmin = @IsSuperAdmin, IsAdmin = @IsAdmin, IsViewer = @IsViewer, CompanyId = @CompanyId  WHERE Id = @Id", user);
+                    @"UPDATE [dbo].[User] SET IsSuperAdmin = @IsSuperAdmin, IsAdmin = @IsAdmin, IsViewer = @IsViewer, CompanyId = @CompanyId, IsActive = @IsActive  WHERE Id = @Id", user);
         }
 
 
@@ -33,7 +33,7 @@ namespace A4EPARC.Repositories
         {
             return
                 Query<UserViewModel>(
-                    @"SELECT u.Id, u.Email, u.IsSuperAdmin, u.IsAdmin, u.IsViewer, c.Id As CompanyId, c.Name AS CompanyName FROM [User] u INNER JOIN Company c ON c.Id = u.CompanyId")
+                    @"SELECT u.Id, u.Email, u.IsSuperAdmin, u.IsAdmin, u.IsViewer, c.Id As CompanyId, c.Name AS CompanyName, u.IsActive FROM [User] u INNER JOIN CompanyNew c ON c.Id = u.CompanyId")
                     .ToList();
         }
     }

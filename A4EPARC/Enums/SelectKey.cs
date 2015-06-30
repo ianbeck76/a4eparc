@@ -4,6 +4,7 @@
     {
         State = 1,
         LengthOfUnemployment = 2,
-        Stream = 3
+        Stream = 3,
+        RTO = 4
     }
 }

@@ -2,12 +2,11 @@
 
 namespace A4EPARC.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : AuthBaseController
     {
         public ActionResult Index()
         {
             return View(GetCompanyId());
         }
-
     }
 }

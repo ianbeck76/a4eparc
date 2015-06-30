@@ -66,16 +66,25 @@
                     key: true,
                     list: false
                 },
-                Password: {
-                    title: 'Password',
-                    list: false
-                },
                 ResetPassword: {
                     title: 'Password',
                     edit: false,
-                    create: false,
+                    create: true,
                     display: function (data) {
                         return resetPassword(data, "/User/ResetPassword")
+                    }
+                },
+                IsActive: {
+                    title: 'Active',
+                    edit: false,
+                    create: false,
+                    display: function (data) {
+                        if (data.record.IsActive == true) {
+                            return deactivateUser(data, "/User/Deactivate")
+                        }
+                        else {
+                            return reactivateUser(data, "/User/Reactivate")
+                        }
                     }
                 }
             }
@@ -143,14 +152,14 @@
                     type: 'checkbox',
                     values: { 'false': '', 'true': '' },
                     sorting: true,
-                    display: function(data) {
+                    display: function (data) {
                         if (data.record.IsAdmin == true) {
                             return '<i aria-hidden="true" class="icon icon-tick"></i>';
                         } else {
                             return '<i aria-hidden="true" class="icon icon-cross"></i>';
                         }
                     },
-                    edit: function(data) {
+                    edit: function (data) {
                         if (data.record.IsAdmin == true) {
                             return '<i aria-hidden="true" class="icon icon-tick"></i>';
                         } else {
@@ -164,14 +173,14 @@
                     type: 'checkbox',
                     values: { 'false': '', 'true': '' },
                     sorting: true,
-                    display: function(data) {
+                    display: function (data) {
                         if (data.record.IsViewer == true) {
                             return '<i aria-hidden="true" class="icon icon-tick"></i>';
                         } else {
                             return '<i aria-hidden="true" class="icon icon-cross"></i>';
                         }
                     },
-                    edit: function(data) {
+                    edit: function (data) {
                         if (data.record.IsViewer == true) {
                             return '<i aria-hidden="true" class="icon icon-tick"></i>';
                         } else {
@@ -187,13 +196,28 @@
                     options: '/User/GetCompanies'
                 },
                 Id: {
-                key: true,
-                list: false
+                    key: true,
+                    list: false
                 },
                 ResetPassword: {
-                title: 'Password',
-                display: function (data) {
-                    return resetPassword(data, "/User/AdminResetPassword")
+                    title: 'Password',
+                    edit: false,
+                    create: true,
+                    display: function (data) {
+                        return resetPassword(data, "/User/AdminResetPassword")
+                    }
+                },
+                IsActive: {
+                    title: 'Active',
+                    edit: false,
+                    create: false,
+                    display: function (data) {
+                        if (data.record.IsActive == true) {
+                            return deactivateUser(data, "/User/Deactivate")
+                        }
+                        else {
+                            return reactivateUser(data, "/User/Reactivate")
+                        }
                     }
                 }
             }
@@ -241,6 +265,56 @@
                 },
                 error: function () {
                     alert('Password reset but email failed to send!')
+                }
+            });
+        });
+        return $link;
+    }
+
+    function deactivateUser(data, url) {
+
+        var $link = $('<a href="#" id="Activate_' + data.record.Id + '">Deactivate</a>');
+
+        $link.click(function () {
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                async: false,
+                type: 'POST',
+                data: { id: data.record.Id },
+                success: function (result) {
+                    if (result.IsValid == true) {
+                        alert('Account deactivated!')
+                    }
+                    $('#Activate_' + data.record.Id).html("Deactivated!");
+                },
+                error: function () {
+                }
+            });
+        });
+        return $link;
+    }
+
+    function reactivateUser(data, url) {
+
+        var $link = $('<a href="#" id="Activate_' + data.record.Id + '">Reactivate</a>');
+
+        $link.click(function () {
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                async: false,
+                type: 'POST',
+                data: { id: data.record.Id },
+                success: function (result) {
+                    if (result.IsValid == true) {
+                        alert('Account reactivated!')
+                    }
+                    $('#Activate_' + data.record.Id).html("Reactivated!");
+                },
+                error: function () {
                 }
             });
         });

@@ -35,7 +35,7 @@ namespace A4EPARC.Services
 
         public int Login(string email, string password)
         {
-            User user = _userRepository.SingleOrDefault("email=@Email", new { email });
+            User user = _userRepository.SingleOrDefault("email=@Email and isactive=1", new { email });
             if (((user != null)))
             {
                 var saltedPassword = password + user.Salt;

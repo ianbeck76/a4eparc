@@ -672,7 +672,7 @@ $.extend($.validator, {
 		showLabel: function(element, message) {
 			var label = this.errorsFor( element );
 			if ( label.length ) {
-				// refresh error/success class
+			    // refresh error/success class
 				label.removeClass( this.settings.validClass ).addClass( this.settings.errorClass );
 
 				// check if we have a generated label, replace the message then
@@ -680,11 +680,11 @@ $.extend($.validator, {
 					label.html(message);
 				}
 			} else {
-				// create label
+			    // create label
 				label = $("<" + this.settings.errorElement + "/>")
 					.attr({"for":  this.idOrName(element), generated: true})
 					.addClass(this.settings.errorClass)
-					.html(message || "");
+                    .html(message || "");
 				if ( this.settings.wrapper ) {
 					// make sure the element is visible, even in IE
 					// actually showing the wrapped element is handled elsewhere

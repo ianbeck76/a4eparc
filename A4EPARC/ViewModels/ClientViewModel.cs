@@ -72,6 +72,7 @@ namespace A4EPARC.ViewModels
 
         public string Gender { get; set; }
 
+        [DisplayFormat(NullDisplayText = "N/A")]
         public string EnrolmentID { get; set; }
 
         public bool Male { get; set; }
@@ -118,6 +119,20 @@ namespace A4EPARC.ViewModels
         public IEnumerable<CompanyPageItemViewModel> PageItems { get; set; }
 
         public int NumberOfPreviousAttempts { get; set; }
+
+        public bool IsIslander { get; set; }
+
+        public string RTO { get; set; }
+
+        public IEnumerable<string> RTODropdownList { get; set; }
+
+        public bool? IsCurrentlyCollectingBenefits { get; set; }
+
+        public string UnemploymentInsuranceId { get; set; }
+
+        public bool? IsOverEighteen { get; set; }
+
+        public bool? HasDiplomaOrGED { get; set; }
 
     }
 }

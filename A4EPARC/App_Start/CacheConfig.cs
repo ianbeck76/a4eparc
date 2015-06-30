@@ -14,8 +14,8 @@ namespace A4EPARC.App_Start
     {
         public static void Initialise()
         {
-            var questionRepository = DependencyResolver.Current.GetService<IQuestionRepository>();
-            const string query = @"SELECT Id, Code, Description,ActionTypeId, SchemeId, LanguageCode FROM [dbo].[Question]";
+            var questionRepository = DependencyResolver.Current.GetService<IQuestionsRepository>();
+            const string query = @"SELECT Id, Code, Description,ActionTypeId, SchemeId, LanguageCode, Code AS OrderNumber FROM [dbo].[Question]";
             var questionsList = (List<QuestionViewModel>) questionRepository.Query(query);
             HttpContext.Current.Cache.Insert("GetQuestions", questionsList, null, DateTime.Now.AddHours(2), TimeSpan.Zero);
 

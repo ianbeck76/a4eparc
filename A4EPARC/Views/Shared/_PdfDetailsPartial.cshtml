@@ -2,14 +2,18 @@
 
 <div style="float:none;padding-right:2em;padding-left:2em;padding-bottom:70em;background-color:white;page-break-before:always">
 
-    <h3 style="color:dimgray" class="col-xs-offset-2 col-xs-3">Name:</h3>
-    <h3 style="font-weight:bolder;color:black" class="col-xs-7">@Html.DisplayFor(m => m.FirstName)&nbsp;@Html.DisplayFor(m => m.Surname)</h3>
-    <h3 style="color:dimgray" class="col-xs-offset-2 col-xs-3">DOB:</h3>
-    <h3 style="font-weight:bolder;color:black" class="col-xs-7">@Html.DisplayFor(m => m.DateOfBirth)</h3>
-    <h3 style="color:dimgray" class="col-xs-offset-2 col-xs-3">State:</h3>
-    <h3 style="font-weight:bolder;color:black" class="col-xs-7">@Html.DisplayFor(m => m.State)</h3>
-    <h3 style="color:dimgray" class="col-xs-offset-2 col-xs-3">Enrolment ID:</h3>
-    <h3 style="font-weight:bolder;color:black" class="col-xs-7">@Html.DisplayFor(m => m.EnrolmentID)</h3>
+    <h3 style="color:dimgray" class="col-xs-3">Name:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-9">@Html.DisplayFor(m => m.FirstName)&nbsp;@Html.DisplayFor(m => m.Surname)</h3>
+    <h3 style="color:dimgray" class="col-xs-3">DOB:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-9">@Html.DisplayFor(m => m.DateOfBirth)</h3>
+    <h3 style="color:dimgray" class="col-xs-3">Enrolment ID:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-9">@Html.DisplayFor(m => m.EnrolmentID)</h3>
+    <h3 style="color:dimgray" class="col-xs-3">Created Date:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-9">@Model.CreatedDate.ToString("yyyy/MM/dd HH:mm:ss")</h3>
+    <h3 style="color:dimgray" class="col-xs-3">State:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-3">@Html.DisplayFor(m => m.State)</h3>
+    <h3 style="color:dimgray" class="col-xs-3">RTO:</h3>
+    <h3 style="font-weight:bolder;color:black" class="col-xs-3">@Html.DisplayFor(m => m.RTO)</h3>
     <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "1").Description)</h3>
     <h3 style="font-weight:bolder;color:black" class="col-xs-1">@Model.AnswerString.Substring(0, 1)</h3>
     <h3 style="color:dimgray" class="col-xs-11">@Html.DisplayFor(m => m.Questions.FirstOrDefault(q => q.Code == "2").Description)</h3>

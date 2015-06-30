@@ -12,7 +12,7 @@ namespace A4EPARC.Repositories
     {
         #region Public Methods
 
-        public IQueryable<WebServiceResultsViewModel> GetResultsView()
+        public IQueryable<WebServiceResultsViewModel> GetResultsView(DateTime? dateFrom, DateTime? dateTo, string jobseekerid, string environment, string company)
         {
             using (var connection = DbConnectionFactory.CreateConnection())
             {
@@ -20,29 +20,45 @@ namespace A4EPARC.Repositories
 
                 var modelList = new List<WebServiceResultsViewModel>();
 
-                var commandText = "select w.Id, c.Name, k.Type, w.CreatedDate, w.JobSeekerID, w.ActionTypeId, w.AnswerString ";
-                commandText += "FROM WebServiceLog w INNER JOIN WebServiceKeys k ON k.UniqueKey = w.UniqueKey ";
-                commandText += "INNER JOIN Company c ON c.Id = k.CompanyId";
+                var query = @"select w.Id, c.Name AS Company, k.Type AS Environment, w.CreatedDate, w.JobSeekerID, 
+                            a.ActionType AS ActionResult, 
+                            w.AnswerString AS AnswerList
+                            FROM WebServiceLog w INNER JOIN WebServiceKeys k ON k.UniqueKey = w.UniqueKey
+                            INNER JOIN CompanyNew c ON c.Id = k.CompanyId
+                            INNER JOIN ActionType a ON a.Id = w.ActionTypeId";
 
-                cmd.CommandText = commandText;
+                var clause = " WHERE ";
 
-                cmd.Prepare();
-
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                if (!string.IsNullOrWhiteSpace(jobseekerid))
                 {
-                    var model = new WebServiceResultsViewModel();
-                    model.Id = reader.GetInt32(0).ToString();
-                    model.CompanyName = reader.GetString(1);
-                    model.Environment = reader.GetString(2) == "TEST" ? "TEST" : "LIVE";
-                    model.CreatedDate = reader.GetDateTime(3);
-                    model.JobSeekerId = (!reader.IsDBNull(4)) ? (reader.GetString(4)) : "N/A";
-                    model.ActionResult = (!reader.IsDBNull(5)) ? (CalculateAction(reader.GetInt16(5))) : "N/A";
-                    model.AnswerList = (!reader.IsDBNull(6)) ? (reader.GetString(6)) : "N/A";
-                    modelList.Add(model);
+                    query += clause += "w.JobSeekerID = @JobseekerId";
+                    clause = " AND ";
                 }
+                if (!string.IsNullOrWhiteSpace(environment))
+                {
+                    query += clause += "k.Type = @Environment";
+                    clause = " AND ";
+                }
+                if (!string.IsNullOrWhiteSpace(company))
+                {
+                    query += clause += "c.Name = @Company";
+                    clause = " AND ";
+                }
+                if (dateFrom.HasValue)
+                {
+                    query += clause += "w.CreatedDate > @DateFrom";
+                    clause = " AND ";
+                }
+                if (dateTo.HasValue)
+                {
+                    query += clause += "w.CreatedDate < @DateTo";
+                    clause = " AND ";
+                }
+                query += " ORDER BY w.CreatedDate DESC";
 
-                return modelList.AsQueryable();
+                var model = new WebServiceResultsViewModel { JobSeekerId = jobseekerid, Environment = environment, DateFrom = dateFrom, DateTo = dateTo, Company = company };
+
+                return Query<WebServiceResultsViewModel>(query, model).AsQueryable();
             }
         }
 
@@ -57,7 +73,7 @@ namespace A4EPARC.Repositories
 
                 var commandText = "select w.Id, c.Name, k.Type, w.CreatedDate, w.JobSeekerID, w.ActionTypeId, w.AnswerString ";
                 commandText += "FROM WebServiceLog w INNER JOIN WebServiceKeys k ON k.UniqueKey = w.UniqueKey ";
-                commandText += "INNER JOIN Company c ON c.Id = k.CompanyId";
+                commandText += "INNER JOIN CompanyNew c ON c.Id = k.CompanyId";
 
                 if (toDate.HasValue)
                 {
@@ -137,7 +153,7 @@ namespace A4EPARC.Repositories
 
     public interface IWebServiceResultsRepository : IRepository<WebServiceResultsViewModel>
     {
-        IQueryable<WebServiceResultsViewModel> GetResultsView();
+        IQueryable<WebServiceResultsViewModel> GetResultsView(DateTime? dateFrom, DateTime? dateTo, string jobseekerid, string environment, string company);
 
         List<WebServiceCsvExportViewModel> GetCsvData(DateTime? toDate, DateTime? fromDate, string environmentType,
                                                       string jobSeekerID, string company);
