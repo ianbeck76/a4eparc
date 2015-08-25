@@ -16,6 +16,7 @@ namespace A4EPARC.Repositories
             ,DateOfBirth
             ,CaseWorkerName
             ,CaseWorkerId
+            ,CaseId
             ,Agency
             ,Gender
             ,LengthOfUnemployment
@@ -37,12 +38,16 @@ namespace A4EPARC.Repositories
             ,IsCurrentlyCollectingBenefits
             ,UnemploymentInsuranceId
             ,IsOverEighteen
-            ,HasDiplomaOrGED)
+            ,HasDiplomaOrGED
+            ,Provider
+            ,IsReassessment
+            ,Project)
             VALUES(@FirstName
             ,@Surname
             ,@DateOfBirth
             ,@CaseWorkerName
             ,@CaseWorkerId
+            ,@CaseId
             ,@Agency
             ,@Gender
             ,@LengthOfUnemployment
@@ -64,7 +69,10 @@ namespace A4EPARC.Repositories
             ,@IsCurrentlyCollectingBenefits
             ,@UnemploymentInsuranceId
             ,@IsOverEighteen
-            ,@HasDiplomaOrGED);
+            ,@HasDiplomaOrGED
+            ,@Provider
+            ,@IsReassessment
+            ,@Project);
             SELECT CAST(SCOPE_IDENTITY() as int);";
 
             return Query<int>(query, model).SingleOrDefault();
@@ -92,6 +100,7 @@ namespace A4EPARC.Repositories
                                 ,c.DateOfBirth
                                 ,c.CaseWorkerName
                                 ,c.CaseWorkerId
+                                ,c.CaseId
                                 ,c.Agency
                                 ,c.Gender
                                 ,c.JobSeekerID
@@ -124,6 +133,9 @@ namespace A4EPARC.Repositories
                                 ,c.UnemploymentInsuranceId
                                 ,c.IsOverEighteen
                                 ,c.HasDiplomaOrGED
+                                ,c.Provider
+                                ,c.IsReassessment
+                                ,c.Project
 								FROM ClientNew c 
                                 INNER JOIN [user] u ON u.id = c.UserId
 								INNER JOIN [CompanyNew] com ON com.Id = u.CompanyId
@@ -186,29 +198,6 @@ namespace A4EPARC.Repositories
 
         public IList<ClientCsvModel> GetCsvData(DateTime? dateFrom, DateTime? dateTo, string jobseekerId, string surname, string username, string company, string fieldstring)
         {
-
-                                            //            ,c.AdvisorName
-                                            //,c.CaseWorkerId
-                                            //,c.CaseWorkerName
-                                            //,c.FirstName
-                                            //,c.DateOfBirth
-                                            //,c.Gender
-                                            //,c.JobSeekerID
-                                            //,c.LengthOfUnemployment
-                                            //,c.Organisation
-                                            //,c.Surname
-                                            //,c.State
-                                            //,c.Stream
-                                            //,c.CompletedAllFiveWorkshops
-                                            //,c.Comments
-                                            //,c.IsIslander
-                                            //,c.RTO
-                                            //,c.IsCurrentlyCollectingBenefits
-                                            //,c.UnemploymentInsuranceId
-                                            //,c.IsOverEighteen
-                                            //,c.HasDiplomaOrGED
-
-
                 var query = string.Format(@"select
                                             c.CreatedDate,
                                             com.Name AS Company,

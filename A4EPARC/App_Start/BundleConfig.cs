@@ -41,12 +41,11 @@ namespace A4EPARC
                 "~/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/css/theme.css"));
-
             bundles.Add(new StyleBundle("~/Content/css_gls").Include("~/Content/css_gls/theme.css"));
-
             bundles.Add(new StyleBundle("~/Content/css_a4e").Include("~/Content/css_a4e/theme.css"));
-
             bundles.Add(new StyleBundle("~/Content/css_incite").Include("~/Content/css_incite/theme.css"));
+            bundles.Add(new StyleBundle("~/Content/css_serco").Include("~/Content/css_serco/theme.css"));
+            bundles.Add(new StyleBundle("~/Content/css_readify").Include("~/Content/css_readify/theme.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                 "~/Content/themes/base/jquery.ui.core.css",

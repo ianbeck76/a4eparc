@@ -29,6 +29,51 @@
            <input type="hidden" id="SchemeId" value=@Model.SchemeId />
         }
 
+        @if (Model.PageItems.FirstOrDefault(p => p.Name == "Provider") != null)
+        {
+
+            <div class="form-group" id="ProviderGroup">
+                    @if (AuthenticationService.GetCompanyId() == 16)
+                    {
+                        <label class="col-sm-4 control-label" id="ProviderLabel">Client</label>
+                    }
+                    else
+                    {
+                        <label class="col-sm-4 control-label" id="ProviderLabel">@LabelService.Get("ProviderLabel", "Provider", Model.SiteLabels, Model.SchemeId)</label>
+                    }
+                <div class="col-md-6" style="margin-bottom: 10px">
+                    @if (Model.ProviderDropdownList.Any())
+                    {
+                        @Html.DropDownListFor(m => m.Provider, new SelectList(Model.ProviderDropdownList), "Please Select", new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "Provider").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => m.Provider, new { @class = "form-control", @maxlength = "50", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "Provider").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required" })
+                    }
+                </div>
+                <span class="col-md-1" data-valmsg-for="Provider" data-valmsg-replace="true"></span>
+            </div>
+        }
+        
+        @if (Model.PageItems.FirstOrDefault(p => p.Name == "Project") != null)
+        {
+
+            <div class="form-group" id="ProjectGroup">
+                <label class="col-sm-4 control-label" id="ProjectLabel">@LabelService.Get("ProjectLabel", "Project", Model.SiteLabels, Model.SchemeId)</label>
+                <div class="col-md-6" style="margin-bottom: 10px">
+                    @if (Model.ProjectDropdownList.Any())
+                    {
+                        @Html.DropDownListFor(m => m.Project, new SelectList(Model.ProjectDropdownList), "Please Select", new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "Project").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => m.Project, new { @class = "form-control", @maxlength = "50", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "Project").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required" })
+                    }
+                </div>
+                <span class="col-md-1" data-valmsg-for="Project" data-valmsg-replace="true"></span>
+            </div>
+        }
+
         @if (Model.PageItems.FirstOrDefault(p => p.Name == "CaseWorkerName") != null)
         {
                 <div class="form-group" id="CaseWorkerNameGroup">
@@ -49,6 +94,17 @@
                     </div>
                         <span class="col-md-1" data-valmsg-for="CaseWorkerId" data-valmsg-replace="true"></span>
                 </div>
+        }
+        
+        @if (Model.PageItems.FirstOrDefault(p => p.Name == "CaseId") != null)
+        {
+            <div class="form-group" id="CaseIdGroup">
+                <label class="col-sm-4 control-label" id="CaseIdLabel">@LabelService.Get("CaseIdLabel", "Customer Case No: (CC-01-02-34567)", Model.SiteLabels, Model.SchemeId)</label>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.CaseId, new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "CaseId").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required", @maxlength = 50 })
+                </div>
+                <span class="col-md-1" data-valmsg-for="CaseId" data-valmsg-replace="true"></span>
+            </div>
         }
 
         @if (Model.PageItems.FirstOrDefault(p => p.Name == "Agency") != null)
@@ -88,7 +144,14 @@
         @if (Model.PageItems.FirstOrDefault(p => p.Name == "JobSeekerID") != null)
         {
             <div class="form-group" id="JobSeekerIDGroup">
-                <label class="col-sm-4 control-label" id="JobSeekerIDLabel">@LabelService.Get("JobSeekerIDLabel", "Job Seeker ID", Model.SiteLabels, Model.SchemeId)</label>
+                @if (AuthenticationService.GetCompanyId() == 17)
+                {
+                    <label class="col-sm-4 control-label" id="JobSeekerIDLabel">Customer ID</label>
+                }
+                else
+                {
+                    <label class="col-sm-4 control-label" id="JobSeekerIDLabel">@LabelService.Get("JobSeekerIDLabel", "Job Seeker ID", Model.SiteLabels, Model.SchemeId)</label>
+                }
                 <div class="col-md-6">
                     @Html.TextBoxFor(m => m.JobSeekerID, new { @class = "col-md-6 form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "JobSeekerID").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required", @maxlength = 50 })
                 </div>
@@ -115,12 +178,25 @@
         <div class="form-group" id="DateOfBirthGroup">
             <label class="col-xs-12 col-sm-4 control-label" id="DateOfBirthLabel">@LabelService.Get("DateOfBirthLabel", "Date of Birth", Model.SiteLabels, Model.SchemeId)</label>
             <input class="form-control" type="hidden" id="DateOfBirth" name="DateOfBirth" value="@Model.DateOfBirth" data-val=@Model.PageItems.FirstOrDefault(p => p.Name == "DateOfBirth").IsRequired.GetValueOrDefault().ToString().ToLower() , data-val-required="required" />
-            <div class="col-xs-4 col-md-2">
-                @Html.DropDownListFor(m => m.DateOfBirthMonth, new SelectList(Model.MonthDropdownList, "key", "value"), "Month", new { @class = "form-control" })
-            </div>
-            <div class="col-xs-4 col-md-2">
-                @Html.DropDownListFor(m => m.DateOfBirthDay, new SelectList(Model.DayDropdownList), "Day", new { @class = "form-control" })
-            </div>
+        
+            @if (Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["UKDateFormat"]))
+            {
+                <div class="col-xs-4 col-md-2">
+                    @Html.DropDownListFor(m => m.DateOfBirthDay, new SelectList(Model.DayDropdownList), "Day", new { @class = "form-control" })
+                </div>
+                <div class="col-xs-4 col-md-2">
+                    @Html.DropDownListFor(m => m.DateOfBirthMonth, new SelectList(Model.MonthDropdownList, "key", "value"), "Month", new { @class = "form-control" })
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-4 col-md-2">
+                    @Html.DropDownListFor(m => m.DateOfBirthMonth, new SelectList(Model.MonthDropdownList, "key", "value"), "Month", new { @class = "form-control" })
+                </div>
+                <div class="col-xs-4 col-md-2">
+                    @Html.DropDownListFor(m => m.DateOfBirthDay, new SelectList(Model.DayDropdownList), "Day", new { @class = "form-control" })
+                </div>
+            }
             <div class="col-xs-4 col-md-2">
                 @Html.DropDownListFor(m => m.DateOfBirthYear, new SelectList(Model.YearDropdownList), "Year", new { @class = "form-control" })
             </div>
@@ -276,6 +352,21 @@
                 <span class="col-md-1" data-valmsg-for="HasDiplomaOrGED" data-valmsg-replace="true"></span>
             </div>
         }
+        
+        @if (Model.PageItems.FirstOrDefault(p => p.Name == "IsReassessment") != null)
+        {
+
+            <div class="form-group" id="IsReassessmentGroup">
+                <label class="col-sm-4 control-label" id="IsReassessmentLabel">@LabelService.Get("IsReassessmentLabel", "Reassessment?", Model.SiteLabels, Model.SchemeId)</label>
+                <input class="form-control" type="hidden" id="IsReassessment" name="IsReassessment" value="@Model.IsReassessment" data-val=@Model.PageItems.FirstOrDefault(p => p.Name == "IsReassessment").IsRequired.GetValueOrDefault().ToString().ToLower() , data-val-required="required" />
+                <div class="col-md-6 btn-group" data-toggle="buttons">
+                    <button type="button" class="btn btn-default yesno col-md-3 @(Model.IsReassessment == true ? "active" : "")" data-radio-name="IsReassessment" data-text="true">Yes</button>
+                    <button type="button" class="btn btn-default yesno col-md-3 @(Model.IsReassessment == false ? "active" : "")" data-radio-name="IsReassessment" data-text="false">No</button>
+                </div>
+                <span class="col-md-1" data-valmsg-for="IsReassessment" data-valmsg-replace="true"></span>
+            </div>
+        }
+
     </div>
     
     <br/>

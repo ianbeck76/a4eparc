@@ -502,6 +502,8 @@ namespace A4EPARC.Controllers
             model.YearDropdownList = GetYearDropdownList();
             model.LengthOfUnemploymentDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.LengthOfUnemployment);
             model.StateDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.State);
+            model.ProviderDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.Provider);
+            model.ProjectDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.Project);
             model.StreamDropdownList = GetStreamDropdownList(companyId);
             model.RTODropdownList = GetCompanySelectValues(companyId, (int)SelectKey.RTO);
             return model;

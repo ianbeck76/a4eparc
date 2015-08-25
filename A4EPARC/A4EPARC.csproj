@@ -63,6 +63,9 @@
     <Reference Include="Microsoft.Web.Mvc">
       <HintPath>..\packages\Mvc4Futures.4.0.20710.0\lib\net40\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="MvcContrib">
       <HintPath>..\packages\StudioDonder.MvcContrib.Mvc4.3.0.0.99\lib\MvcContrib.dll</HintPath>
     </Reference>
@@ -326,6 +329,8 @@
     <Content Include="Content\bootstrap\js\tooltip.js" />
     <Content Include="Content\bootstrap\js\transition.js" />
     <Content Include="Content\css\theme - Copy.css" />
+    <Content Include="Content\css_readify\theme.css" />
+    <Content Include="Content\css_serco\theme.css" />
     <Content Include="Content\css_incite\theme.css" />
     <Content Include="Content\css_a4e\theme.css" />
     <Content Include="Content\css_gls\theme%28old%29.css" />
@@ -384,7 +389,10 @@
     <Content Include="Content\images\esherhouse.png" />
     <Content Include="Content\images\GLSLogo.png" />
     <Content Include="Content\images\jobFutures.jpg" />
+    <Content Include="Content\images\PboLogo.png" />
+    <Content Include="Content\images\ReadifyLogo.png" />
     <Content Include="Content\images\rethinking-01.png" />
+    <Content Include="Content\images\SercoLogo.png" />
     <Content Include="Content\images\WorksourceOregonLogo.png" />
     <Content Include="Content\jquery.timepicker.css" />
     <Content Include="Content\Site.css" />
@@ -444,6 +452,34 @@
     <Content Include="Content\css_incite\fonts.less" />
     <Content Include="Content\css_incite\theme.less" />
     <Content Include="Content\css_incite\variables.less" />
+    <Content Include="Content\css_serco\bootstrap-metro\alerts.less" />
+    <Content Include="Content\css_serco\bootstrap-metro\checkbox.less" />
+    <Content Include="Content\css_serco\bootstrap-metro\labels.less" />
+    <Content Include="Content\css_serco\bootstrap-metro\modals.less" />
+    <Content Include="Content\css_serco\bootstrap-metro\navbar-side.less" />
+    <Content Include="Content\css_serco\bootstrap-metro\radio.less" />
+    <Content Include="Content\css_serco\bootstrap-metro\tiles.less" />
+    <Content Include="Content\css_serco\bootstrap-metro\variables.less" />
+    <Content Include="Content\css_serco\bootstrap.less" />
+    <Content Include="Content\css_serco\custom.less" />
+    <Content Include="Content\css_serco\datepicker.less" />
+    <Content Include="Content\css_serco\fonts.less" />
+    <Content Include="Content\css_serco\theme.less" />
+    <Content Include="Content\css_serco\variables.less" />
+    <Content Include="Content\css_readify\bootstrap-metro\alerts.less" />
+    <Content Include="Content\css_readify\bootstrap-metro\checkbox.less" />
+    <Content Include="Content\css_readify\bootstrap-metro\labels.less" />
+    <Content Include="Content\css_readify\bootstrap-metro\modals.less" />
+    <Content Include="Content\css_readify\bootstrap-metro\navbar-side.less" />
+    <Content Include="Content\css_readify\bootstrap-metro\radio.less" />
+    <Content Include="Content\css_readify\bootstrap-metro\tiles.less" />
+    <Content Include="Content\css_readify\bootstrap-metro\variables.less" />
+    <Content Include="Content\css_readify\bootstrap.less" />
+    <Content Include="Content\css_readify\custom.less" />
+    <Content Include="Content\css_readify\datepicker.less" />
+    <Content Include="Content\css_readify\fonts.less" />
+    <Content Include="Content\css_readify\theme.less" />
+    <Content Include="Content\css_readify\variables.less" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -921,6 +957,9 @@
     <Content Include="Views\Incite\ThankYou.cshtml" />
     <Content Include="Views\Shared\_Layout_AnonIncite.cshtml" />
     <Content Include="Views\Shared\_Incite_AimStatement.cshtml" />
+    <Content Include="Views\Shared\_Serco_AimStatement.cshtml" />
+    <Content Include="Views\Shared\_Layout_Serco.cshtml" />
+    <Content Include="Views\Shared\_Layout_Readify.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

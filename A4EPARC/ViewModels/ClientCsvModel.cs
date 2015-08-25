@@ -18,6 +18,7 @@ namespace A4EPARC.ViewModels
         public int PreContemplationPoints { get; set; }
         public int ContemplationPoints { get; set; }
         public int ActionPoints { get; set; }
+        public string CaseId { get; set; }
         public string CaseWorkerName { get; set; }
         public string CaseWorkerId { get; set; }
         public string Comments { get; set; }
@@ -41,5 +42,8 @@ namespace A4EPARC.ViewModels
         public string UnemploymentInsuranceId { get; set; }
         public string IsOverEighteen { get; set; }
         public string HasDiplomaOrGED { get; set; }
+        public string IsReassessment { get; set; }
+        public string Provider { get; set; }
+        public string Project { get; set; }
     }
 }

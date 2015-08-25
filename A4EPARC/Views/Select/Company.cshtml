@@ -11,13 +11,14 @@
                 <h3 class="panel-title">Select a Company</h3>
             </div>
             <div class="panel-body">
-                @foreach (var company in Model)
+                @foreach (var company in Model.OrderBy(c => c.Value))
                 {
-                    <p class="text-center">
+                    <p class="text-center col-xs-4">
                         <button type="submit" value="@company.Key" class="btn btn-primary btn-block" name="CompanySelected">@company.Value</button>
                     </p>
                 }
             </div>
+
         </div>
 }
     </div>

@@ -44,33 +44,7 @@
         }
             <!--<a class="btn btn-primary" href="/Results/GeneratePdf/@Model.Id">PDF <span class="glyphicon glyphicon-download-alt"></span></a>-->
         </div>
-    <div class="col-md-offset-2 col-md-3 col-xs-offset-6 col-xs-6">
-
-        @if (Model.ActionIdToDisplay == 1)
-        {
-            <h3 style="color:darkblue;">Precontemplator</h3>
-        }
-        else if (Model.ActionIdToDisplay == 2)
-        {
-            <h3 style="color:darkblue;">Unauthentic Actor</h3>
-        }
-        else if (Model.ActionIdToDisplay == 3)
-        {
-            <h3 style="color:darkblue;">Contemplator</h3>
-        }
-        else if (Model.ActionIdToDisplay == 4)
-        {
-            <h3 style="color:darkblue;">Preparer</h3>
-        }
-        else if (Model.ActionIdToDisplay == 5)
-        {
-            <h3 style="color:darkblue;">Actor</h3>
-        }
-        <!--<a class="btn btn-primary" href="/Results/GeneratePdf/@Model.Id">PDF <span class="glyphicon glyphicon-download-alt"></span></a>-->
-    </div>
     }
-    else
-    {
         <div class="col-md-offset-2 col-md-3 col-xs-offset-6 col-xs-6">
 
             @if (Model.ActionIdToDisplay == 1)
@@ -94,7 +68,7 @@
                 <h3 style="color:darkblue;">A</h3>
             }
         </div>
-    }
+    
         <br />
         <br />
 </div>

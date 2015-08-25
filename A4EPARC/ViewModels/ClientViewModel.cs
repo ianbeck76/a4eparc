@@ -62,9 +62,15 @@ namespace A4EPARC.ViewModels
 
         public string CaseWorkerId { get; set; }
 
+        public string CaseId { get; set; }
+
         public string Stream { get; set; }
 
         public IEnumerable<string> StreamDropdownList { get; set; }
+
+        public string Project { get; set; }
+
+        public IEnumerable<string> ProjectDropdownList { get; set; }
 
         public string FirstName { get; set; }
 
@@ -126,6 +132,10 @@ namespace A4EPARC.ViewModels
 
         public IEnumerable<string> RTODropdownList { get; set; }
 
+        public string Provider { get; set; }
+
+        public IEnumerable<string> ProviderDropdownList { get; set; }
+
         public bool? IsCurrentlyCollectingBenefits { get; set; }
 
         public string UnemploymentInsuranceId { get; set; }
@@ -133,6 +143,8 @@ namespace A4EPARC.ViewModels
         public bool? IsOverEighteen { get; set; }
 
         public bool? HasDiplomaOrGED { get; set; }
+
+        public bool? IsReassessment { get; set; }
 
     }
 }

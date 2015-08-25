@@ -5,6 +5,9 @@ $(document).ready(function() {
     if (defaultLanguage != null) {
         $("#languageselect").val(defaultLanguage);
     }
+    else {
+        defaultLanguage = 'en-GB';
+    }
 
     if ($('#languageselect').length > 0) {
 

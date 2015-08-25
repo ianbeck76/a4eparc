@@ -32,6 +32,14 @@
             {
                 Layout = "~/Views/Shared/_Layout_ACA.cshtml";
             }
+            else if (companyId == 16)
+            {
+                Layout = "~/Views/Shared/_Layout_Readify.cshtml";
+            }
+            else if (companyId == 17)
+            {
+                Layout = "~/Views/Shared/_Layout_Serco.cshtml";
+            }
             else
             {
                 Layout = "~/Views/Shared/_Layout.cshtml";
@@ -68,6 +76,14 @@
             {
                 Layout = "~/Views/Shared/_Layout_ACA.cshtml";
             }
+            else if (companyId == 16)
+            {
+                Layout = "~/Views/Shared/_Layout_Readify.cshtml";
+            }
+            else if (companyId == 17)
+            {
+                Layout = "~/Views/Shared/_Layout_Serco.cshtml";
+            }
             else
             {
                 Layout = "~/Views/Shared/_Layout.cshtml";
@@ -101,6 +117,14 @@
             else if (companyId == 12)
             {
                 Layout = "~/Views/Shared/_Layout_ACA.cshtml";
+            }
+            else if (companyId == 16)
+            {
+                Layout = "~/Views/Shared/_Layout_Readify.cshtml";
+            }
+            else if (companyId == 17)
+            {
+                Layout = "~/Views/Shared/_Layout_Serco.cshtml";
             }
             else
             {
@@ -138,6 +162,14 @@
                 {
                     Layout = "~/Views/Shared/_Layout_ACA.cshtml";
                 }
+                else if (companyId == 16)
+                {
+                    Layout = "~/Views/Shared/_Layout_Readify.cshtml";
+                }
+                else if (companyId == 17)
+                {
+                    Layout = "~/Views/Shared/_Layout_Serco.cshtml";
+                }
                 else
                 {
                     Layout = "~/Views/Shared/_Layout_Incite.cshtml";
@@ -168,6 +200,14 @@
             {
                 Layout = "~/Views/Shared/_Layout_ACA.cshtml";
             }
+            else if (companyId == 16)
+            {
+                Layout = "~/Views/Shared/_Layout_Readify.cshtml";
+            }
+            else if (companyId == 17)
+            {
+                Layout = "~/Views/Shared/_Layout_Serco.cshtml";
+            }
             else
             {
                 Layout = "~/Views/Shared/_Layout.cshtml";
@@ -178,6 +218,90 @@
             Layout = "~/Views/Shared/_Layout_ACA.cshtml";
         }
 
+    }
+    else if (Request.Url.AbsoluteUri.Contains("readify"))
+    {
+        if (Request.IsAuthenticated)
+        {
+            if (companyId == 5)
+            {
+                Layout = "~/Views/Shared/_Layout_A4E.cshtml";
+            }
+            else if (companyId == 11 || companyId == 13)
+            {
+                Layout = "~/Views/Shared/_Layout_GLS.cshtml";
+            }
+            else if (companyId == 10)
+            {
+                Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+            }
+            else if (companyId == 14)
+            {
+                Layout = "~/Views/Shared/_Layout_Incite.cshtml";
+            }
+            else if (companyId == 12)
+            {
+                Layout = "~/Views/Shared/_Layout_ACA.cshtml";
+            }
+            else if (companyId == 16)
+            {
+                Layout = "~/Views/Shared/_Layout_Readify.cshtml";
+            }
+            else if (companyId == 17)
+            {
+                Layout = "~/Views/Shared/_Layout_Serco.cshtml";
+            }
+            else
+            {
+                Layout = "~/Views/Shared/_Layout.cshtml";
+            }
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_Layout_Readify.cshtml";
+        }
+    }
+    else if (Request.Url.AbsoluteUri.Contains("sparc"))
+    {
+        if (Request.IsAuthenticated)
+        {
+            if (companyId == 5)
+            {
+                Layout = "~/Views/Shared/_Layout_A4E.cshtml";
+            }
+            else if (companyId == 11 || companyId == 13)
+            {
+                Layout = "~/Views/Shared/_Layout_GLS.cshtml";
+            }
+            else if (companyId == 10)
+            {
+                Layout = "~/Views/Shared/_Layout_Exemplar.cshtml";
+            }
+            else if (companyId == 14)
+            {
+                Layout = "~/Views/Shared/_Layout_Incite.cshtml";
+            }
+            else if (companyId == 12)
+            {
+                Layout = "~/Views/Shared/_Layout_ACA.cshtml";
+            }
+            else if (companyId == 16)
+            {
+                Layout = "~/Views/Shared/_Layout_Readify.cshtml";
+            }
+            else if (companyId == 17)
+            {
+                Layout = "~/Views/Shared/_Layout_Serco.cshtml";
+            }
+            else
+            {
+                Layout = "~/Views/Shared/_Layout.cshtml";
+            }
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_Layout_Serco.cshtml";
+        }
     }
     else
     {
@@ -202,6 +326,14 @@
             else if (companyId == 12)
             {
                 Layout = "~/Views/Shared/_Layout_ACA.cshtml";
+            }
+            else if (companyId == 16)
+            {
+                Layout = "~/Views/Shared/_Layout_Readify.cshtml";
+            }
+            else if (companyId == 17)
+            {
+                Layout = "~/Views/Shared/_Layout_Serco.cshtml";
             }
             else
             {

@@ -14,6 +14,7 @@ using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Text;
+using System.Configuration;
 namespace A4EPARC.Controllers
 {
     [Authorize(Roles = "IsViewer")]
@@ -346,7 +347,14 @@ namespace A4EPARC.Controllers
                 sb.Append(d.FirstName + ",");
                 sb.Append(d.Surname+ ",");
                 sb.Append(d.HowManyTimesHasSurveyBeenCompleted + ",");
-                sb.Append(d.DateOfBirth.ToString("dd/MM/yyyy ") + ",");
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["UKDateFormat"]))
+                {
+                    sb.Append(d.DateOfBirth.ToString("dd/MM/yyyy ") + ",");
+                }
+                else
+                {
+                    sb.Append(d.DateOfBirth.ToString("MM/dd/yyyy ") + ",");
+                }
                 sb.Append(d.State + ",");
                 sb.Append(d.RTO + ",");
                 sb.Append(d.ActionName + ",");
@@ -368,7 +376,6 @@ namespace A4EPARC.Controllers
             var sb = new StringBuilder();
             sb.Append("CreatedDate,Company,Username,Previous Surveys,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points," + fieldstring);
 
-         //   sb.Append("CreatedDate,Username,FirstName,Surname,CaseWorker Name,Case Worker ID,JobSeekerID,Previous Surveys,Date Of Birth,Gender,Length Of Unemployment,State,Stream,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points,Comments, Completed All 5 Surveys, Is Islander");
             sb.AppendLine(Environment.NewLine);
 
             foreach (var d in data)
@@ -389,6 +396,10 @@ namespace A4EPARC.Controllers
                 {
                     sb.Append(d.Agency + ",");
                 }
+                if (fieldstring.Contains("CaseId"))
+                {
+                    sb.Append(d.CaseId + ",");
+                }
                 if (fieldstring.Contains("CaseWorkerId"))
                 {
                     sb.Append(d.CaseWorkerId + ",");
@@ -407,7 +418,14 @@ namespace A4EPARC.Controllers
                 }
                 if (fieldstring.Contains("DateOfBirth"))
                 {
-                    sb.Append(d.DateOfBirth.ToString("MM/dd/yyyy ") + ",");
+                    if (Convert.ToBoolean(ConfigurationManager.AppSettings["UKDateFormat"]))
+                    {
+                        sb.Append(d.DateOfBirth.ToString("dd/MM/yyyy ") + ",");
+                    }
+                    else
+                    {
+                        sb.Append(d.DateOfBirth.ToString("MM/dd/yyyy ") + ",");
+                    }
                 }
                 if (fieldstring.Contains("EnrolmentID"))
                 {
@@ -437,6 +455,10 @@ namespace A4EPARC.Controllers
                 {
                     sb.Append(d.IsOverEighteen + ",");
                 }
+                if (fieldstring.Contains("IsReassessment"))
+                {
+                    sb.Append(d.IsReassessment + ",");
+                }
                 if (fieldstring.Contains("JobSeekerID"))
                 {
                     sb.Append(d.JobSeekerID + ",");
@@ -444,6 +466,14 @@ namespace A4EPARC.Controllers
                 if (fieldstring.Contains("LengthOfUnemployment"))
                 {
                     sb.Append(d.LengthOfUnemployment + ",");
+                }
+                if (fieldstring.Contains("Provider"))
+                {
+                    sb.Append(d.Provider + ",");
+                }
+                if (fieldstring.Contains("Project"))
+                {
+                    sb.Append(d.Project + ",");
                 }
                 if (fieldstring.Contains("RTO"))
                 {

@@ -17,7 +17,14 @@
         }
         else
         {
-            @Html.Partial("_AimStatement", @Model)
+            if (AuthenticationService.GetCompanyId() == 17)
+            {
+                @Html.Partial("_Serco_AimStatement", @Model)
+            }
+            else
+            {
+                @Html.Partial("_AimStatement", @Model)
+            }
         }
 
       <br/> 
