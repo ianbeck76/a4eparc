@@ -1,17 +1,35 @@
-﻿<div class="container form-horizontal">
+﻿@model bool
+<div class="container form-horizontal">
     
-    <h1 class="text-center">Thank you for participating!</h1>
+    <h1 class="text-center">Thank you for completing the survey!</h1>
 
 </div>    
 
 <br />
-<h2 class="text-center">(you can now close this page)</h2>
+<div class="container">
+    <div class="row">
+        <h3 style="color:black;font-weight:lighter">When you file your weekly claim for benefits and are asked to record your work seeking activities for the week that you take the survey, you should indicate that one of your activities was the "Rethinking survey." You may only take the survey once.</h3>
+
+        @if (Model == true)
+        {
+            <h3 style="font-weight:lighter">Congratulations!</h3><h3 style="color:black;font-weight:lighter">You meet the minimum requirements for registering for Rethinking Job Search! Want to know more? <a target="_blank" style="color:black;font-weight:lighter; text-decoration: underline" href="http://rethinkingjobsearch.org/participant-information/participant-registration/">Click here to return to the Rethinking Job Search website to see a video about the program and register!</a></h3>
+        }
+        else
+        {
+            <h3 style="color:black;font-weight:lighter">Because you indicated that you do not meet one of the following three requirements, you are not eligible to register for the program. If this was by mistake, please contact your local WorkSource Center. To be eligible to register for Rethinking Job Search, you must:</h3>
+            <ul>
+                <li>
+                    <h3 style="color:black;font-weight:lighter">Be at least 18 years old</h3>
+                </li>
+                <li>
+                    <h3 style="color:black;font-weight:lighter">Have a High School Diploma or GED</h3>
+                </li>
+                <li>
+                    <h3 style="color:black;font-weight:lighter">Be currently collecting Unemployment Insurance Benefits in Oregon</h3>
+                </li>
+            </ul>
+        }
 
 
-<div class="form-group">
-    <div class="col-md-offset-3 col-md-2 col-xs-6">
-      <!--  <a class="btn btn-primary" href="/InciteSurvey/PageOne">Back to Start <span class="glyphicon glyphicon-backward"></span></a>-->
     </div>
-        <br />
-        <br />
 </div>

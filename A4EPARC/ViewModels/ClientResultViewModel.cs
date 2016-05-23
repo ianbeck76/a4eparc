@@ -33,5 +33,6 @@ namespace A4EPARC.ViewModels
         public int ContemplationPoints { get; set; }
         [ScaffoldColumn(false)]
         public int ActionPoints { get; set; }
+        public bool? Deleted { get; set; }
     }
 }

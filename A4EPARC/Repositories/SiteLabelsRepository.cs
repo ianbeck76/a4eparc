@@ -63,6 +63,28 @@ namespace A4EPARC.Repositories
             return siteLabels;
         }
 
+        public List<SiteFieldValuesViewModel> GetFieldValues()
+        {
+            var values = HttpContext.Current.Cache["GetSiteFieldValues"] as List<SiteFieldValuesViewModel>;
+
+            if (values != null)
+            {
+                if (values.Any())
+                {
+                    return values;
+                }
+            }
+
+            var query = @"SELECT s.ParentName, s.[Key], s.[Value], s.LanguageCode, s.FieldType, s.OrderNumber
+                                    FROM [dbo].[SiteFieldValues] s
+                                    ORDER BY s.ParentName, s.OrderNumber";
+            values = (List<SiteFieldValuesViewModel>)Query<SiteFieldValuesViewModel>(query).ToList();
+
+            HttpContext.Current.Cache.Insert("GetSiteFieldValues", values, null, DateTime.Now.AddHours(24), TimeSpan.Zero);
+
+            return values;
+        }
+
 
         public List<SiteLabelsViewModel> GetJtableView()
         {
@@ -94,5 +116,6 @@ namespace A4EPARC.Repositories
         int Add(SiteLabelsViewModel model);
         int Save(SiteLabelsViewModel model);
         List<SiteLabelsViewModel> All();
+        List<SiteFieldValuesViewModel> GetFieldValues();
     }
 }

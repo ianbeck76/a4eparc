@@ -56,7 +56,7 @@ namespace A4EPARC.Controllers
                 DateTo = dateto,
                 JobSeekerID = jobseekerid,
                 Company = company,
-                Companies = _companyRepository.All().Select(c => c.Name).ToList(),
+                Companies = _companyRepository.All().Where(c => c.IsActive == true).Select(c => c.Name).ToList(),
                 EnvironmentList = new List<string> { "BOTH", "LIVE", "TEST" },
                 Environment = environment
             };

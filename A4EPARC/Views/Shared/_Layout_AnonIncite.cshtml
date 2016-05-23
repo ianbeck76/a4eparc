@@ -19,14 +19,26 @@
             
             <div class="container-fluid navbar-inner">                      
             <form class="collapse navbar-collapse navbar-form navbar-left row">
-                <div class="hidden-xs hidden-sm hidden-md">
-                    <a title="Home" href="/incite"><img style="max-height: 80px;padding-right:1em;" src="~/Content/images/WorksourceOregonLogo.png" alt="" /></a>
-                    <a title="Home" href="/incite"><img style="max-height: 80px;" src="~/Content/images/AmercianJobCenterlogo.png" alt="" /></a>
-                </div>
-                <div class="hidden-lg">
-                    <a title="Home" href="/incite"><img style="max-height: 80px;max-width: 300px;padding-right:1em;" src="~/Content/images/WorksourceOregonLogo.png" alt="" /></a>
-                    <a title="Home" href="/incite"><img style="max-height: 80px;max-width: 250px" src="~/Content/images/AmercianJobCenterlogo.png" alt="" /></a>
-                </div>
+                @if (Request.IsAuthenticated)
+                {
+                    <div class="hidden-xs hidden-sm hidden-md">
+                        <a title="Home" href="/Home"><img style="max-height: 100px;padding-right:2em;" src="~/Content/images/incite_rethinking.png" alt="" /></a>
+                    </div>
+                    <div class="hidden-lg">
+                        <a title="Home" href="/Home"><img style="max-height: 100px;max-width: 350px;padding-right:2em;" src="~/Content/images/incite_rethinking.png" alt="" /></a>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="hidden-xs hidden-sm hidden-md">
+                        <a title="Home" href="/incite"><img style="max-height: 100px;padding-right:2em;" src="~/Content/images/incite_rethinking.png" alt="" /></a>
+                    </div>
+                    <div class="hidden-lg">
+                        <a title="Home" href="/incite"><img style="max-height: 100px;max-width: 350px;padding-right:2em;" src="~/Content/images/incite_rethinking.png" alt="" /></a>
+                    </div>
+
+                }
             </form>
             </div>
         </div>  
@@ -38,13 +50,17 @@
         </div>
     </div>
 
+
     <footer>
         <div id="footer" class="container-fluid footer">
-            <div class="row" style="padding-bottom:1em">
-                <div class="col-xs-11 col-md-7">
+            <div class="row">
+                <div class="col-xs-3">
                     <p>&copy; @DateTime.UtcNow.Year Powered by Esher House Pty Ltd</p>
                 </div>
-                <div class="col-xs-1 col-md-1 pull-right text-right">
+                <div class="col-xs-6">
+                    <p>All personal information collected on this website is protected by the Privacy Act 1988 (the Privacy Act). You can click <a style="color:white;font-weight:bold" target="_blank" href="~/Images/Pdfs/PrivacyStatement.pdf">here</a>for more details.</p>
+                </div>
+                <div class="col-xs-offset-2 col-xs-1 pull-right text-right">
                     <a href="#top" title="Top"><i class="fa fa-chevron-up fa-lg"></i></a>
                 </div>
             </div>

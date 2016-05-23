@@ -5,8 +5,6 @@
 
         @Html.Partial("_ResultHeader", Model)
 
-        @*@Html.Partial("_InterventionGuide", Model)*@
-
 </div>    
 
 <br />
@@ -48,23 +46,23 @@
 
         @if (Model.ActionIdToDisplay == 1)
         {
-            <h3 style="color:darkblue;">Precontemplator</h3>
+            <h3 style="color:darkblue;">PC</h3>
         }
         else if (Model.ActionIdToDisplay == 2)
         {
-            <h3 style="color:darkblue;">Unauthentic Actor</h3>
+            <h3 style="color:darkblue;">UA</h3>
         }
         else if (Model.ActionIdToDisplay == 3)
         {
-            <h3 style="color:darkblue;">Contemplator</h3>
+            <h3 style="color:darkblue;">C</h3>
         }
         else if (Model.ActionIdToDisplay == 4)
         {
-            <h3 style="color:darkblue;">Preparer</h3>
+            <h3 style="color:darkblue;">P</h3>
         }
         else if (Model.ActionIdToDisplay == 5)
         {
-            <h3 style="color:darkblue;">Actor</h3>
+            <h3 style="color:darkblue;">A</h3>
         }
         <!--<a class="btn btn-primary" href="/Results/GeneratePdf/@Model.Id">PDF <span class="glyphicon glyphicon-download-alt"></span></a>-->
     </div>

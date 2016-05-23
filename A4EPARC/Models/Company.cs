@@ -5,6 +5,7 @@
         public string Name { get; set; }
         public string EmailFromAddress { get; set; }
         public string DefaultPassword { get; set; }
+        public bool? IsActive { get; set; }
     }
 
     public interface ICompany : IEntity
@@ -12,5 +13,6 @@
         string Name { get; set; }
         string EmailFromAddress { get; set; }
         string DefaultPassword { get; set; }
+        bool? IsActive { get; set; }
     }
 }

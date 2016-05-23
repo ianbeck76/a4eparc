@@ -7,6 +7,8 @@
         Stream = 3,
         RTO = 4,
         Provider = 5,
-        Project = 6
+        Project = 6,
+        MaritalStatus = 7,
+        NumberOfChildren = 8
     }
 }

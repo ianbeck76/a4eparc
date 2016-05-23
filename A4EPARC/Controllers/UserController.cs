@@ -44,7 +44,7 @@ namespace A4EPARC.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult GetCompanies()
         {
-            var companies = _companyRepository.All().Select(c => c.Name);
+            var companies = _companyRepository.All().Where(c => c.IsActive == true).Select(c => c.Name);
 
             return Json(new { Result = "OK", Options = companies });
         }

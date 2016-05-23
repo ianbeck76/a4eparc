@@ -6,6 +6,10 @@
         <input type="hidden" name="ResultId" value="@Model.ResultId" id="ResultId" />
         @Html.ValidationMessage("WebserviceUnavailable", new { @style = "color:red;" })
         @Html.ValidationMessage("RecordAlreadyAdded", new { @style = "color:red;" })
+        @if (Model.ResultId > 0)
+        {
+            <a style="font-weight:bold" title="Home" href="/">click here</a>
+        }
         <h4 id="QuestionHeaderLabel">@LabelService.Get("QuestionHeaderLabel", "Please answer the following using the 5 point scale: 1=Strongly Disagree; 2=Disagree; 3=Neutral; 4=Agree; 5=Strongly Agree", Model.SiteLabels, Model.SchemeId)</h4>
         <hr class="divider" />
     </div>

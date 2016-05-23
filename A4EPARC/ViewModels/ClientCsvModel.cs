@@ -45,5 +45,10 @@ namespace A4EPARC.ViewModels
         public string IsReassessment { get; set; }
         public string Provider { get; set; }
         public string Project { get; set; }
+        public string CustomerCaseNumber { get; set; }
+        public string MaritalStatus { get; set; }
+        public string NumberOfChildren { get; set; }
+        public string CustomerId { get; set; }
+        public string CustomerEmail { get; set; }
     }
 }

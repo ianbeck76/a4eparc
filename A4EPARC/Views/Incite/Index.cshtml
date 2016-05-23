@@ -10,6 +10,7 @@
 {
     <h2 class="text-center no-print">Welcome!</h2>
 
+    
         @Html.Partial("_Incite_AimStatement", @Model)
 
 
@@ -237,7 +238,7 @@
         {
 
             <div class="form-group" id="IsCurrentlyCollectingBenefitsGroup">
-                <label class="col-sm-4 control-label" id="IsCurrentlyCollectingBenefitsLabel">@LabelService.Get("IsCurrentlyCollectingBenefitsLabel", "Are you currently collecting Unemployment Insurance Benefits?", Model.SiteLabels, Model.SchemeId)</label>
+                <label class="col-sm-4 control-label" id="IsCurrentlyCollectingBenefitsLabel">@LabelService.Get("IsCurrentlyCollectingBenefitsLabel", "Are you currently collecting Oregon Unemployment Insurance Benefits?", Model.SiteLabels, Model.SchemeId)</label>
                 <input class="form-control" type="hidden" id="IsCurrentlyCollectingBenefits" name="IsCurrentlyCollectingBenefits" value="@Model.IsCurrentlyCollectingBenefits" data-val=@Model.PageItems.FirstOrDefault(p => p.Name == "IsCurrentlyCollectingBenefits").IsRequired.GetValueOrDefault().ToString().ToLower() , data-val-required="required" />
                 <div class="col-md-6 btn-group" data-toggle="buttons">
                     <button type="button" class="btn btn-default yesno col-md-3 @(Model.IsCurrentlyCollectingBenefits == true ? "active" : "")" data-radio-name="IsCurrentlyCollectingBenefits" data-text="true">Yes</button>
@@ -246,7 +247,7 @@
                 <span class="col-md-1" data-valmsg-for="IsCurrentlyCollectingBenefits" data-valmsg-replace="true"></span>
             </div>
         }
-        @if (Model.PageItems.FirstOrDefault(p => p.Name == "UnemploymentInsuranceId") != null)
+        @*@if (Model.PageItems.FirstOrDefault(p => p.Name == "UnemploymentInsuranceId") != null)
         {
 
             <div class="form-group" id="UnemploymentInsuranceIdLabelGroup">
@@ -256,7 +257,39 @@
                 </div>
                 <span class="col-md-1" data-valmsg-for="UnemploymentInsuranceId" data-valmsg-replace="true"></span>
             </div>
+        }*@
+        @if (Model.PageItems.FirstOrDefault(p => p.Name == "UnemploymentInsuranceId") != null)
+        {
+            <div class="form-group" id="UnemploymentInsuranceGroup">
+                <label class="col-md-4 col-xs-12 control-label" id="UnemploymentInsuranceLabel">@LabelService.Get("UnemploymentInsuranceIdLabel", "Unemployment Insurance Customer ID (CID)", Model.SiteLabels, Model.SchemeId)</label>
+                <div class="col-xs-3 col-sm-1">
+                    @Html.TextBoxFor(m => m.UnemploymentInsurance1, new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "UnemploymentInsuranceId").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required", @maxlength = 2 })​
+                </div>
+                <div class="col-xs-3 col-sm-1">
+                    @Html.TextBoxFor(m => m.UnemploymentInsurance2, new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "UnemploymentInsuranceId").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required", @maxlength = 3 })
+                </div>
+                <div class="col-xs-3 col-sm-1">
+                    @Html.TextBoxFor(m => m.UnemploymentInsurance3, new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "UnemploymentInsuranceId").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required", @maxlength = 3 })
+                </div>
+                <div class="col-xs-3 col-sm-1">
+                    @Html.TextBoxFor(m => m.UnemploymentInsurance4, new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "UnemploymentInsuranceId").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required", @maxlength = 3 })
+                </div>
+                <div class="col-xs-0 col-sm-2 control-label">
+                    <label>(e.g. 12-345.678.910)</label>
+                </div>
+                <!-- <div class="col-xs-5 hidden-sm hidden-md hidden-lg">
+                    <br />
+                    @Html.TextBoxFor(m => m.UnemploymentInsurance4, new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "UnemploymentInsuranceId").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required", @maxlength = 3 })
+                    <br />
+                </div>-->
+
+                <span class="col-md-1" data-valmsg-for="UnemploymentInsurance1" data-valmsg-replace="true"></span>
+                <span class="col-md-1" data-valmsg-for="UnemploymentInsurance2" data-valmsg-replace="true"></span>
+                <span class="col-md-1" data-valmsg-for="UnemploymentInsurance3" data-valmsg-replace="true"></span>
+                <span class="col-md-1" data-valmsg-for="UnemploymentInsurance4" data-valmsg-replace="true"></span>
+            </div>
         }
+        
         @if (Model.PageItems.FirstOrDefault(p => p.Name == "IsOverEighteen") != null)
         {
 
@@ -281,6 +314,53 @@
                     <button type="button" class="btn btn-default yesno col-md-3 @(Model.HasDiplomaOrGED == false ? "active" : "")" data-radio-name="HasDiplomaOrGED" data-text="false">No</button>
                 </div>
                 <span class="col-md-1" data-valmsg-for="HasDiplomaOrGED" data-valmsg-replace="true"></span>
+            </div>
+        }
+        @if (Model.PageItems.FirstOrDefault(p => p.Name == "MaritalStatus") != null)
+        {
+
+            <div class="form-group" id="MaritalStatusGroup">
+                <label class="col-sm-4 control-label" id="MaritalStatusLabel">@LabelService.Get("MaritalStatusLabel", "Marital Status", Model.SiteLabels, Model.SchemeId)</label>
+                <div class="col-md-6" style="margin-bottom: 10px">
+                    @if (Model.MaritalStatusDropdownList.Any())
+                    {
+                        @Html.DropDownListFor(m => m.MaritalStatus, new SelectList(Model.MaritalStatusDropdownList), "Please Select", new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "MaritalStatus").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => m.MaritalStatus, new { @class = "form-control", @maxlength = "35", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "MaritalStatus").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required" })
+                    }
+                </div>
+                <span class="col-md-1" data-valmsg-for="MaritalStatus" data-valmsg-replace="true"></span>
+            </div>
+        }
+        @if (Model.PageItems.FirstOrDefault(p => p.Name == "NumberOfChildren") != null)
+        {
+
+            <div class="form-group" id="NumberOfChildrenGroup">
+                <label class="col-sm-4 control-label" id="NumberOfChildrenLabel">@LabelService.Get("NumberOfChildrenLabel", "Number of Children", Model.SiteLabels, Model.SchemeId)</label>
+                <div class="col-md-6" style="margin-bottom: 10px">
+                    @if (Model.NumberOfChildrenDropdownList.Any())
+                    {
+                        @Html.DropDownListFor(m => m.NumberOfChildren, new SelectList(Model.NumberOfChildrenDropdownList), "Please Select", new { @class = "form-control", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "NumberOfChildren").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => m.NumberOfChildren, new { @class = "form-control", @maxlength = "2", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "NumberOfChildren").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required" })
+                    }
+                </div>
+                <span class="col-md-1" data-valmsg-for="NumberOfChildren" data-valmsg-replace="true"></span>
+            </div>
+        }
+        @if (Model.PageItems.FirstOrDefault(p => p.Name == "CustomerEmail") != null)
+        {
+
+            <div class="form-group" id="CustomerEmailLabelGroup">
+                <label class="col-sm-4 control-label" id="CustomerEmailLabel">@LabelService.Get("CustomerEmailLabel", "Email Address", Model.SiteLabels, Model.SchemeId)</label>
+                <div class="col-md-6" style="margin-bottom: 10px">
+                    @Html.TextBoxFor(m => m.CustomerEmail, new { @class = "form-control email", @maxlength = "50", @data_val = @Model.PageItems.FirstOrDefault(p => p.Name == "CustomerEmail").IsRequired.GetValueOrDefault().ToString().ToLower(), @data_val_required = "required" })
+                </div>
+                <span class="col-md-1" data-valmsg-for="CustomerEmail" data-valmsg-replace="true"></span>
             </div>
         }
     </div>

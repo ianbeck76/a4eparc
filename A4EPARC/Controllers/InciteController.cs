@@ -20,6 +20,7 @@ using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.html;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using A4EPARC.Extensions;
 
 namespace A4EPARC.Controllers
 {
@@ -30,18 +31,23 @@ namespace A4EPARC.Controllers
         private readonly ICompanyRepository _companyRepository;
         private readonly ISiteLabelsRepository _siteLabelsRepository;
         private readonly IResultService _resultService;
+        private readonly IEmailRepository _emailRepository;
+        private readonly IEmailService _emailService;
         
         public InciteController(IClientRepository clientRepository, 
             IQuestionsService questionsService, 
             ISiteLabelsRepository siteLabelsRepository,
             ICompanyRepository companyRepository,
-            IResultService resultService)
+            IResultService resultService,
+            IEmailRepository emailRepository, IEmailService emailService)
         {
             _clientRepository = clientRepository;
             _questionsService = questionsService;
             _siteLabelsRepository = siteLabelsRepository;
             _companyRepository = companyRepository;
             _resultService = resultService;
+            _emailRepository = emailRepository;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -65,6 +71,19 @@ namespace A4EPARC.Controllers
             return View(viewmodel);
         }
 
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         [HttpPost]
         public ActionResult Index(ClientViewModel viewmodel)
         {
@@ -77,10 +96,42 @@ namespace A4EPARC.Controllers
 
             viewmodel.SiteLabels = _siteLabelsRepository.Get(viewmodel.SchemeId, LanguageCode);
 
+            var unemploymentInsuranceId = viewmodel.PageItems.FirstOrDefault(c => c.Name == "UnemploymentInsuranceId");
+            if (unemploymentInsuranceId != null)
+            {
+                if (unemploymentInsuranceId.IsRequired.GetValueOrDefault() == true)
+                {
+                    if (string.IsNullOrEmpty(viewmodel.UnemploymentInsurance1)
+                        || string.IsNullOrEmpty(viewmodel.UnemploymentInsurance2)
+                        || string.IsNullOrEmpty(viewmodel.UnemploymentInsurance3)
+                        || string.IsNullOrEmpty(viewmodel.UnemploymentInsurance4))
+                    {
+                        ModelState.AddModelError("UnemploymentInsurance", "Unemployment Insurance ID Required");
+                    }
+                }
+            }
+
             if(!ModelState.IsValid)
             {
                 viewmodel = InitializeDropdowns(viewmodel, companyId);
+
+                if (!string.IsNullOrWhiteSpace(viewmodel.CustomerEmail))
+                {
+                    if (!IsValidEmail(viewmodel.CustomerEmail))
+                    {
+                        ModelState.AddModelError("CustomerEmail", "Email Address is invalid");                        
+                    }
+                }
+
                 return View(viewmodel);
+            }
+
+            if (!string.IsNullOrEmpty(viewmodel.UnemploymentInsurance1))
+            {
+                viewmodel.UnemploymentInsuranceId = viewmodel.UnemploymentInsurance1 + "-"
+                    + viewmodel.UnemploymentInsurance2 + "."
+                    + viewmodel.UnemploymentInsurance3 + "."
+                    + viewmodel.UnemploymentInsurance4;
             }
 
             viewmodel.UserId = Convert.ToInt32(ConfigurationManager.AppSettings["InciteUserId"]);
@@ -176,7 +227,47 @@ namespace A4EPARC.Controllers
         [HttpGet]
         public ActionResult ThankYou(int id)
         {
-            return View();
+            var viewmodel = _clientRepository.GetClient(id);
+
+            if (viewmodel != null 
+                && !string.IsNullOrWhiteSpace(viewmodel.CustomerEmail) 
+                && viewmodel.EmailSentDate == null)
+            {
+                if (SendInciteEmail("noreply@incite.esherhouse.com", viewmodel.CustomerEmail))
+                {
+                    _clientRepository.UpdateEmailSentDate(id);
+                }   
+            }
+
+            if (viewmodel.HasDiplomaOrGED.GetValueOrDefault() 
+                && viewmodel.IsOverEighteen.GetValueOrDefault() 
+                && viewmodel.IsCurrentlyCollectingBenefits.GetValueOrDefault())
+            {
+                return View(true);
+            }
+            return View(false);
+        }
+
+        private bool SendInciteEmail(string fromEmail, string toEmail)
+        {
+            if (_emailRepository.GetEmailLogCount() < 201)
+            {
+                try
+                {
+                    var html = new SerializeService().RenderRazorViewToString(this.ControllerContext,
+                                                                        "_InciteEmail");
+
+                    _emailService.Send(fromEmail, toEmail, "Rethinking Job Search – Register Today!", html);
+
+                    _emailRepository.InsertEmailLog();
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
 
         [HttpGet]
@@ -346,8 +437,18 @@ namespace A4EPARC.Controllers
             model.YearDropdownList = GetYearDropdownList();
             model.LengthOfUnemploymentDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.LengthOfUnemployment);
             model.StateDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.State);
+            model.ProviderDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.Provider);
+            model.ProjectDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.Project);
             model.StreamDropdownList = GetStreamDropdownList(companyId);
             model.RTODropdownList = GetCompanySelectValues(companyId, (int)SelectKey.RTO);
+            model.MaritalStatusDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.MaritalStatus);
+            model.NumberOfChildrenDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.NumberOfChildren);
+            if (model.NumberOfChildrenDropdownList.Any())
+            {
+                var list = model.NumberOfChildrenDropdownList.ToList();
+                list.Sort((x, y) => Utils.ExtractNumber(x).CompareTo(Utils.ExtractNumber(y)));
+                model.NumberOfChildrenDropdownList = list;
+            }
             return model;
         }
     }

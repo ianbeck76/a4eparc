@@ -55,24 +55,32 @@ namespace A4EPARC.Controllers
             company = GetParameterValue("res", "company", company);
             username = GetParameterValue("res", "username", username);
 
-            if (!GetCurrentUser().IsSuperAdmin)
+            var isSuperAdmin = GetCurrentUser().IsSuperAdmin; 
+
+            if (!isSuperAdmin)
             {
                 company = GetCompanyDetails().Name;
             }
 
             var query = _clientRepository.All(ConvertMinDate(datefrom), ConvertMaxDate(dateto), jobseekerid, surname, username, company);
-            
+
+            if (!isSuperAdmin && query.Any())
+            {
+                query = query.Where(q => q.Deleted == false);
+            }
+
             var model = new ClientResultListViewModel
             {
                 GridSortOptions = gridSortOptions,
                 Results = query.AsPagination(page.GetValueOrDefault() == 0 ? 1 : page.GetValueOrDefault(), 10),
+                SiteLabels = _siteLabelsRepository.All(),
                 DateFrom = datefrom,
                 DateTo = dateto,
                 JobSeekerID = jobseekerid,
                 Surname = surname,
                 Username = username,
                 Company = company,
-                Companies = _companyRepository.All().Select(c => c.Name).ToList()
+                Companies = _companyRepository.All().Where(c => c.IsActive == true).OrderBy(c => c.Name).Select(c => c.Name).ToList()
             };
 
             return View(model);
@@ -229,12 +237,20 @@ namespace A4EPARC.Controllers
             }
         }
 
-        public ActionResult Delete(int id)
+        [HttpPost]
+        public JsonResult Delete(int? id)
         {
-            var viewmodel = _clientRepository.GetClient(id);
-
-            return RedirectToAction("Index", new { id });
-        }
+            var deleted = _clientRepository.GetClient(id.GetValueOrDefault()).Deleted;
+            if (deleted)
+            {
+                _clientRepository.Activate(id.GetValueOrDefault());
+            }
+            else 
+            {
+                _clientRepository.Delete(id.GetValueOrDefault());
+            }
+            return Json( deleted );
+        }      
 
         public FileResult ExportList(string datefrom, string dateto, string jobseekerid, string surname, string username, string company)
         {
@@ -245,27 +261,27 @@ namespace A4EPARC.Controllers
             company = GetParameterValue("res", "company", company);
             username = GetParameterValue("res", "username", username);
 
-            var items = _companyRepository.GetPageItems().Where(c => c.CompanyId == AuthenticationService.GetCompanyId()).ToList();
+            var companyId = AuthenticationService.GetCompanyId();
+
+            if (GetCurrentUser().IsSuperAdmin && !string.IsNullOrWhiteSpace(company))
+            {
+                var comp = CompanyRepository.Where("Name = @CompanyName", new { CompanyName = company }).FirstOrDefault();
+                if (comp != null)
+                {
+                    companyId = comp.Id;
+                }
+            }
+
+            var items = _companyRepository.GetPageItems().Where(c => c.CompanyId == companyId).ToList();
 
             var sb = new StringBuilder();
 
             var i = 0;
 
-            if (GetCurrentUser().IsSuperAdmin)
+            foreach (var item in items.Where(s => s.IsDisplay == true).OrderBy(s => s.Name))
             {
-                foreach (var item in items.OrderBy(s => s.Name))
-                {
-                    sb.Append(item.Name);
-                    sb.Append(",");
-                }
-            }
-            else 
-            {
-                foreach (var item in items.Where(s => s.IsDisplay == true).OrderBy(s => s.Name))
-                {
-                    sb.Append(item.Name);
-                    sb.Append(",");
-                }
+                sb.Append(item.Name);
+                sb.Append(",");
             }
 
             var fieldstring = "";
@@ -275,9 +291,6 @@ namespace A4EPARC.Controllers
             }
 
             var data = _clientRepository.GetCsvData(ConvertMinDate(datefrom), ConvertMaxDate(dateto), jobseekerid, surname, username, company, fieldstring).ToList();
-
-
-            var companyId = AuthenticationService.GetCompanyId();
 
             if (companyId == 11 || companyId == 13)
             {
@@ -337,7 +350,7 @@ namespace A4EPARC.Controllers
         private StringBuilder GetGlsExcel(IList<ClientCsvModel> data)
         {
             var sb = new StringBuilder();
-            sb.Append("CreatedDate,Username,FirstName,Surname,Previous Surveys,Date Of Birth,State,RTO,Action Name,Action Band,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points");
+            sb.Append("CreatedDate,Username,FirstName,Surname,Previous Surveys,Date Of Birth,State,RTO,Action,Action Band,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points");
             sb.AppendLine(Environment.NewLine);
 
             foreach (var d in data)
@@ -374,7 +387,7 @@ namespace A4EPARC.Controllers
         private StringBuilder GetStandardExcel(IList<ClientCsvModel> data, string fieldstring) 
         {
             var sb = new StringBuilder();
-            sb.Append("CreatedDate,Company,Username,Previous Surveys,Action Name,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points," + fieldstring);
+            sb.Append("CreatedDate,Company,Username,Previous Surveys,Action,Answer String,Action Points,Contemplation Points,PreContemplation Points,Matrix Action Points,Matrix Contemplation Points,Matrix PreContemplation Points," + fieldstring);
 
             sb.AppendLine(Environment.NewLine);
 
@@ -415,6 +428,18 @@ namespace A4EPARC.Controllers
                 if (fieldstring.Contains("CompletedAllFiveWorkshops"))
                 {
                     sb.Append(d.CompletedAllFiveWorkshops + ",");
+                }
+                if (fieldstring.Contains("CustomerCaseNumber"))
+                {
+                    sb.Append(d.CustomerCaseNumber + ",");
+                }
+                if (fieldstring.Contains("CustomerEmail"))
+                {
+                    sb.Append(d.CustomerEmail + ",");
+                }
+                if (fieldstring.Contains("CustomerId"))
+                {
+                    sb.Append(d.CustomerId + ",");
                 }
                 if (fieldstring.Contains("DateOfBirth"))
                 {
@@ -466,6 +491,14 @@ namespace A4EPARC.Controllers
                 if (fieldstring.Contains("LengthOfUnemployment"))
                 {
                     sb.Append(d.LengthOfUnemployment + ",");
+                }
+                if (fieldstring.Contains("MaritalStatus"))
+                {
+                    sb.Append(d.MaritalStatus + ",");
+                }
+                if (fieldstring.Contains("NumberOfChildren"))
+                {
+                    sb.Append(d.NumberOfChildren + ",");
                 }
                 if (fieldstring.Contains("Provider"))
                 {

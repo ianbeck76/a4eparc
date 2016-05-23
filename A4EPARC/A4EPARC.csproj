@@ -289,6 +289,7 @@
     <Compile Include="Services\_Service.cs" />
     <Compile Include="ViewModels\ClientCsvModel.cs" />
     <Compile Include="ViewModels\ClientQueryViewModel.cs" />
+    <Compile Include="ViewModels\SiteFieldValuesViewModel.cs" />
     <Compile Include="ViewModels\WebServiceResultListViewModel.cs" />
     <Compile Include="ViewModels\ClientResultListViewModel.cs" />
     <Compile Include="ViewModels\ClientResultViewModel.cs" />
@@ -384,13 +385,18 @@
     <Content Include="Content\images\AC3Logo.png" />
     <Content Include="Content\images\AcaBusyLogo.jpg" />
     <Content Include="Content\images\AmercianJobCenterlogo.png" />
+    <Content Include="Content\images\apm.png" />
     <Content Include="Content\images\bg_fade_right.png" />
     <Content Include="Content\images\bg_fade_top.png" />
+    <Content Include="Content\images\ceis-logo.png" />
+    <Content Include="Content\images\clearlogo.png" />
     <Content Include="Content\images\esherhouse.png" />
     <Content Include="Content\images\GLSLogo.png" />
+    <Content Include="Content\images\incite_rethinking.png" />
     <Content Include="Content\images\jobFutures.jpg" />
     <Content Include="Content\images\PboLogo.png" />
     <Content Include="Content\images\ReadifyLogo.png" />
+    <Content Include="Content\images\reedlogo.png" />
     <Content Include="Content\images\rethinking-01.png" />
     <Content Include="Content\images\SercoLogo.png" />
     <Content Include="Content\images\WorksourceOregonLogo.png" />
@@ -414,7 +420,9 @@
     <Content Include="Images\a4e-group-logo.png" />
     <Content Include="Images\AcaBusyLogo.jpg" />
     <Content Include="Images\esherhouse.png" />
+    <Content Include="Images\EsherhouseABS.png" />
     <Content Include="Images\exemplarX.png" />
+    <Content Include="Content\images\MAS_logo.jpg" />
     <Content Include="NuGet.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -480,6 +488,12 @@
     <Content Include="Content\css_readify\fonts.less" />
     <Content Include="Content\css_readify\theme.less" />
     <Content Include="Content\css_readify\variables.less" />
+    <Content Include="Images\Pdfs\PrivacyStatement.pdf" />
+    <Content Include="Images\Pdfs\ReedActionInterventionGuide.pdf" />
+    <Content Include="Images\Pdfs\ReedContemplationInterventionGuide.pdf" />
+    <Content Include="Images\Pdfs\ReedPrecontemplationInterventionGuide.pdf" />
+    <Content Include="Images\Pdfs\ReedPreparationInterventionGuide.pdf" />
+    <Content Include="Images\Pdfs\ReedUnauthenticActionInterventionGuide.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -866,7 +880,7 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\reportFilters0405.js" />
+    <Content Include="Scripts\reportFilters.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -960,6 +974,12 @@
     <Content Include="Views\Shared\_Serco_AimStatement.cshtml" />
     <Content Include="Views\Shared\_Layout_Serco.cshtml" />
     <Content Include="Views\Shared\_Layout_Readify.cshtml" />
+    <Content Include="Views\Results\Serco.cshtml" />
+    <Content Include="Views\Shared\_Layout_Mas.cshtml" />
+    <Content Include="Views\Shared\_Layout_Reed.cshtml" />
+    <Content Include="Views\Shared\_InciteEmail.cshtml" />
+    <Content Include="Views\Shared\_Layout_APM.cshtml" />
+    <Content Include="Views\Shared\_Layout_Ceis.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

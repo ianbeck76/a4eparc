@@ -41,7 +41,17 @@ namespace A4EPARC.Repositories
             ,HasDiplomaOrGED
             ,Provider
             ,IsReassessment
-            ,Project)
+            ,Project
+            ,CustomerCaseNumber
+            ,CustomerCaseNumber1
+            ,CustomerCaseNumber2
+            ,CustomerCaseNumber3
+            ,CustomerCaseNumber4
+            ,MaritalStatus
+            ,NumberOfChildren
+            ,CustomerId
+            ,CustomerEmail
+            )
             VALUES(@FirstName
             ,@Surname
             ,@DateOfBirth
@@ -72,7 +82,16 @@ namespace A4EPARC.Repositories
             ,@HasDiplomaOrGED
             ,@Provider
             ,@IsReassessment
-            ,@Project);
+            ,@Project
+            ,@CustomerCaseNumber
+            ,@CustomerCaseNumber1
+            ,@CustomerCaseNumber2
+            ,@CustomerCaseNumber3
+            ,@CustomerCaseNumber4
+            ,@MaritalStatus
+            ,@NumberOfChildren
+            ,@CustomerId
+            ,@CustomerEmail);
             SELECT CAST(SCOPE_IDENTITY() as int);";
 
             return Query<int>(query, model).SingleOrDefault();
@@ -90,6 +109,21 @@ namespace A4EPARC.Repositories
             SELECT CAST(SCOPE_IDENTITY() as int);";
 
             return Query<int>(query, model).SingleOrDefault();
+        }
+
+        public void Delete(int id) 
+        {
+            Execute("UPDATE ClientNew SET Deleted = 1 WHERE Id = @Id", new { Id = id });
+        }
+
+        public void Activate(int id)
+        {
+            Execute("UPDATE ClientNew SET Deleted = 0 WHERE Id = @Id", new { Id = id });
+        }
+
+        public void UpdateEmailSentDate(int id)
+        {
+            Execute("UPDATE ClientNew SET EmailSentDate = @EmailSentDate WHERE Id = @Id", new { EmailSentDate = DateTime.UtcNow, Id = id });
         }
 
         public ClientViewModel GetClient(int id)
@@ -136,6 +170,16 @@ namespace A4EPARC.Repositories
                                 ,c.Provider
                                 ,c.IsReassessment
                                 ,c.Project
+                                ,c.CustomerCaseNumber
+                                ,c.CustomerCaseNumber1
+                                ,c.CustomerCaseNumber2
+                                ,c.CustomerCaseNumber3
+                                ,c.CustomerCaseNumber4
+                                ,c.MaritalStatus
+                                ,c.NumberOfChildren
+                                ,c.CustomerId
+                                ,c.CustomerEmail
+                                ,c.EmailSentDate
 								FROM ClientNew c 
                                 INNER JOIN [user] u ON u.id = c.UserId
 								INNER JOIN [CompanyNew] com ON com.Id = u.CompanyId
@@ -150,8 +194,9 @@ namespace A4EPARC.Repositories
             var query = string.Format(@"select c.Id, c.JobSeekerID, c.Surname,
                                             u.Email AS Username, 
                                             c.CreatedDate,
-                                            a.ActionType AS ActionName, 
-                                            cr.AnswerString
+                                            a.ShortName AS ActionName, 
+                                            cr.AnswerString,
+                                            c.Deleted
                                             FROM [dbo].[ClientNew] c 
                                             INNER JOIN [dbo].[ClientResult] cr ON cr.ClientId = c.Id
                                             INNER JOIN [dbo].[ActionType] a ON a.Id = cr.ActionIdToDisplay
@@ -203,7 +248,7 @@ namespace A4EPARC.Repositories
                                             com.Name AS Company,
                                             u.Email AS Username,
                                             c.HowManyTimesHasSurveyBeenCompleted,
-                                            a.ActionType AS ActionName,
+                                            a.ShortName AS ActionName,
                                             cr.AnswerString,
                                             cr.PreContemplationPoints,
                                             cr.MatrixPreContemplationPoints,
@@ -218,8 +263,9 @@ namespace A4EPARC.Repositories
                                             INNER JOIN [dbo].[ActionType] a ON a.Id = cr.ActionIdToDisplay
                                             INNER JOIN [dbo].[User] u ON c.UserId = u.Id
                                             INNER JOIN [dbo].[CompanyNew] com ON com.Id = u.CompanyId
-                                            INNER JOIN [dbo].[Scheme] s ON c.SchemeId = s.Id");
-            var clause = " WHERE ";
+                                            INNER JOIN [dbo].[Scheme] s ON c.SchemeId = s.Id
+                                            WHERE c.Deleted = 0");
+            var clause = " AND ";
             
             if (!string.IsNullOrWhiteSpace(jobseekerId))
             {
@@ -268,12 +314,15 @@ namespace A4EPARC.Repositories
     public interface IClientRepository : IRepository<ClientViewModel>
     {
         int InsertPerson(ClientViewModel client);
+        void UpdateEmailSentDate(int id);
         int InsertResult(ResultViewModel result);
         ClientViewModel GetClient(int id);
         IQueryable<ClientResultViewModel> All(DateTime? dateFrom, 
         DateTime? dateTo, string jobseekerId, string surname, string username, string company);
         IList<ClientCsvModel> GetCsvData(DateTime? dateFrom, DateTime? dateTo, string jobseekerId, string surname, string username, string company, string fieldstring);
         int GetNumberOfPreviousAttempts(string reference);
+        void Delete(int id);
+        void Activate(int id);
 
     }
 }

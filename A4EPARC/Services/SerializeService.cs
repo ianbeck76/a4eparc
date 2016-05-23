@@ -19,6 +19,18 @@ public class SerializeService :  Controller, ISerializeService
             }
         }
 
+        public string RenderRazorViewToString(ControllerContext controllerContext, string viewName)
+        {
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(controllerContext, viewName);
+                var viewContext = new ViewContext(controllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(controllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
+        }
+
         public string RenderRazorViewToString(ControllerContext controllerContext, string viewName, ViewDataDictionary viewData)
         {
             using (var sw = new StringWriter())

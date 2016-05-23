@@ -7,7 +7,7 @@
     @*@Html.Partial("_InterventionGuide", Model)*@
 
     <div style="padding:2em">
-        @Html.Partial("_PersonDetails", Model)
+     <!--   @Html.Partial("_PersonDetails", Model)-->
     </div>
 </div>
 
@@ -22,25 +22,52 @@
     </div>
     <div class="col-md-2 col-xs-6">
 
-        @if (Model.ActionIdToDisplay == 1)
+        @if (Model.Company == "Reed")
         {
-            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/PrecontemplationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            if (Model.ActionIdToDisplay == 1)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ReedPrecontemplationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
+            else if (Model.ActionIdToDisplay == 2)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ReedUnauthenticActionInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
+            else if (Model.ActionIdToDisplay == 3)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ReedContemplationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
+            else if (Model.ActionIdToDisplay == 4)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ReedPreparationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
+            else if (Model.ActionIdToDisplay == 5)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ReedActionInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
+            <!--<a class="btn btn-primary" href="/Results/GeneratePdf/@Model.Id">PDF <span class="glyphicon glyphicon-download-alt"></span></a>-->
         }
-        else if (Model.ActionIdToDisplay == 2)
+        else
         {
-            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/UnauthenticActionInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
-        }
-        else if (Model.ActionIdToDisplay == 3)
-        {
-            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ContemplationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
-        }
-        else if (Model.ActionIdToDisplay == 4)
-        {
-            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/PreparationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
-        }
-        else if (Model.ActionIdToDisplay == 5)
-        {
-            <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ActionInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            if (Model.ActionIdToDisplay == 1)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/PrecontemplationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
+            else if (Model.ActionIdToDisplay == 2)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/UnauthenticActionInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
+            else if (Model.ActionIdToDisplay == 3)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ContemplationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
+            else if (Model.ActionIdToDisplay == 4)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/PreparationInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
+            else if (Model.ActionIdToDisplay == 5)
+            {
+                <a class="btn btn-primary" target="_blank" href="~/Images/Pdfs/ActionInterventionGuide.pdf">Coaching Guide <span class="glyphicon glyphicon-download-alt"></span></a>
+            }
         }
         <!--<a class="btn btn-primary" href="/Results/GeneratePdf/@Model.Id">PDF <span class="glyphicon glyphicon-download-alt"></span></a>-->
     </div>
@@ -48,23 +75,23 @@
 
         @if (Model.ActionIdToDisplay == 1)
         {
-            <h3 style="color:darkblue;">Precontemplator</h3>
+            <h3 style="color:darkblue;">PC</h3>
         }
         else if (Model.ActionIdToDisplay == 2)
         {
-            <h3 style="color:darkblue;">Unauthentic Actor</h3>
+            <h3 style="color:darkblue;">UA</h3>
         }
         else if (Model.ActionIdToDisplay == 3)
         {
-            <h3 style="color:darkblue;">Contemplator</h3>
+            <h3 style="color:darkblue;">C</h3>
         }
         else if (Model.ActionIdToDisplay == 4)
         {
-            <h3 style="color:darkblue;">Preparer</h3>
+            <h3 style="color:darkblue;">P</h3>
         }
         else if (Model.ActionIdToDisplay == 5)
         {
-            <h3 style="color:darkblue;">Actor</h3>
+            <h3 style="color:darkblue;">A</h3>
         }
         <!--<a class="btn btn-primary" href="/Results/GeneratePdf/@Model.Id">PDF <span class="glyphicon glyphicon-download-alt"></span></a>-->
     </div>

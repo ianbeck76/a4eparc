@@ -1,46 +1,53 @@
-﻿@model int
+﻿@using A4EPARC.Services
+@using A4EPARC.ViewModels
+@model ClientViewModel
 
 <div class="row">
+    @{int companyId = AuthenticationService.GetCompanyId();}
     <div class="col-sm-4 col-sm-offset-4">
 
         <p><br /><br /></p>
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Options</h3>
+                <h3 id="Options" class="panel-title">@LabelService.Get("Options", "Options", Model.SiteLabels, 1)</h3>
             </div>
             <div class="panel-body">
 
-                    <p class="text-center">
-                        @if (Model == 11 || Model == 13)
-                        {
-                            @Html.ActionLink("Begin Survey", "GlsOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Begin Survey", "PageOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
-                        }
-                    </p>
-            
-                    @if (Context.User.IsInRole("IsViewer"))
+                <p class="text-center">
+                    @if (companyId == 11 || companyId == 13)
                     {
-                          <p class="text-center">
-                            <a href="@ViewBag.BrowseResultsLink" class="btn btn-primary btn-block btn-lg">View Client Data</a>
+                        @Html.ActionLink("Begin Survey", "GlsOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg" })
+                    }
+                    else if (companyId == 14)
+                    {
+                        @Html.ActionLink("Begin Survey", "Index", "Incite", null, new { @class = "btn btn-primary btn-block btn-lg" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink(LabelService.Get("BeginSurveyLink", "Begin Survey", Model.SiteLabels, 1), "PageOne", "Survey", null, new { @class = "btn btn-primary btn-block btn-lg", @id = "BeginSurveyLink" })
+                    }
+                </p>
+
+                @if (Context.User.IsInRole("IsViewer"))
+                {
+                    <p class="text-center">
+                        <a id="ViewDataLink" href="@ViewBag.BrowseResultsLink" class="btn btn-primary btn-block btn-lg">@LabelService.Get("ViewDataLink", "View Client Data", Model.SiteLabels, 1)</a>
+                    </p>
+                }
+
+                @if (Context.User.IsInRole("IsSuperAdmin"))
+                {
+                    if (!Request.Url.AbsoluteUri.Contains("exemplar"))
+                    {
+                        <p class="text-center">
+                            @Html.ActionLink("View WebService Data", "Index", "WebServiceResults", null, new { @id = "form-submit", @class = "btn btn-primary btn-block btn-lg" })
                         </p>
                     }
-                
-                    @if (Context.User.IsInRole("IsSuperAdmin"))
-                    {
-                        if (!Request.Url.AbsoluteUri.Contains("exemplar"))
-                        {
-                            <p class="text-center">
-                                @Html.ActionLink("View WebService Data", "Index", "WebServiceResults", null, new { @id = "form-submit", @class = "btn btn-primary btn-block btn-lg" })
-                            </p>
-                        }
-                    }
+                }
             </div>
-            <div class="panel-footer text-center">
-                Please choose an option from above.
+            <div id="ChooseOption" class="panel-footer text-center">
+                @LabelService.Get("ChooseOption", "Please choose an option from above.", Model.SiteLabels, 1)
             </div>
         </div>
 

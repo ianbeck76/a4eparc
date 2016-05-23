@@ -8,7 +8,6 @@ using A4EPARC.Services;
 
 namespace A4EPARC.Controllers
 {
-    [Authorize(Roles = "IsSuperAdmin")]
     public class SiteLabelsController : Controller
     {
         private readonly ISiteLabelsRepository _siteLabelsRepository;
@@ -18,11 +17,13 @@ namespace A4EPARC.Controllers
             _siteLabelsRepository = siteLabelsRepository;
         }
 
+        [Authorize(Roles = "IsSuperAdmin")]
         public ActionResult Index()
         {
             return View();
         }
 
+        [Authorize(Roles = "IsSuperAdmin")]
         public ActionResult GetRows(int? scheme, string language, string name, int jtStartIndex, int jtPageSize, string jtSorting)
         {
             try
@@ -53,6 +54,7 @@ namespace A4EPARC.Controllers
             }
         }
 
+        [Authorize(Roles = "IsSuperAdmin")]
         [HttpPost]
         public JsonResult AddRow(SiteLabelsViewModel model)
         {
@@ -76,6 +78,7 @@ namespace A4EPARC.Controllers
             }
         }
 
+        [Authorize(Roles = "IsSuperAdmin")]
         public JsonResult EditRow(SiteLabelsViewModel model)
         {
             var label = _siteLabelsRepository.SingleOrDefault(model.Id);
@@ -90,9 +93,40 @@ namespace A4EPARC.Controllers
         {
             var items = new List<SiteLabelsViewModel>();
 
+            if (!schemeId.HasValue)
+            {
+                schemeId = 1;
+            }
+
             var labels = _siteLabelsRepository.All().Where(l => l.LanguageCode == languageCode && l.SchemeId == schemeId.GetValueOrDefault()).ToList();
+
+            if (labels == null)
+            {
+                labels = _siteLabelsRepository.All().Where(l => l.LanguageCode == languageCode && l.SchemeId == 1).ToList();
+            }
             
             return Json(new { Labels = labels }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult GetOptions(string languageCode)
+        {
+            var items = new List<SiteFieldValuesViewModel>();
+
+            var options = _siteLabelsRepository.GetFieldValues().Where(l => l.LanguageCode == languageCode).Where(s => s.FieldType == "option").ToList();
+
+            return Json(new { Options = options }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetRadioOptions(string languageCode)
+        {
+            var items = new List<SiteFieldValuesViewModel>();
+
+            var options = _siteLabelsRepository.GetFieldValues().Where(l => l.LanguageCode == languageCode).Where(s => s.FieldType == "radio").ToList();
+
+            return Json(new { Options = options }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

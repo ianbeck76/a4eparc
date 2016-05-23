@@ -20,6 +20,7 @@ using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.html;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using A4EPARC.Extensions;
 
 namespace A4EPARC.Controllers
 {
@@ -166,6 +167,11 @@ namespace A4EPARC.Controllers
 
             viewmodel.PageItems = GetPageItems(companyId).Where(c => c.IsDisplay.GetValueOrDefault() == true);
 
+            if (viewmodel.PageItems.FirstOrDefault(p => p.Name == "CustomerId") != null)
+            {
+                viewmodel.CustomerId = "WP";   
+            }
+
             if (viewmodel.DateOfBirth.HasValue)
             {
                 viewmodel.DateOfBirthDay = viewmodel.DateOfBirth.Value.Day;
@@ -221,12 +227,36 @@ namespace A4EPARC.Controllers
                         ModelState.AddModelError("Gender", "Gender Required");
                     }                       
                 }
-            }          
+            }
 
+            var customerCaseNumber = viewmodel.PageItems.FirstOrDefault(c => c.Name == "CustomerCaseNumber");
+            if (customerCaseNumber != null)
+            {
+                if (customerCaseNumber.IsRequired.GetValueOrDefault() == true)
+                {
+                    if (string.IsNullOrEmpty(viewmodel.CustomerCaseNumber1)
+                        || string.IsNullOrEmpty(viewmodel.CustomerCaseNumber2)
+                        || string.IsNullOrEmpty(viewmodel.CustomerCaseNumber3)
+                        || string.IsNullOrEmpty(viewmodel.CustomerCaseNumber4))
+                    {
+                        ModelState.AddModelError("CustomerCaseNumber", "Customer Case Number Required");
+                    }
+                }
+            }
+            
             if(!ModelState.IsValid || !isDateOfBirthValid)
             {
                 viewmodel = InitializeDropdowns(viewmodel, companyId);
                 return View(viewmodel);
+            }
+
+
+            if (!string.IsNullOrEmpty(viewmodel.CustomerCaseNumber1))
+            {
+                viewmodel.CustomerCaseNumber = viewmodel.CustomerCaseNumber1 + "-"
+                    + viewmodel.CustomerCaseNumber2 + "-"
+                    + viewmodel.CustomerCaseNumber3 + "-"
+                    + viewmodel.CustomerCaseNumber4;
             }
 
             viewmodel.UserId = GetCurrentUser().Id;
@@ -288,9 +318,20 @@ namespace A4EPARC.Controllers
                 }
             }
 
+            var backbuttonmessage = "This record has already been added and cannot be amended - to return to home menu";
+
             if (viewmodel.ResultId > 0)
             {
-                ModelState.AddModelError("RecordAlreadyAdded", "This record has already been added - go back to home page to create a new record");
+                ModelState.AddModelError("RecordAlreadyAdded", backbuttonmessage);
+            }
+            else
+            {
+                var client = _clientRepository.GetClient(viewmodel.Id);
+                viewmodel.ResultId = client.ResultId;
+                if (!string.IsNullOrEmpty(client.AnswerString))
+                {
+                    ModelState.AddModelError("RecordAlreadyAdded", backbuttonmessage);                    
+                }
             }
 
             if (!ModelState.IsValid)
@@ -362,6 +403,16 @@ namespace A4EPARC.Controllers
                 languageoptions = new List<KeyValuePair<string, string>>{new KeyValuePair<string,string>("en-GB", "English")};
             }
             return Json(new { Options = languageoptions }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetSchemeOptions(string languageCode)
+        {
+            var schemes = _companyRepository.GetSchemes().Where(s => s.CompanyId == AuthenticationService.GetCompanyId());
+
+            var options = GetSchemeDropdownList(schemes);
+
+            return Json(new { Options = options }, JsonRequestBehavior.AllowGet);
         }
 
         private IEnumerable<CompanyPageItemViewModel> GetPageItems(int companyId) 
@@ -506,6 +557,14 @@ namespace A4EPARC.Controllers
             model.ProjectDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.Project);
             model.StreamDropdownList = GetStreamDropdownList(companyId);
             model.RTODropdownList = GetCompanySelectValues(companyId, (int)SelectKey.RTO);
+            model.MaritalStatusDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.MaritalStatus);
+            model.NumberOfChildrenDropdownList = GetCompanySelectValues(companyId, (int)SelectKey.NumberOfChildren);
+            if (model.NumberOfChildrenDropdownList.Any())
+            {
+                var list = model.NumberOfChildrenDropdownList.ToList();
+                list.Sort((x, y) => Utils.ExtractNumber(x).CompareTo(Utils.ExtractNumber(y)));
+                model.NumberOfChildrenDropdownList = list;
+            }
             return model;
         }
     }

@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     var defaultLanguage = $.cookie('default_language');
 
@@ -15,7 +15,8 @@ $(document).ready(function() {
             $('#languageselect').empty();
             for (var i = 0; i < options.length; i++) {
                 $('<option' + (options[i].Key == defaultLanguage ? ' selected="selected"' : '') + '>' + options[i].Value + '</option>').val(options[i].Key).appendTo($('#languageselect'));
-        }
+                getTranslations(defaultLanguage);
+            }
 
         $('#languageselect').live('change', function () {
 
@@ -27,6 +28,8 @@ $(document).ready(function() {
                 $('#' + label.Name).html(label.Description).val(label.Description);
             })
 
+            getTranslations($(this).val());
+
             if ($('.surveyPageTwo').length > 0) {
 
                 var questions = getQuestions($(this).val());
@@ -37,6 +40,31 @@ $(document).ready(function() {
                 });
             }
         });
+    }
+
+    function getTranslations(languageCode) {
+
+        var options = getSiteOptions(languageCode);
+
+        var optionName = '';
+        var selectedValue = '';
+
+        options.forEach(function (option) {
+
+            if (optionName != option.ParentName) {
+                optionName = option.ParentName;
+                selectedValue = $('#' + option.ParentName).val();
+                $('#' + option.ParentName).empty();
+            }
+            $('<option' + (option.Key == selectedValue ? ' selected="selected"' : '') + '>' + option.Value + '</option>').val(option.Key).appendTo($('#' + option.ParentName));
+        })
+
+        var radios = getSiteRadioOptions(languageCode);
+
+        radios.forEach(function (radio) {
+            $("button[data-text='" + radio.Key + "']").text(radio.Value);
+        })
+
     }
 
     function getSchemeId() {
@@ -125,6 +153,41 @@ $(document).ready(function() {
         });
         return labels;
     }
+
+    function getSiteOptions(languageCode) {
+
+        var options = new Array();
+
+        $.ajax({
+            url: "/SiteLabels/GetOptions",
+            dataType: 'json',
+            async: false,
+            type: 'GET',
+            data: { languageCode: languageCode },
+            success: function (data) {
+                options = data.Options;
+            }
+        });
+        return options;
+    }
+
+    function getSiteRadioOptions(languageCode) {
+
+        var options = new Array();
+
+        $.ajax({
+            url: "/SiteLabels/GetRadioOptions",
+            dataType: 'json',
+            async: false,
+            type: 'GET',
+            data: { languageCode: languageCode },
+            success: function (data) {
+                options = data.Options;
+            }
+        });
+        return options;
+    }
+
 
     // drop shadow when scrolling down the page
     var navigationbar = $('#navigation-bar');
@@ -218,9 +281,44 @@ $(document).ready(function() {
 
     }
 
+    if ($('#resultsgrid').length > 0) {
+
+
+        $('.active').each(function() {
+            $(this).click(function (e) {
+                var id = $(this).attr('id');
+                e.preventDefault();
+                $.ajax({
+                    url: "/Results/Delete",
+                    dataType: 'json',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (data) {
+                        changeActive(data, id);
+                    }
+                });
+            });
+        });
+
+        function changeActive(data, row) {
+
+            if (data == false) {
+                $('#' + row).removeClass('active icon icon-tick');
+                $('#'+ row).addClass('active icon icon-cross');
+                $('#' + row).attr('title', 'Active - click to remove from excel results');
+            }
+            else {
+                $('#' + row).removeClass('active icon icon-cross');
+                $('#' + row).addClass('active icon icon-tick');
+                $('#' + row).attr('title', 'Inactive - click to include in excel results');
+            }
+        }
+    }
+
 
     $.validator.setDefaults({
         ignore: [],
         // any other default options and/or rules
     });
+
 });

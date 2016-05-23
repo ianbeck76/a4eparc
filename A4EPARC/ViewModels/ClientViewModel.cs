@@ -112,6 +112,9 @@ namespace A4EPARC.ViewModels
 
         public string JobSeekerID { get; set; }
 
+        [RegularExpression("^[wW]{1}[pP]{1}[0-9]{6}[a-zA-Z]{1}$")]
+        public string CustomerId { get; set; }
+
         public int SchemeId { get; set; }
 
         public IEnumerable<KeyValuePair<int, string>> SchemeDropdownList { get; set; }
@@ -140,11 +143,48 @@ namespace A4EPARC.ViewModels
 
         public string UnemploymentInsuranceId { get; set; }
 
+        [EmailAddress]
+        public string CustomerEmail { get; set; }
+
+        [RegularExpression("([0-9]+)")]
+        public string UnemploymentInsurance1 { get; set; }
+
+        [RegularExpression("([0-9]+)")]
+        public string UnemploymentInsurance2 { get; set; }
+
+        [RegularExpression("([0-9]+)")]
+        public string UnemploymentInsurance3 { get; set; }
+
+        [RegularExpression("([0-9]+)")]
+        public string UnemploymentInsurance4 { get; set; }
+
         public bool? IsOverEighteen { get; set; }
 
         public bool? HasDiplomaOrGED { get; set; }
 
         public bool? IsReassessment { get; set; }
+
+        public string CustomerCaseNumber { get; set; }
+
+        [RegularExpression("([a-zA-Z]+)")]
+        public string CustomerCaseNumber1 { get; set; }
+        
+        [RegularExpression("([0-9]+)")]
+        public string CustomerCaseNumber2 { get; set; }
+        
+        [RegularExpression("([0-9]+)")]
+        public string CustomerCaseNumber3 { get; set; }
+
+        [RegularExpression("([0-9]+)")]
+        public string CustomerCaseNumber4 { get; set; }
+
+        public IEnumerable<string> MaritalStatusDropdownList { get; set; }
+        public string MaritalStatus { get; set; }
+
+        public IEnumerable<string> NumberOfChildrenDropdownList { get; set; }
+        public string NumberOfChildren { get; set; }
+
+        public DateTime? EmailSentDate { get; set; }
 
     }
 }

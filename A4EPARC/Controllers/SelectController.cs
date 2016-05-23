@@ -25,7 +25,7 @@ namespace A4EPARC.Controllers
 
         public ActionResult Company()
         {
-            var companyNames = _companyRepository.All().Select(c => new KeyValuePair<int, string>(c.Id, c.Name)).ToList();
+            var companyNames = _companyRepository.All().Where(c => c.IsActive == true).Select(c => new KeyValuePair<int, string>(c.Id, c.Name)).ToList();
             return View(companyNames);
         }
 

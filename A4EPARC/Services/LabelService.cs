@@ -22,6 +22,12 @@ namespace A4EPARC.Services
         {
             schemeId = schemeId == 0 ? 1 : schemeId;
             var languageCode = LanguageCode;
+
+            if (labels == null)
+            {
+                labels = new SiteLabelsRepository().All();
+            }
+
             var label = labels.ToList().FirstOrDefault(l => l.SchemeId == schemeId && l.LanguageCode == languageCode && l.Name == key);
             return label == null ? value : string.IsNullOrEmpty(label.Description) ? labels.ToList().FirstOrDefault(l => l.SchemeId == 1 && l.LanguageCode == "en-GB" && l.Name == key).Description : label.Description;
         }

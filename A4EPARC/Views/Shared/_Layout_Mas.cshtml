@@ -3,11 +3,11 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta charset="utf-16" />
-        <title>ACA Assessment</title>
+        <title>Psychass Assessment</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/themes/base/css")
-        @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/css_incite")
            <!--[if lt IE 9]>
           @Scripts.Render("~/bundles/ie8specific")
         <![endif]-->
@@ -17,11 +17,14 @@
         
         <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="navigation-bar">
             
-            <div class="container-fluid navbar-inner">
-                    <a class="navbar-brand navbar-right" href="/">ACA Survey Home</a>
-       
+            <div class="container-fluid navbar-inner">       
                 @if (Request.IsAuthenticated)
                 {
+                    var companyId = @A4EPARC.Services.AuthenticationService.GetCompanyId();
+                    <input id="CompanyId" value="@companyId" type="hidden"/>
+
+                    <a class="navbar-brand navbar-right" href="/">Survey Home</a>
+                    
                     <div class="navbar-header">
                         <button id="toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="icon-bar"></span>
@@ -29,18 +32,31 @@
                             <span class="icon-bar"></span>
                         </button>
                     </div>
-                        <form class="collapse navbar-collapse navbar-form navbar-left">
-                            <a title="Home" href="/"><img style="max-height: 80px; cursor: pointer;" src="~/Content/images/AcaBusyLogo.jpg" alt=""></a>
-                        </form>
+    <form class="collapse navbar-collapse navbar-form navbar-left row">
+        <div class="hidden-xs hidden-sm hidden-md">
+            <a title="Home" href="/"><img style="max-height: 80px;" src="~/Content/images/MAS_logo.jpg" alt="" /></a>
+        </div>
+        <div class="hidden-lg">
+            <a title="Home" href="/"><img style="max-height: 80px;" src="~/Content/images/MAS_logo.jpg" alt="" /></a>
+        </div>
+    </form>
                     <div class="collapse navbar-collapse navbar-right">
                         @Html.Partial("_NavigationLinks")
-                        @Html.Partial("_LanguageSelect")
+                        @if (@A4EPARC.Services.AuthenticationService.ShowLanguages(companyId))
+                        {
+                            @Html.Partial("_LanguageSelect")
+                        }
                     </div>
                 }
                 else
                 {
-                    <form class="collapse navbar-collapse navbar-form navbar-left">
-                        <a title="Home" href="/"><img style="max-height: 80px; cursor: pointer;" src="~/Content/images/AcaBusyLogo.jpg" alt=""></a>
+                    <form class="collapse navbar-collapse navbar-form navbar-left row">
+                        <div class="hidden-xs hidden-sm hidden-md">
+                            <a title="Home" href="/"><img style="max-height: 80px;" src="~/Content/images/MAS_logo.jpg" alt="" /></a>
+                        </div>
+                        <div class="hidden-lg">
+                            <a title="Home" href="/"><img style="max-height: 80px;" src="~/Content/images/MAS_logo.jpg" alt="" /></a>
+                        </div>
                     </form>
                 }
             </div>

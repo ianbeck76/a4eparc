@@ -7,6 +7,12 @@ namespace A4EPARC.ViewModels
 {
     public class ClientResultListViewModel
     {
+        public ClientResultListViewModel() 
+        {
+            SiteLabels = new List<SiteLabelsViewModel>();
+        }
+
+        public List<SiteLabelsViewModel> SiteLabels { get; set; }
         public IPagination<ClientResultViewModel> Results { get; set; }
         public GridSortOptions GridSortOptions { get; set; }
         [Display(Name = "Date From")]

@@ -13,7 +13,7 @@ namespace A4EPARC
                 "~/Scripts/jquery-migrate-1.2.1.js",
                 "~/Scripts/jquery.cookie.js",
                 "~/Scripts/ui-validation.js",
-                "~/Scripts/reportFilters0405.js"));
+                "~/Scripts/reportFilters.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                 "~/Scripts/jquery-ui-1.9.2.js",

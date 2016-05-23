@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using A4EPARC.Repositories;
+using A4EPARC.ViewModels;
+using System.Web.Mvc;
 
 namespace A4EPARC.Controllers
 {
@@ -6,7 +8,11 @@ namespace A4EPARC.Controllers
     {
         public ActionResult Index()
         {
-            return View(GetCompanyId());
+            var viewmodel = new ClientViewModel();
+
+            viewmodel.SiteLabels = new SiteLabelsRepository().All();
+
+            return View(viewmodel);
         }
     }
 }

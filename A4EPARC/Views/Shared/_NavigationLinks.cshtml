@@ -1,19 +1,21 @@
-﻿<ul class="nav navbar-nav navbar-right">
+﻿@using A4EPARC.Services
+
+<ul class="nav navbar-nav navbar-right">
     <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<b class="caret"></b></a>
+        <a href="#" id="AccountLink" class="dropdown-toggle" data-toggle="dropdown">@LabelService.Get("AccountLink", "Account", null, 1)<b class="caret"></b></a>
         <ul class="dropdown-menu">
             @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "", Area = "" }))
             {
                 @Html.AntiForgeryToken()
             }
-            <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out"></i> Log out</a></li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()" id="LogOutLink"><i class="fa fa-sign-out"></i> @LabelService.Get("LogOutLink", "Log out", null, 1)</a></li>
             @if (HttpContext.Current.Request.IsAuthenticated)
             {
-                <li><a href="@Url.Action("ChangePassword", "Account", new { Area = "" })"><i class="fa fa-key"></i> Change Password</a></li>
+                <li><a href="@Url.Action("ChangePassword", "Account", new { Area = "" })" id="ChangePasswordLink"><i class="fa fa-key"></i> @LabelService.Get("ChangePasswordLink", "Change Password", null, 1)</a></li>
             }
             @if (Context.User.IsInRole("IsAdmin"))
             {
-                <li><a href="@Url.Action("Index", "User", new { Area = "" })"><i class="fa fa-edit"></i> User Admin </a></li>
+                <li><a href="@Url.Action("Index", "User", new { Area = "" })" id="UserAdminLink"><i class="fa fa-edit"></i>  @LabelService.Get("UserAdminLink", "User Admin", null, 1)</a></li>
             }
             @if (Context.User.IsInRole("IsSuperAdmin"))
             {
